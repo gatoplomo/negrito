@@ -531,9 +531,11 @@ app.post("/generar",function(req,res)
 
 {
 cantidad=300;
+
+
 console.log(req.body.central);
 
-
+console.log("NEGRITOOOO")
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 var formatted = dt.format('d-m-Y-H-M-S');
@@ -547,7 +549,7 @@ const fs = require("fs");
 var formatted2 = dt.format('d-m-Y');
 
 //const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
-const ws = fs.createWriteStream("C:/Users/agroc/Desktop/APR/Version1.2/Datos2/"+"nodo1"+"/"+formatted+".csv");
+const ws = fs.createWriteStream("/home/tom/Documentos/GitHub/negrito/Datos2/"+"nodo1"+"/"+formatted+".csv");
  let url = "mongodb://localhost:27017/";
  
 
@@ -577,10 +579,10 @@ client.connect(function(err) {
 
 
   const db = client.db(dbName);
-  const collection = db.collection('directorios'+req.body.central);
-
+  //const collection = db.collection('directorios'+req.body.central);
+const collection = db.collection('directorios'+"nodo1");
 //collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
-collection.insertOne({id:"nodo1",date:formatted,dir:"C:/Users/agroc/Desktop/APR/Version1.2/Datos2/"+"nodo1"+"/"+formatted+"f"+".xlsx"});
+collection.insertOne({id:"nodo1",date:formatted,dir:"/home/tom/Documentos/GitHub/negrito/Datos2/"+"nodo1"+"/"+formatted+"f"+".xlsx"});
 
 
 
@@ -598,11 +600,12 @@ mongodb.connect(
       .db("myproject")
       //.collection(req.body.central)
       .collection("nodo1")
-      .find({"fecha" : formatted2})
+      .find({})
       .toArray((err, data) => {
         if (err) throw err;
 
         console.log(data.length);
+        console.log("BLACK")
         cantidad=data.length;
         mandar(cantidad)
         fastcsv
@@ -634,7 +637,7 @@ mongodb.connect(
 function mandar(cantidad)
 {
 
-var python = spawn('python3', ["C:/Users/agroc/Desktop/APR/Version1.2/formato.py",formatted,"nodo1",cantidad.toString()]);
+var python = spawn('python3', ["/home/tom/Documentos/GitHub/negrito/formato.py",formatted,"nodo1",cantidad.toString()]);
 
 var dataToSend;
 

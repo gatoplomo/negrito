@@ -49,7 +49,7 @@ a=sys.argv[1]
 b=sys.argv[2]
 c=sys.argv[3]
 
-csv = pd.read_csv(r'C:/Users/agroc/Desktop/APR/Version1.2/Datos2/'+sys.argv[2]+'/'+a+'.csv')
+csv = pd.read_csv(r'/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.csv')
 
 df = pd.DataFrame(csv)
   
@@ -58,7 +58,7 @@ df = pd.DataFrame(csv)
 
 
 # create excel writer object
-writer = pd.ExcelWriter(r'C:/Users/agroc/Desktop/APR/Version1.2/Datos2/'+sys.argv[2]+'/'+a+'.xlsx')
+writer = pd.ExcelWriter(r'/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx')
 # write dataframe to excel
 df.to_excel(writer)
 # save the excel
@@ -82,7 +82,7 @@ sheet = wb.active
 
  
 # Give the location of the file
-path = 'C:/Users/agroc/Desktop/APR/Version1.2/Datos2/'+sys.argv[2]+'/'+a+'.xlsx'
+path = '/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx'
  
 # To open the workbook
 # workbook object is created
@@ -185,7 +185,7 @@ chart.set_categories(dates)
 ws.add_chart(chart, "E2")
 
 
-wb.save('C:/Users/agroc/Desktop/APR/Version1.2/Datos2/'+sys.argv[2]+'/'+a+"f"+'.xlsx')
+wb.save('/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+"f"+'.xlsx')
 
 
 
