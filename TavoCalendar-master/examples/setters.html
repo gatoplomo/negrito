@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>TavoCalendar setters</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../dist/tavo-calendar.css">
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            #my-calendar {
+                max-width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="my-calendar"></div>
+
+        <button>Set year to 1983</button>
+        <button>Set month to May</button>
+        <button>Select day 15</button>
+        <button>Select day 25</button>
+        <button>Set date to 1995-05-14</button>
+        <button>Set range 10-12</button>
+        <button>Clear selections</button>
+            
+        <script src="../node_modules/moment/moment.js" ></script>
+        <script src="../dist/tavo-calendar.js"></script>
+
+        <script>
+            const my_calendar = new TavoCalendar('#my-calendar', {
+                date: "2014-12-21",
+                selected: ["2014-12-24"]
+            });
+
+            const buttons = document.querySelectorAll('button');
+
+            buttons[0].addEventListener('click', function() {
+                my_calendar.setFocusYear(1983);
+            })
+
+            buttons[1].addEventListener('click', function() {
+                my_calendar.setFocusMonth(5);
+            })
+
+            buttons[2].addEventListener('click', function() {
+                var year = my_calendar.getFocusYear();
+                var month = my_calendar.getFocusMonth();
+
+                my_calendar.addSelected(year + '-' + month + '-' + '15');
+            })
+
+            buttons[3].addEventListener('click', function() {
+                var year = my_calendar.getFocusYear();
+                var month = my_calendar.getFocusMonth();
+
+                my_calendar.addSelected(year + '-' + month + '-' + '25');
+            })
+
+            buttons[4].addEventListener('click', function() {
+                my_calendar.setFocusDate('1995-05-14');
+            })
+
+            buttons[5].addEventListener('click', function() {
+                var year = my_calendar.getFocusYear();
+                var month = my_calendar.getFocusMonth();
+
+                my_calendar.setRange(year + '-' + month + '-' + '10', year + '-' + month + '-' + '12');
+            })
+
+            buttons[6].addEventListener('click', function() {
+                my_calendar.clear();
+            })
+        </script>   
+    </body>
+</html>
