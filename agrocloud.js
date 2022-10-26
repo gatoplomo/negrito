@@ -436,14 +436,15 @@ app.post("/basededatos",function(req,res)
 
 const db = client.db(dbName);
 console.log(req.body.central);
-
+console.log("GATOOOOOOOOOOOOOOOOo")
 
 const collection = db.collection("directorios"+req.body.central);
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    //console.log(docs)
+    console.log(docs)
+    console.log("GATOQL")
 res.send(docs)
   });
 
