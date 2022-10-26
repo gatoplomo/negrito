@@ -438,7 +438,7 @@ const db = client.db(dbName);
 console.log(req.body.central);
 console.log("GATOOOOOOOOOOOOOOOOo")
 
-const collection = db.collection("directorios"+req.body.central);
+const collection = db.collection("directoriosnodo1");
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
