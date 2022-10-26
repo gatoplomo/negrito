@@ -24,6 +24,8 @@ var xl = require('excel4node');
 
 var router = express.Router();
 
+var root="/home/tom/Documentos/GitHub/negrito/Datos2/"
+var root2="/home/tom/Documentos/GitHub/negrito/"
 
 
 //ruta y Json , funcion que media entre las peticiones y el servidor 
@@ -549,7 +551,7 @@ const fs = require("fs");
 var formatted2 = dt.format('d-m-Y');
 
 //const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
-const ws = fs.createWriteStream("/home/tom/Documentos/GitHub/negrito/Datos2/"+"nodo1"+"/"+formatted+".csv");
+const ws = fs.createWriteStream(root+"nodo1"+"/"+formatted+".csv");
  let url = "mongodb://localhost:27017/";
  
 
@@ -582,7 +584,7 @@ client.connect(function(err) {
   //const collection = db.collection('directorios'+req.body.central);
 const collection = db.collection('directorios'+"nodo1");
 //collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
-collection.insertOne({id:"nodo1",date:formatted,dir:"/home/tom/Documentos/GitHub/negrito/Datos2/"+"nodo1"+"/"+formatted+"f"+".xlsx"});
+collection.insertOne({id:"nodo1",date:formatted,dir:root+"nodo1"+"/"+formatted+"f"+".xlsx"});
 
 
 
@@ -637,7 +639,7 @@ mongodb.connect(
 function mandar(cantidad)
 {
 
-var python = spawn('python3', ["/home/tom/Documentos/GitHub/negrito/formato.py",formatted,"nodo1",cantidad.toString()]);
+var python = spawn('python3', [root2+"formato.py",formatted,"nodo1",cantidad.toString()]);
 
 var dataToSend;
 
