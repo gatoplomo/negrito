@@ -332,20 +332,30 @@ th, td {
 
 </style>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
     
     $( document ).ready(function() {
 
-
-var jsarray = JSON.parse(sessionStorage.getItem("jsArray"));
-
-console.log(jsarray);
-
-
 $.ajax({
     url:'/basededatos',
     method:'POST',
-    data: {'central':localStorage.getItem("dato")},
+    data: {'central':'nodo1'},
 
     beforeSend: function(data){
       console.log('Enviando...',data)
@@ -353,42 +363,6 @@ $.ajax({
 
 
   }).done(function(respuesta){
-
-
-    console.log('Respuesta recibida:',respuesta)
-    console.log(respuesta)
-   console.log(respuesta.length)
-   const numero = respuesta.length;
-   let nombres = respuesta;
-   console.log(numero);
-
-
-
-console.log(respuesta);
-console.log(respuesta);
-console.log(respuesta);
-console.log(respuesta);
-console.log(respuesta);
-console.log(respuesta);
-
-
-var id=[];
-var sector=[];
-var estado=[];
-
-
-
-for ( var item = 0; item < numero ; item++) {
-
-
-id.push(respuesta[item].id)
-sector.push(respuesta[item].Sector)
-estado.push(respuesta[item].Estado)
-
-
-        }
-
-console.log(id);
 
 
 
@@ -398,28 +372,6 @@ $('#table').bootstrapTable({
   onClickRow:function (row,$element) {
 
 
-$( document ).ready(function() {
-
-$.ajax({
-    url:'/basededatos',
-    method:'POST',
-    //data: {'central':localStorage.getItem("dato")},
-   data: {'central':'nodo1'},
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-
-
-  }).done(function(respuesta){
-
-    const numero = respuesta.length;
-    let nombres = respuesta;
-    const canales=[];
-
-    console.log('Respuesta recibida:',respuesta)
-    console.log(respuesta)
-    console.log(respuesta.length)
- 
    
 var detalles = document.createElement("form");
 
@@ -460,28 +412,14 @@ detalles.appendChild(baton)
 
     ubi.appendChild(detalles)
 
-}).fail(function(err){
-    console.log(err)
-    
-
-  }
-
-    )
 //console.log(canales);
 
  alert("Descargando información del usuario")
 
 
-});
 
 
-/*
-    document.getElementById("nom").innerHTML = row.id;
 
-document.getElementById("sector").innerHTML = row.Sector;
-
-document.getElementById("estatus").innerHTML = row.Estado;
-*/
       modal.style.display = "block";
 
 
@@ -505,9 +443,6 @@ document.getElementById("estatus").innerHTML = row.Estado;
   
 })
 
-
-
-
 }).fail(function(err){
     console.log(err)
     
@@ -518,9 +453,38 @@ document.getElementById("estatus").innerHTML = row.Estado;
 
  alert("Base de datos descargada")
 });
-
-
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!--
 <div class="container" id="prueba">
@@ -813,16 +777,7 @@ $('#test2').selected(function() {
 </script>
 
   
-<script>
 
-function getPaging(str) {
-   localStorage.setItem("dato",str);
-  alert(str);
-  $("#loading-content").load("dataSearch.php?"+str, hideLoader);
- 
-}
-
-</script>
 
 
 <script src="/mqtt.js"></script>
@@ -981,7 +936,7 @@ location.reload();
 </script>
 
 
-
+<!--
 
 <script>
 
@@ -1003,7 +958,7 @@ var table = $('#table').DataTable();
 
 
 </script>
-
+-->
 
 
 <!-- The Modal -->
