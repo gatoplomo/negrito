@@ -29,7 +29,7 @@ const options = {
 }
 
 
-const host = 'ws://167.172.129.238:9001' 
+const host = 'ws://192.168.145.104:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -403,13 +403,13 @@ var myChart = new Chart(ctx, {
 function abrir2(id)
 {
 
-
+/*
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
   fechas.pop();
   myChart.update()
 }
-
+*/
 console.log(respuesta2[id].id)
 seleccion=respuesta2[id].id
 $.ajax({
@@ -424,11 +424,6 @@ $.ajax({
 
    const numero = respuesta.length;
    let nombres = respuesta;
-
-
-
-
-
 
 
 for ( var item = 0; item < numero ; item++) {
@@ -512,7 +507,6 @@ var msn=message.toString();
 console.log("seleccion"+seleccion)
 lecturas.push(msn)
 fechas.push(time)
-
 
 }
 myChart.update();
