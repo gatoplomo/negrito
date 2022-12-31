@@ -49,7 +49,7 @@ a=sys.argv[1]
 b=sys.argv[2]
 c=sys.argv[3]
 
-csv = pd.read_csv(r'/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.csv')
+csv = pd.read_csv(r'/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+'.csv')
 
 df = pd.DataFrame(csv)
   
@@ -58,7 +58,7 @@ df = pd.DataFrame(csv)
 
 
 # create excel writer object
-writer = pd.ExcelWriter(r'/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx')
+writer = pd.ExcelWriter(r'/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx')
 # write dataframe to excel
 df.to_excel(writer)
 # save the excel
@@ -82,7 +82,7 @@ sheet = wb.active
 
  
 # Give the location of the file
-path = '/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx'
+path = '/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx'
  
 # To open the workbook
 # workbook object is created
@@ -159,7 +159,7 @@ rows = [
 i=0
 for row in data:
 
-    rows.append([float(row),data2[i]])
+    rows.append([row,data2[i]])
     i=i+1;
 print(rows)
 
@@ -185,7 +185,7 @@ chart.set_categories(dates)
 ws.add_chart(chart, "E2")
 
 
-wb.save('/home/tom/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+"f"+'.xlsx')
+wb.save('/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+"f"+'.xlsx')
 
 
 

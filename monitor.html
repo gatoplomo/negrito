@@ -1,5 +1,5 @@
     <!DOCTYPE html>
-    <!-- saved from url=(0060)https://getbootstrap.com/docs/4.0/examples/starter-template/ -->
+   
     <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,10 +26,10 @@
 
         <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
 
-        <!-- Bootstrap core CSS -->
+    
         <link href="./Starter Template for Bootstrap_files/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
+    
         <link href="./Starter Template for Bootstrap_files/starter-template.css" rel="stylesheet">
       </head>
 
@@ -72,19 +72,14 @@
 
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="Registro_Centrales.html">Agregar Central</a>
-          <a class="dropdown-item" href="#">Agregar Usuario</a>
            <a class="dropdown-item"  id="test" href="#">Prueba</a>
           <a class="dropdown-item"  id="test2" href="#">reiniciar</a>
+          <a class="dropdown-item"  id="test2" href="#">Conf IP</a>
+          <a class="dropdown-item"  id="test2" href="#">Conf Dir</a>
           <div class="dropdown-divider"></div>
-          <!--
-          <a class="dropdown-item" href="#">Ver Canales</a>
-        -->
+       
         </div>
-      <!--
-    <li class="nav-item">
-            <a class="nav-link" href="/login.html">Cerrar Sesión</a>
-          </li>
-        -->
+    
         </ul>
       
       </div>
@@ -96,11 +91,8 @@
     <br></br>
       </div>
 
-    </main><!-- /.container -->
+    </main>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="./Starter Template for Bootstrap_files/jquery-3.2.1.slim.min.js.descarga" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 
@@ -111,60 +103,10 @@
 
 <body id="cuerpo">
 
-
-<style>
-body, html {
-  height: 100%;
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.hero-image {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/banner.jpg");
-  height: 30%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
-
-.hero-text {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
-
-.hero-text button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 10px 25px;
-  color: black;
-  background-color: #ddd;
-  text-align: center;
-  cursor: pointer;
-}
-
-.hero-text button:hover {
-  background-color: #555;
-  color: white;
-}
-</style>
 </head>
 <body>
 <br>
 <br>
-  
-
-
-<!--style="overflow:scroll; height:500px;-->
-<style type="text/css">
-
-
-</style>
   
 
 
@@ -187,7 +129,6 @@ ctx.fillRect(80, 80, 75, 50);
 
 
 
-<div id="class="container-fluid">
     <div class="row">
         <div class="col-lg-6" >
 
@@ -210,43 +151,50 @@ ctx.fillRect(80, 80, 75, 50);
          <div id="monitor3" class="container">
            
 <div class="btn-group" role="group" aria-label="Basic example">
+   <!--
+  <select id="ajustar">
+        <option value="20">Segundos</option>
+        <option value="30">Minutos</option>
+        <option value="40">Horas</option>
+      </select>
+ 
+
+    <button  type="button" class="button2" onclick="ajustar(myChart)">Ajustar</button>
+-->
+
+
   <button type="button" class="button2" onclick="limpiar(myChart)">Limpiar</button>
  <button class="button" onclick="abrir()";>Generar</button>
 
+ <button  type="button" class="button2" onclick="apagar()">Encender</button>
     
 </div>
         </div>
 
         <div id="detalles" class="container">
-
-<!--
-<form>
-  <div class="form-row">
-    <div class="col">
-      <input type="text" class="form-control" placeholder="First name">
-       <input type="text" class="form-control" placeholder="First name">
-        <input type="text" class="form-control" placeholder="First name">
-    </div>
-    <div class="col">
-      <input type="text" class="form-control" placeholder="Last name">
-       <input type="text" class="form-control" placeholder="First name">
-        <input type="text" class="form-control" placeholder="First name">
-    </div>
-  </div>
-</form>
--->
-
         </div>
     </div>
     
 </div>
+
 <table id="table"></table>
 
 
       
 
 
+<script type="text/javascript">
 
+var flag=0;
+
+ function apagar()
+ {
+
+if(flag==0)
+flag=1;
+
+ }
+</script>
 
 
 
@@ -293,31 +241,6 @@ body, html {
  
 }
 
-/* The hero image */
-.hero-image {
-  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/banner.jpg");
-
-  /* Set a specific height */
-  height: 50%;
-
-  /* Position and center the image to scale nicely on all screens */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
-
-/* Place text in the middle of the image */
-.hero-text {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
-
 
 table, th, td {
   border: 1px solid black;
@@ -334,38 +257,12 @@ th, td {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script type="text/javascript">
+
+
     
     $( document ).ready(function() {
       
-
-$.ajax({
-    url:'/basededatos',
-    method:'POST',
-    data: {'central':'nodo1'},
-
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-
-
-  }).done(function(respuesta){
-
-
 
 $('#table').bootstrapTable({ 
 
@@ -378,7 +275,7 @@ var detalles = document.createElement("form");
 
 detalles.setAttribute("action","/single")
 
-//detalles.setAttribute("id",item)
+
 
 detalles.setAttribute("method","POST")
 detalles.setAttribute("id" , "myForm")
@@ -392,8 +289,7 @@ put.setAttribute("value",row.dir.toString());
 detalles.appendChild(put)
 var baton = document.createElement("button");
 baton.setAttribute("type","submit")
-//detalles.setAttribute("id",item)
-//detalles.setAttribute("method","get")
+
 var textoCelda4 = document.createTextNode("Descargar Archivo");
 
 
@@ -405,7 +301,6 @@ detalles.appendChild(baton)
 
 
 
-  //division.appendChild(label);
     var ubi=document.getElementById("ventana")
     while (ubi.firstChild) {
   ubi.removeChild(ubi.firstChild);
@@ -418,13 +313,7 @@ detalles.appendChild(baton)
  alert("Descargando información del usuario")
 
 
-
-
-
       modal.style.display = "block";
-
-
-    alert("holaa"+row.dir.toString())
                     $('.info').removeClass('info');
                     $($element).addClass('info');
                 }, 
@@ -440,58 +329,14 @@ detalles.appendChild(baton)
   }, {
     field: 'dir',
     title: 'Directorio'
-  }],data: respuesta.reverse()
+  }],data: directorios.reverse()
   
 })
 
-}).fail(function(err){
-    console.log(err)
-    
 
-  }
-
-    )
-
- alert("Base de datos descargada")
+ 
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-<div class="container" id="prueba">
-
-</div>
--->
 
 
 <link rel="stylesheet" href="./simplepicker_ Material Inspired Date &amp; Time Picker Example_files/simplepicker.css">
@@ -519,7 +364,6 @@ $( document ).ready(function() {
     console.log('Respuesta recibida:',respuesta)
     console.log(respuesta)
     console.log(respuesta.length)
-   //console.log(numero);
 for ( var item = 0; item < numero ; item++) {
 
 copia(respuesta[item]);
@@ -534,38 +378,31 @@ copia(respuesta[item]);
             var porte= document.createElement("h1")
             var newContent3 = document.createTextNode(respuesta[item].id);
             porte.appendChild(newContent3)
-      
-            //document.body.appendChild(division)
+    
             document.getElementById("monitor").appendChild(division);
             canv.setAttribute('width', 400);
             canv.setAttribute('height', 400);
 
 
             canv.setAttribute('id', item);
-            //document.body.appendChild(canv);
+        
 
             canales.push(nombres[item].id)
-            //console.log(canales);
            
- // Obtener la referencia del elemento body
+  
   var body = document.getElementsByTagName("body")[0];
 
-  // Crea un elemento <table> y un elemento <tbody>
+
   var tabla   = document.createElement("table");
   var tblBody = document.createElement("tbody");
 
-  // Crea las celdas
   for (var i = 0; i < 4; i++) {
-    // Crea las hileras de la tabla
+ 
     var hilera = document.createElement("tr");
 
     for (var j = 0; j < 1; j++) {
-      // Crea un elemento <td> y un nodo de texto, haz que el nodo de
-      // texto sea el contenido de <td>, ubica el elemento <td> al final
-      // de la hilera de la tabla
+   
       var celda = document.createElement("td");
-     // var textoCelda = document.createTextNode("celda en la hilera "+i+", columna "+j);
-      //celda.appendChild(textoCelda);
       hilera.appendChild(celda);
 
      if(i==0)
@@ -602,7 +439,7 @@ if(i==3)
  a1.setAttribute("id",item);
  a1.setAttribute("href","#");
   a1.setAttribute("onClick","abrir2(this.id)");
- var texto22 = document.createTextNode("Registro");
+ var texto22 = document.createTextNode("Ver");
 a1.appendChild(texto22);
  li.appendChild(a1)
  var li2 = document.createElement("li");
@@ -626,7 +463,7 @@ var ul3 = document.createElement("ul");
 a13.appendChild(texto223);
  li3.appendChild(a13)
  ul.appendChild(li)
-  ul.appendChild(li2)
+  //ul.appendChild(li2)
   ul.appendChild(li3)
  celda.appendChild(ul)
      }
@@ -701,11 +538,11 @@ detalles.appendChild(textoCelda3)
 
 
 
-  // posiciona el <tbody> debajo del elemento <table>
+
   tabla.appendChild(tblBody);
-  // appends <table> into <body>
+ 
   body.appendChild(tabla);
-  // modifica el atributo "border" de la tabla y lo fija a "2";
+
   tabla.setAttribute("border", "2");
 
 
@@ -713,7 +550,7 @@ detalles.appendChild(textoCelda3)
  
 
 
-    //division.appendChild(label);
+ 
     division.appendChild(tabla)
 
 
@@ -767,7 +604,7 @@ $('#test2').selected(function() {
 
 
 
-//console.log(canales);
+
 
  alert("Bienvenido a la sala de monitoreo")
 
@@ -776,8 +613,6 @@ $('#test2').selected(function() {
 
 
 </script>
-
-  
 
 
 
@@ -799,17 +634,6 @@ $('#test2').selected(function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
 
 <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
@@ -820,37 +644,25 @@ $('#test2').selected(function() {
 
 <script>
 
-
-
-
-
-           
+         
 function insertar(readableDate) {
 
- // Find a <table> element with id="myTable":
 var table = document.getElementById("table");
 
-// Create an empty <tr> element and add it to the 1st position of the table:
 var row = table.insertRow();
 
-// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-//var cell1 = row.insertCell();
 var cell2 = row.insertCell();
 var cell3 = row.insertCell();
-
 
 
 var selector2=document.createElement("select");
 selector2.setAttribute("id",readableDate);
 selector2.setAttribute("name","cars2");
 
-
 var opt1=document.createElement("option");
 opt1.setAttribute("value","ON");
 var A1 = document.createTextNode("ON");
 opt1.appendChild(A1);
-
-
 
 var opt2=document.createElement("option");
 opt2.setAttribute("value","OFF")
@@ -863,20 +675,10 @@ var C3 = document.createTextNode("borrar");
 opt3.appendChild(C3);
 
 
-
-
-
 selector2.appendChild(opt1);
 selector2.appendChild(opt2);
 selector2.appendChild(opt3);
 
-
-
-
-
-//cell1.setAttribute("width","10%")
-// Add some text to the new cells:
-//cell1.appendChild(selector);
 
 cell2.innerHTML = readableDate.toString();
 cell3.appendChild(selector2);
@@ -897,8 +699,7 @@ $( document ).ready(function() {
   $.ajax({
     url:'/generar',
     method:'POST',
-    //data: {'central':localStorage.getItem("dato")},
-    data: {'central':'nodo1'},
+    data: {'central':localStorage.getItem("nodo")},
     beforeSend: function(data){
       console.log('Enviando...',data)
     },
@@ -924,7 +725,7 @@ $( document ).ready(function() {
   }
 
     )
-//console.log(canales);
+
 
  alert("Descargando información del usuario")
 
@@ -937,32 +738,8 @@ location.reload();
 </script>
 
 
-<!--
-
-<script>
-
-var table = $('#table').DataTable(); 
-
-       $('#table').bootstrapTable({});
-            function load(){
-                var data = [{
-                        accionador: 1,
-                        timer: 'Item 1',
-                        accion: '$1'
-                    }, {
-                        accionador: 2,
-                        timer: 'Item 2',
-                        accion: '$4'
-                    }]; 
-                $('#table').bootstrapTable("load", data);
-            }
 
 
-</script>
--->
-
-
-<!-- The Modal -->
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
@@ -980,35 +757,16 @@ var table = $('#table').DataTable();
     </div>
 
     <div class="modal-footer">
-      <h3>Registro Actual</h3>
+      <h3></h3>
+      <br>
     </div>
   </div>
 
 
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
-// Get the modal
+
 var modal = document.getElementById("myModal");
 
 var respuesta2 = [];
@@ -1439,3 +1197,5 @@ tr:nth-child(even){background-color: #f2f2f2}
 .button1 {background-color: #4CAF50;} /* Green */
 
 </style>
+
+

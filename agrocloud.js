@@ -24,8 +24,8 @@ var xl = require('excel4node');
 
 var router = express.Router();
 
-var root="/home/tom/Documentos/GitHub/negrito/Datos2/"
-var root2="/home/tom/Documentos/GitHub/negrito/"
+var root="/home/tomas/Escritorio/negrito/Datos2/"
+var root2="/home/tomas/Escritorio/negrito/"
 
 
 //ruta y Json , funcion que media entre las peticiones y el servidor 
@@ -240,8 +240,8 @@ console.log(req.body.id.toString())
 const db = client.db(dbName);
     const collection = db.collection('nodos');
 
-  collection.insertOne({id:req.body.id.toString(),info:req.body.info.toString()});
-const fsPromises = fs.promises;
+  collection.insertOne({id:req.body.id.toString(),info:req.body.info.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString()});
+//const fsPromises = fs.promises;
   
 /*  
 fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toString()).then(function() {
@@ -250,6 +250,31 @@ fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toS
     console.log('failed to create directory');
 });
 */
+}
+
+  );
+
+
+app.post("/eliminarcentral",function(req,res)
+
+{
+
+console.log(req.body.id.toString())
+
+const db = client.db(dbName);
+    const collection = db.collection('nodos');
+
+  collection.deleteOne({id:req.body.id.toString(),});
+//const fsPromises = fs.promises;
+  
+/*  
+fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toString()).then(function() {
+    console.log('Directory created successfully');
+}).catch(function() {
+    console.log('failed to create directory');
+});
+*/
+  res.send("Nodo Borrado")
 }
 
   );
@@ -287,10 +312,11 @@ app.post("/dataget",function(req,res)
 
 const db = client.db(dbName);
 console.log(req.body.central);
-
+console.log(req.body.fecha);
 const collection = db.collection(req.body.central);
-
-collection.find({}).toArray(function(err, docs) {
+fecha=req.body.fecha
+console.log(fecha)
+collection.find({"fecha":fecha}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
     //console.log(docs)
@@ -435,10 +461,9 @@ app.post("/basededatos",function(req,res)
 {
 
 const db = client.db(dbName);
-console.log(req.body.central);
-console.log("GATOOOOOOOOOOOOOOOOo")
+console.log("directorios"+req.body.central);
 
-const collection = db.collection("directoriosnodo1");
+const collection = db.collection("directorios"+req.body.central);
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -471,7 +496,7 @@ console.log("peticion recibida")
 
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.145.104:1884')
+var client2  = mqtt.connect('mqtt://192.168.8.144:1884')
  
 client2.on('connect', function () {
 
@@ -482,6 +507,12 @@ client2.on('connect', function () {
   })
 
 client2.subscribe('nodo2', function (err) {
+    if (!err) {
+      //client2.publish('nodo2', 'Hello mqtt')
+    }
+  })
+
+client2.subscribe('nodo3', function (err) {
     if (!err) {
       //client2.publish('nodo2', 'Hello mqtt')
     }
@@ -533,12 +564,11 @@ console.log(formatted2);
 app.post("/generar",function(req,res)
 
 {
-cantidad=300;
+cantidad=1000;
 
 
 console.log(req.body.central);
 
-console.log("NEGRITOOOO")
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 var formatted = dt.format('d-m-Y-H-M-S');
@@ -550,9 +580,10 @@ const fastcsv = require("fast-csv");
 const fs = require("fs");
 
 var formatted2 = dt.format('d-m-Y');
-
+console.log("pichulita de gato")
+console.log(formatted2)
 //const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
-const ws = fs.createWriteStream(root+"nodo1"+"/"+formatted+".csv");
+const ws = fs.createWriteStream(root+req.body.central+"/"+formatted+".csv");
  let url = "mongodb://localhost:27017/";
  
 
@@ -579,13 +610,12 @@ client.connect(function(err) {
   assert.equal(null, err);
   console.log("Connected successfully to server");
 
-
-
+console.log(req.body.central)
   const db = client.db(dbName);
   //const collection = db.collection('directorios'+req.body.central);
-const collection = db.collection('directorios'+"nodo1");
+const collection = db.collection('directorios'+req.body.central);
 //collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
-collection.insertOne({id:"nodo1",date:formatted,dir:root+"nodo1"+"/"+formatted+"f"+".xlsx"});
+collection.insertOne({id:req.body.central,date:formatted,dir:root+req.body.central+"/"+formatted+"f"+".xlsx"});
 
 
 
@@ -601,16 +631,15 @@ mongodb.connect(
 
     client
       .db("myproject")
-      //.collection(req.body.central)
-      .collection("nodo1")
-      .find({})
+      .collection(req.body.central)
+      .find({"fecha":formatted2})
       .toArray((err, data) => {
         if (err) throw err;
 
         console.log(data.length);
         console.log("BLACK")
         cantidad=data.length;
-        mandar(cantidad)
+        mandar(cantidad,req.body.central)
         fastcsv
           .write(data, { headers: true})
           .on("finish", function() {
@@ -637,10 +666,12 @@ mongodb.connect(
 
 
 
-function mandar(cantidad)
+function mandar(cantidad,nodo)
 {
 
-var python = spawn('python3', [root2+"formato.py",formatted,"nodo1",cantidad.toString()]);
+console.log(root2)
+console.log(formatted)
+var python = spawn('python3', [root2+"formato.py",formatted,nodo,cantidad.toString()]);
 
 var dataToSend;
 

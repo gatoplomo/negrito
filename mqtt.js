@@ -4,7 +4,10 @@
 
 
 
-
+var lecturas=[];
+var fechas=[];
+var seleccion=" "
+var directorios=[];
 
 
 
@@ -29,7 +32,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.80.104:9001' 
+const host = 'ws://192.168.8.144:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -178,7 +181,7 @@ client.on('message', (topic, message, packet) => {
   
 var msn=message.toString();
 console.log(msn);
-console.log(msn.length)
+//console.log(msn.length)
 
 //console.log(canales[0])
 if(message.length<6)
@@ -187,7 +190,7 @@ for ( var item = 0; item < numero ; item++) {
 
  if(topic.toString()==canales[item])
 
- 	gauges[item].value = parseInt(msn)
+ 	gauges[item].value = parseFloat(msn)
  //console.log(canales[item]);
 
         }
@@ -356,9 +359,7 @@ const plugin = {
   }
 };
 
-var lecturas=[];
-var fechas=[];
-var seleccion=" "
+
 
 
 var ctx = document.getElementById('myChart');
@@ -400,22 +401,63 @@ var myChart = new Chart(ctx, {
 
 
 
+
+var lecturas3=[]
+var fechas3=[]
+
 function abrir2(id)
 {
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
 
-/*
+today = dd + '-' + mm + '-' + yyyy;
+console.log(today)
+
+
+
+localStorage.setItem('nodo', respuesta2[id].id);
+$.ajax({
+    url:'/basededatos',
+    method:'POST',
+    data: {'central':respuesta2[id].id},
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+
+
+var $table = $('#table')
+$table.bootstrapTable('load', respuesta.reverse())
+
+
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+
+    )
+alert("Abriendo.."+respuesta2[id].id)
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
   fechas.pop();
-  myChart.update()
+ 
 }
-*/
+
+ myChart.update()
+
 console.log(respuesta2[id].id)
+
 seleccion=respuesta2[id].id
 $.ajax({
     url:'/dataget',
     method:'POST',
-    data: {'central':respuesta2[id].id},
+    data: {'central':respuesta2[id].id,'fecha':today},
 
     beforeSend: function(data){
       console.log('Enviando...',data)
@@ -431,10 +473,62 @@ for ( var item = 0; item < numero ; item++) {
 
 lecturas.push(respuesta[item].lectura)
 fechas.push(respuesta[item].hora)
-myChart.update();
+
 
         }
+console.log(numero)
+console.log(lecturas)
+console.log(fechas)
 
+
+var newArray = [];
+var newArray2=[];
+
+    function identical(array,array2){
+
+        
+        newArray.push(array[0]);
+        newArray2.push(array2[0]);
+
+
+        for(var i = 0; i < array.length -1; i++) {
+            if(array2[i].substring(0,2) != array2[i + 1].substring(0,2)) {
+                newArray.push(array[i + 1]);
+                newArray2.push(array2[i+1]);
+
+
+            }
+        }
+
+
+        console.log(newArray);
+        console.log(newArray2)
+
+    for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
+
+  
+}
+
+   for (var i = 0; i < newArray.length; i++) {
+ lecturas.push(newArray[i]);
+fechas.push(newArray2[i]);
+  
+}
+
+
+    }
+
+
+    identical(lecturas,fechas);
+
+myChart.update();
+
+
+
+
+myChart.update();
 
 
 
@@ -458,6 +552,131 @@ myChart.update();
 
 
 //modal.style.display = "block";
+
+
+var mem1=[];
+var mem2=[];
+
+this.ajustar=function()
+{
+
+var numero =parseInt(document.getElementById("ajustar").value);
+
+
+console.log(numero)
+console.log(lecturas)
+console.log(fechas)
+let extraida = fechas[0].substring(0,2);
+console.log(extraida)
+var opt1=0;
+var opt2=0
+
+switch (numero) {
+
+case 20:
+     opt1=6
+     opt2=8
+    break;
+case 30:
+    opt1=3
+     opt2=5
+    break;
+case 40:
+     opt1=0
+     opt2=2
+    break;
+}
+
+var newArray = [];
+var newArray2=[];
+
+    function identical(array,array2){
+
+        
+        newArray.push(array[0]);
+        newArray2.push(array2[0]);
+
+
+        for(var i = 0; i < array.length -1; i++) {
+            if(array2[i].substring(opt1,opt2) != array2[i + 1].substring(opt1,opt2)) {
+                newArray.push(array[i + 1]);
+                newArray2.push(array2[i+1]);
+
+
+            }
+        }
+
+
+        console.log(newArray);
+        console.log(newArray2)
+
+    for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
+
+  
+}
+
+   for (var i = 0; i < newArray.length; i++) {
+ lecturas.push(newArray[i]);
+fechas.push(newArray2[i]);
+  
+}
+
+
+    }
+    identical(lecturas,fechas);
+
+myChart.update();
+
+
+
+
+
+
+
+
+
+/*
+var newArray = [];
+var newArray2=[];
+    function identical(array,array2){
+
+        
+        newArray.push(array[0]);
+        newArray2.push(array2[0]);
+        for(var i = 0; i < array.length -1; i++) {
+            if(array[i] != array[i + 1]) {
+                newArray.push(array[i + 1]);
+                newArray2.push(array2[i+1]);
+
+            }
+        }
+        console.log(newArray);
+        console.log(newArray2)
+
+    for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
+  
+}
+
+   for (var i = 0; i < newArray.length; i++) {
+ lecturas.push(newArray[i]);
+fechas.push(newArray2[i]);
+  
+}
+
+
+    }
+    identical(lecturas,fechas);
+
+myChart.update();
+*/
+}
+
+
+
 
 
 
@@ -486,12 +705,13 @@ $.ajax({
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
   fechas.pop();
-  myChart.update()
+  
+}
+myChart.update()
 }
 
 }
 
-}
 
 
 client.on('message', (topic, message, packet) => {
@@ -501,15 +721,15 @@ client.on('message', (topic, message, packet) => {
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
 
-if(topic==seleccion)
+if(topic==seleccion && flag==1)
 {
 var msn=message.toString();
 console.log("seleccion"+seleccion)
 lecturas.push(msn)
 fechas.push(time)
-
-}
 myChart.update();
+}
+
 })
 
 
@@ -524,14 +744,14 @@ function abrir4(id)
 {
 
 
-
+alert(id)
 var select = document.getElementById('ventana');
 
 while (select.firstChild) {
   select.removeChild(select.firstChild);
 }
 
-var titulo=document.createTextNode("Accionador A")
+//var titulo=document.createTextNode("Accionador A")
 //select.appendChild(titulo)
 //select.appendChild(label)
 
@@ -581,7 +801,7 @@ var newContent2 = document.createTextNode("OFF");
              label.appendChild(spa)
 
 
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 2; i++) {
     
     // Crea las hileras de la tabla
     var hilera = document.createElement("tr");
@@ -599,7 +819,7 @@ var newContent2 = document.createTextNode("OFF");
      if(i==0)
      {
 
-     var textoCelda = document.createTextNode("Accionador"+x+": Luz de emergencia");
+     var textoCelda = document.createTextNode("Accionador"+x+":" +respuesta2[id].act1);
      celda.appendChild(textoCelda);
      
      }
@@ -613,27 +833,6 @@ if(i==1)
      }
 
 
-if(i==2)
-     {
-
-    
-   var textoCelda = document.createTextNode("12:00");
-     celda.appendChild(textoCelda);
-
-     
-
-     }
-
-
-if(i==3)
-     {
-
-      
-    var textoCelda = document.createTextNode("MAX:MIN:LLAMADA");
-     celda.appendChild(textoCelda);
-
-     }
-
 
 
 
@@ -642,25 +841,30 @@ if(i==3)
     // agrega la hilera al final de la tabla (al final del elemento tblbody)
     tblBody.appendChild(hilera);
   }
+
+
+
 tabla.appendChild(tblBody)
  select.appendChild(tabla)
  
 
   }
 
- var detalles3 = document.createElement("button");
-detalles3.setAttribute("class","button button1")
-detalles3.setAttribute("id","hola22")
-detalles3.setAttribute("onclick","location.href=Configurar_Centrales.html")
+ var eliminar = document.createElement("button");
+eliminar.setAttribute("class","button button1")
+eliminar.setAttribute("id",id)
+eliminar.setAttribute("onclick","borrar(this.id)")
+var textoCelda6 = document.createTextNode("Eliminar Nodo");
+eliminar.appendChild(textoCelda6)
 
- 
+select.appendChild(eliminar)
 
-var textoCelda5 = document.createTextNode("Configurar");
-detalles3.appendChild(textoCelda5)
-select.appendChild(detalles3)
+/*
 document.getElementById("hola22").onclick = function () {
         location.href = "Configuracion_Centrales.html";
     };
+*/
+
   modal.style.display = "block";
 
 
@@ -764,6 +968,49 @@ select.appendChild(trigger)
 select.appendChild(guardar)
 
 }
+
+
+
+
+
+function borrar(nodo)
+{
+
+ $.ajax({
+    url:'/eliminarcentral',
+    method:'POST',
+    data: {
+            id: respuesta2[nodo].id,
+         },
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+  }).done(function(respuesta){
+
+
+
+
+    console.log('Respuesta recibida:',respuesta)
+    console.log(respuesta)
+window.location.reload()
+
+
+}).fail(function(err){
+    console.log(err)
+    
+
+
+
+
+
+  }
+
+    )
+
+
+}
+
 
 
 

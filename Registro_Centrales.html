@@ -144,9 +144,11 @@
             <br></br>
             <label for="username">info</label> <br></br>
             <input type="text" id="info"class="block w-full p-2 border rounded border-gray-500"/>
+<label for="username">Accionador1</label> <br></br>
+            <input type="text" id="act1"class="block w-full p-2 border rounded border-gray-500"/>
 
-
-
+<label for="username">Accionador2</label> <br></br>
+            <input type="text" id="act2"class="block w-full p-2 border rounded border-gray-500"/>
 
             <input
               type="submit"
@@ -209,13 +211,14 @@ $("#boton").click(function(event){
     data: {
             id: $("#id").val(),
            info: $("#info").val(),
+           act1: $("#act1").val(),
+           act2: $("#act2").val(),
          },
 
     beforeSend: function(data){
       console.log('Enviando...',data)
     },
   }).done(function(respuesta){
-
 
 
 
