@@ -48,15 +48,169 @@ var path = __dirname + '/';
 var customers = [];
 
 
+var cron = require('node-cron');
 
-/*
-router.use(function (req,res,next) {
-  console.log("/" + req.method);
-  next();
+// ...
+cron.schedule("43 0-23 * * *", function () {
+  console.log("---------------------");
+  console.log("running a task every 15 seconds");
+
+
+
+for (let step = 0; step < centrales.length; step++) {
+respaldar(centrales[step])
+}
+
+
+
+
 });
-*/
+
+var mqtt = require('mqtt')
+var client2  = mqtt.connect('mqtt://192.168.8.151:1884')
+ 
 
 
+
+client2.on('connect', function () {
+
+
+  client2.subscribe('nodo1', function (err) {
+    if (!err) {
+     // client2.publish('nodo1', 'Hello mqtt')
+    }
+  })
+
+client2.subscribe('nodo2', function (err) {
+    if (!err) {
+      //client2.publish('nodo2', 'Hello mqtt')
+    }
+  })
+
+client2.subscribe('nodo3', function (err) {
+    if (!err) {
+      //client2.publish('nodo2', 'Hello mqtt')
+    }
+  })
+
+})
+
+function respaldar(nodo)
+{
+
+
+
+cantidad=1000;
+
+
+var dateTime = require('node-datetime');
+var dt = dateTime.create();
+var formatted = dt.format('Y-m-d H:M:S');
+console.log(formatted);
+
+
+const mongodb = require("mongodb").MongoClient;
+const fastcsv = require("fast-csv");
+const fs = require("fs");
+
+
+//const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
+const ws = fs.createWriteStream(root+nodo+"/"+formatted.substring(0,10)+".csv");
+ let url = "mongodb://localhost:27017/";
+ 
+
+
+
+//MONGO DB
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+
+
+
+
+const url2 = 'mongodb://localhost:27017';
+
+// Database Name
+const dbName = 'myproject';
+
+// Create a new MongoClient
+const client = new MongoClient(url2);
+
+// Use connect method to connect to the Server
+client.connect(function(err) {
+
+ assert.equal(null, err);
+  console.log("Connected successfully to server");
+
+//console.log(req.body.central)
+// Node.js program to demonstrate 
+// the fsPromises.mkdir() Method 
+    
+// Include fs and path module 
+var inicio="";
+var final="";
+mongodb.connect(
+  url,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err, client) => {
+    if (err) throw err;
+
+    client
+      .db("myproject")
+      .collection(nodo)
+      //.find({"fecha":formatted.substring(0,10)})
+      .find({"fecha":formatted.substring(0,10)})
+      .toArray((err, data) => {
+        if (err) throw err;
+
+if(data.length>0)
+{  
+        //console.log(data[0].date.toString().substring(11,19));
+        inicio=data[0].date.toString().substring(11,19);
+        console.log("fecha"+inicio)
+        final=data[data.length-1].date.toString().substring(11,19);
+
+
+const db = client.db(dbName);
+//const collection = db.collection('directorios'+req.body.central);
+const collection = db.collection('directorios'+nodo);
+
+const query = { name: formatted.substring(0,10) };
+const update = { $set: {id:nodo,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+nodo+"/"+formatted.substring(0,10)+".csv"}};
+const options = { upsert: true };
+collection.updateOne(query, update, options);
+
+}
+        //mandar(cantidad,req.body.central)
+        fastcsv
+          .write(data, { headers: true})
+          .on("finish", function() {
+            console.log("Exportación lista");
+          })
+          .pipe(ws);
+
+      });
+
+
+
+
+  }
+);
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 app.get("/",function(req,res){
   res.sendFile(path + "cover.html");
@@ -452,7 +606,33 @@ console.log(req.body.id)
 
   );
 
+app.post('/filtrar', (req, res) => {
+ var cantidad=300;
+ var dataToSend;
+console.log(req.body)
+ // spawn new child process to call the python script
+var python = spawn('python3', [root2+"filtrar.py",req.body.archivo,req.body.central,cantidad.toString()]);
+ // collect data from script
+ 
+ var result = '';
+ python.stdout.on('data', function (data) {
+  console.log('Pipe data from python script ...');
+result += data.toString();
+console.log(result)
+x=JSON.parse(result)
+console.log(x.length)
 
+dataToSend=x
+
+ });
+ // in close event we are sure that stream from child process is closed
+ python.on('close', (code) => {
+ console.log(`child process close all stdio with code ${code}`);
+ // send data to browser
+ res.send(dataToSend)
+ });
+ 
+})
 
 
 
@@ -495,30 +675,7 @@ console.log("peticion recibida")
 
 
 
-var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.8.144:1884')
- 
-client2.on('connect', function () {
 
-  client2.subscribe('nodo1', function (err) {
-    if (!err) {
-     // client2.publish('nodo1', 'Hello mqtt')
-    }
-  })
-
-client2.subscribe('nodo2', function (err) {
-    if (!err) {
-      //client2.publish('nodo2', 'Hello mqtt')
-    }
-  })
-
-client2.subscribe('nodo3', function (err) {
-    if (!err) {
-      //client2.publish('nodo2', 'Hello mqtt')
-    }
-  })
-
-})
 
 
 client2.on('message', function (topic, message , nodo1 , nodo1b) {
@@ -529,9 +686,9 @@ client2.on('message', function (topic, message , nodo1 , nodo1b) {
 for (let i = 0; i <centrales.length; i++) {
    if(topic==centrales[i])
   {
-  console.log(message.toString())
+  //console.log(message.toString())
 const db = client.db(dbName);
-    const collection = db.collection(centrales[i]);
+  const collection = db.collection(centrales[i]);
   // Insert some documents
 
   var fecha= new Date();
@@ -540,15 +697,10 @@ const db = client.db(dbName);
 
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
-var formatted = dt.format('d-m-Y');
-console.log(formatted);
+var formatted = dt.format('Y-m-d H:M:S');
+console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 
-var dateTime = require('node-datetime');
-var dt = dateTime.create();
-var formatted2 = dt.format('H-M-S');
-console.log(formatted2);
-
-  collection.insertOne({lectura:message.toString(),fecha: formatted,hora:formatted2});
+collection.insertOne({lectura:message.toString(),date: formatted,fecha:formatted.substring(0,10)});
 
 
 }
@@ -571,7 +723,7 @@ console.log(req.body.central);
 
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
-var formatted = dt.format('d-m-Y-H-M-S');
+var formatted = dt.format('Y-m-d H:M:S');
 console.log(formatted);
 
 
@@ -579,11 +731,9 @@ const mongodb = require("mongodb").MongoClient;
 const fastcsv = require("fast-csv");
 const fs = require("fs");
 
-var formatted2 = dt.format('d-m-Y');
-console.log("pichulita de gato")
-console.log(formatted2)
+
 //const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
-const ws = fs.createWriteStream(root+req.body.central+"/"+formatted+".csv");
+const ws = fs.createWriteStream(root+req.body.central+"/"+formatted.substring(0,10)+".csv");
  let url = "mongodb://localhost:27017/";
  
 
@@ -607,22 +757,16 @@ const client = new MongoClient(url2);
 // Use connect method to connect to the Server
 client.connect(function(err) {
 
-  assert.equal(null, err);
+ assert.equal(null, err);
   console.log("Connected successfully to server");
 
 console.log(req.body.central)
-  const db = client.db(dbName);
-  //const collection = db.collection('directorios'+req.body.central);
-const collection = db.collection('directorios'+req.body.central);
-//collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
-collection.insertOne({id:req.body.central,date:formatted,dir:root+req.body.central+"/"+formatted+"f"+".xlsx"});
-
-
-
 // Node.js program to demonstrate 
 // the fsPromises.mkdir() Method 
     
 // Include fs and path module 
+var inicio="";
+var final="";
 mongodb.connect(
   url,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -632,14 +776,33 @@ mongodb.connect(
     client
       .db("myproject")
       .collection(req.body.central)
-      .find({"fecha":formatted2})
+      //.find({"fecha":formatted.substring(0,10)})
+      .find({"fecha":formatted.substring(0,10)})
       .toArray((err, data) => {
         if (err) throw err;
 
-        console.log(data.length);
-        console.log("BLACK")
-        cantidad=data.length;
-        mandar(cantidad,req.body.central)
+if(data.length>0)
+{  
+        //console.log(data[0].date.toString().substring(11,19));
+        inicio=data[0].date.toString().substring(11,19);
+        console.log("fecha"+inicio)
+        final=data[data.length-1].date.toString().substring(11,19);
+
+
+const db = client.db(dbName);
+//const collection = db.collection('directorios'+req.body.central);
+const collection = db.collection('directorios'+req.body.central);
+
+const query = { name: formatted.substring(0,10) };
+const update = { $set: {id:req.body.central,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+req.body.central+"/"+formatted.substring(0,10)+".csv"}};
+const options = { upsert: true };
+collection.updateOne(query, update, options);
+
+
+//collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
+//collection.insertOne({id:req.body.central,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+req.body.central+"/"+formatted.substring(0,10)+".csv"});
+}
+        //mandar(cantidad,req.body.central)
         fastcsv
           .write(data, { headers: true})
           .on("finish", function() {
@@ -647,20 +810,13 @@ mongodb.connect(
           })
           .pipe(ws);
 
-     
-      
-
-
       });
-
-
 
 
 
 
   }
 );
-
 
 });
 
@@ -671,7 +827,7 @@ function mandar(cantidad,nodo)
 
 console.log(root2)
 console.log(formatted)
-var python = spawn('python3', [root2+"formato.py",formatted,nodo,cantidad.toString()]);
+var python = spawn('python3', [root2+"lecturas.py",formatted,nodo,cantidad.toString()]);
 
 var dataToSend;
 
@@ -681,6 +837,7 @@ var dataToSend;
  python.stdout.on('data', function (data) {
   console.log('Pipe data from python script ...');
   dataToSend = data.toString();
+  console.log(dataToSend)
  });
  // in close event we are sure that stream from child process is closed
 
@@ -693,6 +850,8 @@ var dataToSend;
  });
 
 }
+
+
 
  
 }

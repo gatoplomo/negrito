@@ -147,32 +147,10 @@ ctx.fillRect(80, 80, 75, 50);
 
         <div class="col-lg-6">
             <div id="monitor2" class="container">
+
         </div>
-         <div id="monitor3" class="container">
-           
-<div class="btn-group" role="group" aria-label="Basic example">
-   <!--
-  <select id="ajustar">
-        <option value="20">Segundos</option>
-        <option value="30">Minutos</option>
-        <option value="40">Horas</option>
-      </select>
- 
+   
 
-    <button  type="button" class="button2" onclick="ajustar(myChart)">Ajustar</button>
--->
-
-
-  <button type="button" class="button2" onclick="limpiar(myChart)">Limpiar</button>
- <button class="button" onclick="abrir()";>Generar</button>
-
- <button  type="button" class="button2" onclick="apagar()">Encender</button>
-    
-</div>
-        </div>
-
-        <div id="detalles" class="container">
-        </div>
     </div>
     
 </div>
@@ -180,6 +158,10 @@ ctx.fillRect(80, 80, 75, 50);
 <table id="table"></table>
 
 
+ <button class="button" onclick="abrir()";>Generar</button>
+
+ <button  type="button" class="button2" onclick="apagar()">Encender</button>
+    
       
 
 
@@ -189,26 +171,18 @@ var flag=0;
 
  function apagar()
  {
-
+   for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
+}
+myChart.update()
 if(flag==0)
+
+
 flag=1;
 
  }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <style>
 
@@ -266,54 +240,60 @@ th, td {
 
 $('#table').bootstrapTable({ 
 
-
   onClickRow:function (row,$element) {
 
-
-   
-var detalles = document.createElement("form");
-
-detalles.setAttribute("action","/single")
-
-
-
-detalles.setAttribute("method","POST")
-detalles.setAttribute("id" , "myForm")
-
-var put = document.createElement("input");
-put.setAttribute("type","hidden")
-put.setAttribute("id","hiddenField")
-put.setAttribute("name","id")
-put.setAttribute("value",row.dir.toString());
-
-detalles.appendChild(put)
-var baton = document.createElement("button");
-baton.setAttribute("type","submit")
-
-var textoCelda4 = document.createTextNode("Descargar Archivo");
+  $.ajax({
+    url:'/filtrar',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo"),'archivo':row.date.substring(0,10)},
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
 
 
+  }).done(function(res){
 
-baton.appendChild(textoCelda4)
-
-detalles.appendChild(baton)
-
+console.log(res)
 
 
+   for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
 
-    var ubi=document.getElementById("ventana")
-    while (ubi.firstChild) {
-  ubi.removeChild(ubi.firstChild);
+  
 }
 
-    ubi.appendChild(detalles)
+
+for ( var item = 0; item < res.length ; item++) {
+
+
+lecturas.push(res[item].lectura)
+fechas.push(res[item].date.substring(10,20))
+
+
+        }
+console.log(lecturas)
+console.log(fechas)
+
+ myChart.update()
+   
+}).fail(function(err){
+
+    
+
+  }
+
+    )
+
+
+
+
+
 
 //console.log(canales);
 
  alert("Descargando información del usuario")
 
-
-      modal.style.display = "block";
                     $('.info').removeClass('info');
                     $($element).addClass('info');
                 }, 
@@ -322,16 +302,30 @@ detalles.appendChild(baton)
   search: true,
   columns: [{
     field: 'id',
-    title: 'id'
+    title: 'Nodo'
   }, {
     field: 'date',
-    title: 'Fecha Actualización  '
+    title: 'Fecha Creación '
   }, {
+    field: 'time',
+    title: 'Ultima Actualización'
+  }, 
+{
+    field: 'h2',
+    title: 'Ultimo Dato'
+  }, 
+{
+    field: 'h1',
+    title: 'Primer Dato'
+  }, 
+
+  {
     field: 'dir',
     title: 'Directorio'
   }],data: directorios
   
 })
+
 
 
  
@@ -439,7 +433,7 @@ if(i==3)
  a1.setAttribute("id",item);
  a1.setAttribute("href","#");
   a1.setAttribute("onClick","abrir2(this.id)");
- var texto22 = document.createTextNode("perrito");
+ var texto22 = document.createTextNode("Ver");
 a1.appendChild(texto22);
  li.appendChild(a1)
  var li2 = document.createElement("li");

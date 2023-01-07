@@ -38,14 +38,14 @@ from openpyxl.chart.axis import DateAxis
 
 
 
-a=sys.argv[1]
+fecha=sys.argv[1]
 b=sys.argv[2]
-c=sys.argv[3]
+#c=sys.argv[3]
 
-csv = pd.read_csv(r'/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+'.csv')
+csv = pd.read_csv(r'/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+fecha+'.csv',parse_dates =["date"], index_col ="date")
 
 df = pd.DataFrame(csv)
-  
+df.head()
 # displaying the DataFrame
 #display(df)
 
@@ -55,8 +55,10 @@ data=[];
 print(df)
 print(len(df))
 
-for i in range(len(df)):
-    #print(df.loc[i])
-    data.append(df.loc[i])
 
-print(data)
+
+
+hola=df['lectura'].resample('5S').ffill()
+
+print(hola)
+print(len(hola))

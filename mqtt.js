@@ -32,7 +32,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.8.144:9001' 
+const host = 'ws://192.168.8.151:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -170,7 +170,7 @@ for ( var item = 0; item < numero ; item++) {
  client.subscribe(canales[item], { qos: 0 })
  client.subscribe(canales[item]+"reporte", { qos: 0 })
           
-gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 200,
+gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 180,
     height: 210, id:item}).draw()
 
 
@@ -339,7 +339,7 @@ var chart = document.createElement("canvas")
 chart.setAttribute("id","myChart")
 
 
-chart.setAttribute("height","200")
+chart.setAttribute("height","175")
 chart.setAttribute("width","auto")
 chartconteiner.appendChild(chart)
 
@@ -412,7 +412,7 @@ var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 
-today = dd + '-' + mm + '-' + yyyy;
+today = yyyy + '-' + mm + '-' + dd;
 console.log(today)
 
 
@@ -472,7 +472,7 @@ for ( var item = 0; item < numero ; item++) {
 
 
 lecturas.push(respuesta[item].lectura)
-fechas.push(respuesta[item].hora)
+fechas.push(respuesta[item].date.substring(10,20))
 
 
         }
@@ -489,10 +489,8 @@ var newArray2=[];
         
         newArray.push(array[0]);
         newArray2.push(array2[0]);
-
-
         for(var i = 0; i < array.length -1; i++) {
-            if(array2[i].substring(0,2) != array2[i + 1].substring(0,2)) {
+            if(array2[i].substring(0,3) != array2[i + 1].substring(0,3)) {
                 newArray.push(array[i + 1]);
                 newArray2.push(array2[i+1]);
 
@@ -501,8 +499,8 @@ var newArray2=[];
         }
 
 
-        console.log(newArray);
-        console.log(newArray2)
+        //console.log(array2[0].substring(3,4));
+        //console.log(array2[0].substring(3,4))
 
     for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
@@ -751,17 +749,8 @@ while (select.firstChild) {
   select.removeChild(select.firstChild);
 }
 
-//var titulo=document.createTextNode("Accionador A")
-//select.appendChild(titulo)
-//select.appendChild(label)
-
-
-// Crea un elemento <table> y un elemento <tbody>
   var tabla   = document.createElement("table");
   var tblBody = document.createElement("tbody");
- // Crea las celdas+
-//
-
 
 for (var x = 0; x < 2; x++) {
 //botón 1
@@ -807,12 +796,9 @@ var newContent2 = document.createTextNode("OFF");
     var hilera = document.createElement("tr");
 
     for (var j = 0; j < 1; j++) {
-      // Crea un elemento <td> y un nodo de texto, haz que el nodo de
-      // texto sea el contenido de <td>, ubica el elemento <td> al final
-      // de la hilera de la tabla
+
       var celda = document.createElement("td");
-     // var textoCelda = document.createTextNode("celda en la hilera "+i+", columna "+j);
-      //celda.appendChild(textoCelda);
+ 
       hilera.appendChild(celda);
 
 
@@ -838,7 +824,7 @@ if(i==1)
 
     }
 
-    // agrega la hilera al final de la tabla (al final del elemento tblbody)
+
     tblBody.appendChild(hilera);
   }
 
@@ -887,87 +873,6 @@ window.onclick = function(event) {
   }
 
 
-
-
-
-
-
-
-
-  function abrir3(id)
-{
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-var select = document.getElementById('ventana');
-
-
-
-while (select.firstChild) {
-  select.removeChild(select.firstChild);
-}
-
-var evento=document.createElement("input");
-evento.setAttribute("type","button");
-evento.setAttribute("value","Añadir Evento de Tiempo");
-evento.setAttribute("onclick","simplepicker.open();")
-
-var trigger=document.createElement("input");
-
-
-trigger.setAttribute("type","button");
-trigger.setAttribute("value","Añadir Evento de Sensor");
-trigger.setAttribute("onclick","insertar2();")
-
-
-var guardar=document.createElement("input");
-
-
-guardar.setAttribute("type","button");
-guardar.setAttribute("value","Guardar");
-guardar.setAttribute("onclick","obtener(this.id);")
-guardar.setAttribute("id",id);
-
-var dov= document.createElement("div");
-dov.setAttribute("id","eventos");
-
-
-
-select.appendChild(dov);
-
-let table = document.createElement('table');
-let thead = document.createElement('thead');
-let tbody = document.createElement('tbody');
-
-table.appendChild(thead);
-table.appendChild(tbody);
-
-document.getElementById('ventana').appendChild(table);
-
-modal.style.display = "block";
-
-genera();
-
-select.appendChild(evento)
-genera_tabla2()
-select.appendChild(trigger)
-select.appendChild(guardar)
-
-}
 
 
 
