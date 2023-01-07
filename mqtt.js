@@ -345,7 +345,30 @@ chartconteiner.appendChild(chart)
 
 
 
+
 select.appendChild(chartconteiner)
+
+labelo=document.createElement("label")
+labelo.setAttribute("class","switch")
+
+inputo=document.createElement("input")
+inputo.setAttribute("type","checkbox")
+spano=document.createElement("span")
+spano.setAttribute("class","slider round")
+
+labelo.appendChild(inputo)
+labelo.appendChild(spano)
+chartconteiner.appendChild(labelo)
+
+
+
+
+
+
+
+
+
+
 
 const plugin = {
   id: 'custom_canvas_background_color',
