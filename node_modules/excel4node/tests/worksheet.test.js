@@ -2,7 +2,7 @@ const tape = require('tape');
 const _tape = require('tape-promise').default;
 const test = _tape(tape);
 const xl = require('../source/index');
-const DOMParser = require('xmldom').DOMParser;
+const DOMParser = require('@xmldom/xmldom').DOMParser;
 
 test('Generate multiple sheets', (t) => {
     let wb = new xl.Workbook();

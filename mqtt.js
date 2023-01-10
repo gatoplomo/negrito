@@ -32,7 +32,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.8.151:9001' 
+const host = 'ws://192.168.8.128:9001' 
 
 
 console.log('Connecting mqtt client')

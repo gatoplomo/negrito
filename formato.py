@@ -43,7 +43,7 @@ a=sys.argv[1]
 b=sys.argv[2]
 c=sys.argv[3]
 
-csv = pd.read_csv(r'/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+'.csv')
+csv = pd.read_csv(r'/home/tomas/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.csv')
 
 df = pd.DataFrame(csv)
   
@@ -52,7 +52,7 @@ df = pd.DataFrame(csv)
 
 
 # create excel writer object
-writer = pd.ExcelWriter(r'/home/tomas/Escritorio/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx')
+writer = pd.ExcelWriter(r'/home/tomas/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+a+'.xlsx')
 # write dataframe to excel
 df.to_excel(writer)
 # save the excel

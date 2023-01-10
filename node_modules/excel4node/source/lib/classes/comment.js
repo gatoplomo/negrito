@@ -1,4 +1,5 @@
-const uuid = require('uuid/v4');
+// const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const utils = require('../utils');
 
 // §18.7.3 Comment

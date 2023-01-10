@@ -24,8 +24,8 @@ var xl = require('excel4node');
 
 var router = express.Router();
 
-var root="/home/tomas/Escritorio/negrito/Datos2/"
-var root2="/home/tomas/Escritorio/negrito/"
+var root="/home/tomas/Documentos/GitHub/negrito/Datos2/"
+var root2="/home/tomas/Documentos/GitHub/negrito/"
 
 
 //ruta y Json , funcion que media entre las peticiones y el servidor 
@@ -67,7 +67,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.8.151:1884')
+var client2  = mqtt.connect('mqtt://192.168.8.128:1884')
  
 
 
@@ -731,7 +731,25 @@ const mongodb = require("mongodb").MongoClient;
 const fastcsv = require("fast-csv");
 const fs = require("fs");
 
+const dir = root+"/nodo2";
 
+//requiring path and fs modules
+const path = require('path');
+
+//joining path of directory 
+const directoryPath = path.join(__dirname, "/Datos2/nodo2");
+//passsing directoryPath and callback function
+fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    } 
+    //listing all files using forEach
+    files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        console.log(file); 
+    });
+});
 //const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
 const ws = fs.createWriteStream(root+req.body.central+"/"+formatted.substring(0,10)+".csv");
  let url = "mongodb://localhost:27017/";

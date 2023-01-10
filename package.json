@@ -24,11 +24,12 @@
     "json2csv": "^5.0.6",
     "mongo-export": "^0.3.1",
     "mongodb": "^3.7.3",
-    "mqtt": "^4.3.4",
+    "mqtt": "^4.3.7",
     "node-cron": "^3.0.2",
     "node-datetime": "^2.1.2",
     "nodemon": "^2.0.9",
     "pandas": "^0.0.3",
-    "python-shell": "^3.0.1"
+    "python-shell": "^3.0.1",
+    "python3": "^0.0.1"
   }
 }
