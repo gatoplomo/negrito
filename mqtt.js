@@ -32,7 +32,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.8.128:9001' 
+const host = 'ws://192.168.0.170:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -358,9 +358,14 @@ spano.setAttribute("class","slider round")
 
 labelo.appendChild(inputo)
 labelo.appendChild(spano)
+
+trash=document.createElement("span")
+trash.setAttribute("classs","bi bi-trash")
+
+
 chartconteiner.appendChild(labelo)
 
-
+chartconteiner.appendChild(trash)
 
 
 
@@ -452,8 +457,8 @@ $.ajax({
 
 
   }).done(function(respuesta){
-
-
+console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAA")
+console.log(respuesta.reverse())
 var $table = $('#table')
 $table.bootstrapTable('load', respuesta.reverse())
 

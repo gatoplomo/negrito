@@ -67,7 +67,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.8.128:1884')
+var client2  = mqtt.connect('mqtt://192.168.0.170:1884')
  
 
 
@@ -162,25 +162,6 @@ mongodb.connect(
       .find({"fecha":formatted.substring(0,10)})
       .toArray((err, data) => {
         if (err) throw err;
-
-if(data.length>0)
-{  
-        //console.log(data[0].date.toString().substring(11,19));
-        inicio=data[0].date.toString().substring(11,19);
-        console.log("fecha"+inicio)
-        final=data[data.length-1].date.toString().substring(11,19);
-
-
-const db = client.db(dbName);
-//const collection = db.collection('directorios'+req.body.central);
-const collection = db.collection('directorios'+nodo);
-
-const query = { name: formatted.substring(0,10) };
-const update = { $set: {id:nodo,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+nodo+"/"+formatted.substring(0,10)+".csv"}};
-const options = { upsert: true };
-collection.updateOne(query, update, options);
-
-}
         //mandar(cantidad,req.body.central)
         fastcsv
           .write(data, { headers: true})
@@ -639,17 +620,73 @@ dataToSend=x
 app.post("/basededatos",function(req,res)
 
 {
+  var fecha= new Date();
+ var hora_actual = Date.now();
 
+
+var dateTime = require('node-datetime');
+var dt = dateTime.create();
+var formatted = dt.format('Y-m-d H:M:S');
+
+
+const fastcsv = require("fast-csv");
+const fs = require("fs");
+
+const dir = root+"/nodo2";
+
+//requiring path and fs modules
+const path = require('path');
+
+//joining path of directory 
+const directoryPath = path.join(__dirname, "/Datos2/"+req.body.central);
+//passsing directoryPath and callback function
+
+ 
 const db = client.db(dbName);
+//const collection = db.collection('directorios'+req.body.central);
+const collection = db.collection('directorios'+req.body.central);
+
+
+fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    }
+    console.log(files)
+
+
+for (let i = 0; i <files.length; i++) {
+
+console.log(files[i])
+
+const query = { name: files[i]};
+const update = { $set: {id:req.body.central,date:files[i].substring(0,files[i].indexOf(".")),dir:root+req.body.central+"/"+files[i]}};
+const options = { upsert: true };
+collection.updateOne(query, update, options);
+
+}
+//collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
+//collection.insertOne({id:req.body.central,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+req.body.central+"/"+formatted.substring(0,10)+".csv"});
+
+
+
+});
+
+
+
+
+
+
+
+
+//const db = client.db(dbName);
 console.log("directorios"+req.body.central);
 
-const collection = db.collection("directorios"+req.body.central);
-
 collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
+    //assert.equal(err, null);
+    //console.log("Found the following records");
     console.log(docs)
-    console.log("GATOQL")
+    //console.log("GATOQL")
 res.send(docs)
   });
 
@@ -737,19 +774,9 @@ const dir = root+"/nodo2";
 const path = require('path');
 
 //joining path of directory 
-const directoryPath = path.join(__dirname, "/Datos2/nodo2");
+const directoryPath = path.join(__dirname, "/Datos2/"+req.body.central);
 //passsing directoryPath and callback function
-fs.readdir(directoryPath, function (err, files) {
-    //handling error
-    if (err) {
-        return console.log('Unable to scan directory: ' + err);
-    } 
-    //listing all files using forEach
-    files.forEach(function (file) {
-        // Do whatever you want to do with the file
-        console.log(file); 
-    });
-});
+
 //const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
 const ws = fs.createWriteStream(root+req.body.central+"/"+formatted.substring(0,10)+".csv");
  let url = "mongodb://localhost:27017/";
@@ -785,6 +812,19 @@ console.log(req.body.central)
 // Include fs and path module 
 var inicio="";
 var final="";
+
+
+fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    }
+    console.log(files)
+
+});
+
+
+
 mongodb.connect(
   url,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -799,27 +839,7 @@ mongodb.connect(
       .toArray((err, data) => {
         if (err) throw err;
 
-if(data.length>0)
-{  
-        //console.log(data[0].date.toString().substring(11,19));
-        inicio=data[0].date.toString().substring(11,19);
-        console.log("fecha"+inicio)
-        final=data[data.length-1].date.toString().substring(11,19);
 
-
-const db = client.db(dbName);
-//const collection = db.collection('directorios'+req.body.central);
-const collection = db.collection('directorios'+req.body.central);
-
-const query = { name: formatted.substring(0,10) };
-const update = { $set: {id:req.body.central,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+req.body.central+"/"+formatted.substring(0,10)+".csv"}};
-const options = { upsert: true };
-collection.updateOne(query, update, options);
-
-
-//collection.insertOne({id:req.body.central,date:formatted,dir:"/home/tom/cloud/Datos/"+req.body.central+"/"+formatted+"f"+".xlsx"});
-//collection.insertOne({id:req.body.central,date:formatted.substring(0,10),time:formatted.substring(11,19),h1:inicio,h2:final,dir:root+req.body.central+"/"+formatted.substring(0,10)+".csv"});
-}
         //mandar(cantidad,req.body.central)
         fastcsv
           .write(data, { headers: true})
@@ -836,9 +856,14 @@ collection.updateOne(query, update, options);
   }
 );
 
+
+
+
+
+
+
+
 });
-
-
 
 function mandar(cantidad,nodo)
 {
