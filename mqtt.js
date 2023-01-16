@@ -1,16 +1,8 @@
 
-
-
-
-
-
 var lecturas=[];
 var fechas=[];
 var seleccion=" "
 var directorios=[];
-
-
-
 
 
 const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
@@ -55,9 +47,6 @@ client.on('connect', () => {
 
   
 })
-
-
-
 
 
 
@@ -158,6 +147,13 @@ document.getElementById(":"+respuesta2[i].id+"/Accionador1").checked = true;
 
 
 
+
+
+
+
+
+
+
 function comu(canales,numero)
 {
   let canales2=[];
@@ -195,9 +191,6 @@ for ( var item = 0; item < numero ; item++) {
 
         }
 }
-
-
-
 })
 
 
@@ -212,90 +205,49 @@ function comu2(canales,numero)
 {
   let canales3=[];
 canales3=canales;
-
-
 for ( var item = 0; item < numero ; item++) {
-
  client.publish(canales3[item],"80")
-
-
         }
-
-
 }
+
 
 
 
 function comu3(canales,numero)
 {
-
    let canales4=[];
 canales4=canales;
-
-
 for ( var item = 0; item < numero ; item++) {
-
  client.publish(canales4[item],"0")
-
-
         }
-
-
-
-
 }
 
 
 
  
 function doalert(checkboxElem,canales,numero) {
-
-
 let canales2=[];
 canales2=canales;
-
-
-
-
 for ( var item = 0; item < numero ; item++) {
 
  client.subscribe(canales[item], { qos: 0 })
 client.subscribe(canales[item]+"reporte", { qos: 0 })
 
         }
-
-
-
-
-
-
-
-
 client.on('message', (topic, message, packet) => {
   //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
-
-
-
 })
-
-
   if (checkboxElem.checked) {
-
-
-
   var strong = checkboxElem.id.substring(
     checkboxElem.id.lastIndexOf(":") + 1, 
     checkboxElem.id.lastIndexOf("/")
 );
-
  var strong2 = checkboxElem.id.substring(
     checkboxElem.id.lastIndexOf("/") + 1, 
     checkboxElem.id.length
 );
 
-
 mySubString=strong+"control";
-  
     alert(strong2+"#ON;")
     client.publish(mySubString,strong2+"#ON;")
     //console.log(mySubString,checkboxElem.id+"#ON;")
@@ -314,89 +266,43 @@ mySubString=strong+"control";
   mySubString=strong+"control";
   //alert(mySubString)
  client.publish(mySubString,strong2+"#OFF;")
- console.log(mySubString,strong2+"#OFF;")
-    
-    
+ console.log(mySubString,strong2+"#OFF;") 
   }
 }
 
 
-var kabur=0;
-
-
-
-
-
 
 var select = document.getElementById('monitor2');
-
-
 var chartconteiner= document.createElement("div")
 chartconteiner.setAttribute("class","chart-container")
-
-
 var chart = document.createElement("canvas")
 chart.setAttribute("id","myChart")
-
-
 chart.setAttribute("height","175")
 chart.setAttribute("width","auto")
 chartconteiner.appendChild(chart)
-
-
-
-
 select.appendChild(chartconteiner)
-
 labelo=document.createElement("label")
 labelo.setAttribute("class","switch")
-
 inputo=document.createElement("input")
 inputo.setAttribute("type","checkbox")
 spano=document.createElement("span")
 spano.setAttribute("class","slider round")
-
 labelo.appendChild(inputo)
 labelo.appendChild(spano)
-
-trash=document.createElement("span")
-trash.setAttribute("classs","bi bi-trash")
-
-
 chartconteiner.appendChild(labelo)
 
-chartconteiner.appendChild(trash)
-
-
-
-
-
-
-
-
-
-const plugin = {
-  id: 'custom_canvas_background_color',
-  beforeDraw: (chart) => {
-    const {ctx} = chart;
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-over';
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, chart.width, chart.height);
-    ctx.restore();
-  }
-};
 
 
 
 
 var ctx = document.getElementById('myChart');
+/*
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: fechas,
         datasets: [{
-            label: 'Real Time',
+            label: '',
             data: lecturas,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -416,25 +322,95 @@ var myChart = new Chart(ctx, {
             ],
             borderWidth: 1
         }]
-    },plugins: [plugin],
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
+    }   
+
 });
 
+*/
+window.chartColors = {
+  red: 'rgb(255, 99, 132)',
+  orange: 'rgb(255, 159, 64)',
+  yellow: 'rgb(255, 205, 86)',
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  purple: 'rgb(153, 102, 255)',
+  grey: 'rgb(231,233,237)'
+};
 
+var config = {
+  type: 'line',
+  data: {
+    labels: fechas,
+    datasets: [{
+      label: "Temperatura nodo 1",
+      backgroundColor: window.chartColors.red,
+      borderColor: window.chartColors.red,
+      data: lecturas,  backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],  borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1,
+      fill: true,
+    }]
+  },
+  options: {
+    responsive: true,
+    title:{
+      display:true,
+      text:'Gráfico'
+    },
+   hover: {
+      mode: 'nearest',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        display: true,
+        scaleLabel: {
+          display: true,
+          labelString: 'Horas'
+        }
+      }],
+      yAxes: [{
+        display: true,
+        scaleLabel: {
+          display: true,
+           labelString: 'Temperatura'
+        },
+      }]
+    }
+  }
+};
+
+var myChart = new Chart(ctx, config);
 
 
 
 var lecturas3=[]
 var fechas3=[]
 
-function abrir2(id)
+
+function ver(id)
 {
+
+localStorage.setItem('nodo', respuesta2[id].id);
+
+console.log("PICHULAAAA")
+
+var x = document.getElementById("tabla"+respuesta2[id].id).getElementsByTagName("td");
+x[0].style.backgroundColor = "#D5FAC2";   
+   
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -445,7 +421,7 @@ console.log(today)
 
 
 
-localStorage.setItem('nodo', respuesta2[id].id);
+
 $.ajax({
     url:'/basededatos',
     method:'POST',
@@ -457,12 +433,9 @@ $.ajax({
 
 
   }).done(function(respuesta){
-console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAA")
 console.log(respuesta.reverse())
 var $table = $('#table')
 $table.bootstrapTable('load', respuesta.reverse())
-
-
 }).fail(function(err){
     console.log(err)
     
@@ -616,7 +589,7 @@ case 40:
 var newArray = [];
 var newArray2=[];
 
-    function identical(array,array2){
+    function filtro(array,array2){
 
         
         newArray.push(array[0]);
@@ -651,59 +624,11 @@ fechas.push(newArray2[i]);
 
 
     }
-    identical(lecturas,fechas);
+    filtro(lecturas,fechas);
 
 myChart.update();
 
-
-
-
-
-
-
-
-
-/*
-var newArray = [];
-var newArray2=[];
-    function identical(array,array2){
-
-        
-        newArray.push(array[0]);
-        newArray2.push(array2[0]);
-        for(var i = 0; i < array.length -1; i++) {
-            if(array[i] != array[i + 1]) {
-                newArray.push(array[i + 1]);
-                newArray2.push(array2[i+1]);
-
-            }
-        }
-        console.log(newArray);
-        console.log(newArray2)
-
-    for (var i = lecturas.length; i > 0; i--) {
- lecturas.pop();
-fechas.pop();
-  
 }
-
-   for (var i = 0; i < newArray.length; i++) {
- lecturas.push(newArray[i]);
-fechas.push(newArray2[i]);
-  
-}
-
-
-    }
-    identical(lecturas,fechas);
-
-myChart.update();
-*/
-}
-
-
-
-
 
 
 this.limpiar =function()
@@ -740,6 +665,11 @@ myChart.update()
 
 
 
+
+
+
+
+
 client.on('message', (topic, message, packet) => {
   //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
 
@@ -766,7 +696,7 @@ myChart.update();
 
 
 
-function abrir4(id)
+function acciones(id)
 {
 
 
@@ -819,49 +749,25 @@ var newContent2 = document.createTextNode("OFF");
 
 
   for (var i = 0; i < 2; i++) {
-    
     // Crea las hileras de la tabla
     var hilera = document.createElement("tr");
-
     for (var j = 0; j < 1; j++) {
-
       var celda = document.createElement("td");
- 
       hilera.appendChild(celda);
-
-
      if(i==0)
      {
-
      var textoCelda = document.createTextNode("Accionador"+x+":" +respuesta2[id].act1);
      celda.appendChild(textoCelda);
-     
      }
-
-
 if(i==1)
      {
-
      celda.appendChild(label);
-
      }
-
-
-
-
-
     }
-
-
     tblBody.appendChild(hilera);
   }
-
-
-
 tabla.appendChild(tblBody)
  select.appendChild(tabla)
- 
-
   }
 
  var eliminar = document.createElement("button");
@@ -933,10 +839,6 @@ window.location.reload()
     console.log(err)
     
 
-
-
-
-
   }
 
     )
@@ -946,8 +848,74 @@ window.location.reload()
 
 
 
+   $( document ).ready(function() {
+      
+
+
+});
 
 
 
+var flag=0;
+
+ function apagar()
+ {
+   for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
+}
+myChart.update()
+if(flag==0)
 
 
+flag=1;
+
+ }
+
+var modal = document.getElementById("myModal");
+
+var respuesta2 = [];
+
+
+
+function copia(respuesta)
+{
+
+respuesta2.push(respuesta)
+console.log(respuesta2);
+
+}
+
+
+var select = document.getElementById('ventana');
+var texto= document.createElement("h1");
+
+var texto3= document.createTextNode("alsjdlkjsd");
+
+texto.appendChild(texto3);
+
+select.appendChild(texto);
+
+
+
+var modal = document.getElementById("myModal");
+
+var respuesta2 = [];
+
+function copia(respuesta)
+{
+
+respuesta2.push(respuesta)
+console.log(respuesta2);
+
+}
+
+
+var select = document.getElementById('ventana');
+var texto= document.createElement("h1");
+
+var texto3= document.createTextNode("alsjdlkjsd");
+
+texto.appendChild(texto3);
+
+select.appendChild(texto);
