@@ -43,9 +43,50 @@ var tblBody = document.createElement("tbody");
 var hilera1 = document.createElement("tr");
 var textoCelda = document.createTextNode(respuesta[item].id);  
 var celda = document.createElement("td");
+
+
+
 led=document.createElement("div")
+led.setAttribute("class","green led")
+
+
+
+
 celda.appendChild(textoCelda);
+//celda.appendChild(led)
 hilera1.appendChild(celda);
+
+
+container=document.createElement("div")
+container.setAttribute("class","container")
+
+row=document.createElement("div")
+row.setAttribute("class","row")
+
+col1=document.createElement("div")
+col1.setAttribute("class","col-sm")
+col1.setAttribute("aling" ,"right")
+col1.appendChild(textoCelda)
+
+
+col2=document.createElement("div")
+col2.setAttribute("class","col-sm")
+col2.setAttribute("aling" ,"right")
+col2.appendChild(led)
+
+row.appendChild(col1)
+row.appendChild(col2)
+
+container.appendChild(row)
+
+celda.appendChild(row)
+
+
+
+
+
+
+
 var hilera2 = document.createElement("tr");
 var celda2= document.createElement("td");
 var textoCelda = document.createTextNode("");
@@ -247,7 +288,7 @@ console.log(fechas)
 
 //FUNCION PARA GENERAR CSV POR NODO MEDIANTE BOTÖN
 function generar()
-{
+{9
 
 $( document ).ready(function() {
 
