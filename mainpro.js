@@ -232,6 +232,7 @@ console.log(fechas)
 
   pagination: true,
   search: true,
+   pageSize: 4,
   columns: [{
     field: 'id',
     title: 'Nodo'
@@ -259,9 +260,6 @@ console.log(fechas)
   }],data: directorios
   
 })
-
-
-
 
 
 

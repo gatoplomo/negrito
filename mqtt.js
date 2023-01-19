@@ -277,7 +277,7 @@ var chartconteiner= document.createElement("div")
 chartconteiner.setAttribute("class","chart-container")
 var chart = document.createElement("canvas")
 chart.setAttribute("id","myChart")
-chart.setAttribute("height","175")
+chart.setAttribute("height","200")
 chart.setAttribute("width","auto")
 chartconteiner.appendChild(chart)
 select.appendChild(chartconteiner)
@@ -400,13 +400,32 @@ var myChart = new Chart(ctx, config);
 var lecturas3=[]
 var fechas3=[]
 
-
+var nodoanterior="";
 function ver(id)
 {
 
 localStorage.setItem('nodo', respuesta2[id].id);
 
 console.log("PICHULAAAA")
+
+
+
+        for(var i = 0; i < respuesta2.length; i++) {
+            if(respuesta2[id]==respuesta2[i]) {
+              var x = document.getElementById("tabla"+respuesta2[i].id).getElementsByTagName("td");
+x[0].style.backgroundColor = "#D5FAC2";   
+
+
+            }
+            else {
+
+
+              var x = document.getElementById("tabla"+respuesta2[i].id).getElementsByTagName("td");
+x[0].style.backgroundColor = "#FFFFFF";   
+
+
+            }
+        }
 
 var x = document.getElementById("tabla"+respuesta2[id].id).getElementsByTagName("td");
 x[0].style.backgroundColor = "#D5FAC2";   
@@ -435,6 +454,10 @@ $.ajax({
   }).done(function(respuesta){
 console.log(respuesta.reverse())
 var $table = $('#table')
+var $table2 = $('#table2')
+var $table3 = $('#table3')
+
+
 $table.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
     console.log(err)
@@ -442,7 +465,15 @@ $table.bootstrapTable('load', respuesta.reverse())
 
   }
 
+
+
     )
+
+
+
+
+
+
 alert("Abriendo.."+respuesta2[id].id)
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
