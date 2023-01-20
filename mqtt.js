@@ -459,6 +459,8 @@ var $table3 = $('#table3')
 
 
 $table.bootstrapTable('load', respuesta.reverse())
+//$table2.bootstrapTable('load', respuesta.reverse())
+//$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
     console.log(err)
     
@@ -730,7 +732,7 @@ myChart.update();
 function acciones(id)
 {
 
-
+id=0;
 alert(id)
 var select = document.getElementById('ventana');
 
@@ -810,13 +812,7 @@ eliminar.appendChild(textoCelda6)
 
 select.appendChild(eliminar)
 
-/*
-document.getElementById("hola22").onclick = function () {
-        location.href = "Configuracion_Centrales.html";
-    };
-*/
-
-  modal.style.display = "block";
+modal.style.display = "block";
 
 
 // Get the <span> element that closes the modal
@@ -835,8 +831,130 @@ window.onclick = function(event) {
    
   }
 }
+
+
   }
 
+
+
+function eventos()
+{
+
+    /*
+  var $table = $('#table3')
+
+      $table.bootstrapTable('insertRow', {
+        index: 1,
+        row: {
+          var: "T°",
+          condi: "=",
+          value: 20 ,
+          act: "ac1:Ventilador",
+          state: "ON"
+        }
+      })
+
+      */
+      // Get the table element in which you want to add row
+      let table = document.getElementById("table3");
+   
+      // Create a row using the inserRow() method and
+      // specify the index where you want to add the row
+      let row = table.insertRow(-1); // We are adding at the end
+   
+      // Create table cells
+      let c1 = row.insertCell(0);
+      let c2 = row.insertCell(1);
+      let c3 = row.insertCell(2);
+            let c4 = row.insertCell(3);
+                  let c5 = row.insertCell(4);
+   
+   /*
+   <select name="cars" id="cars">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+</select>
+*/
+   
+/*
+   <input type="text" id="lname" name="lname">
+
+   */
+
+
+
+var texto3= document.createTextNode("T°");
+c1.appendChild(texto3)
+
+
+var  select=document.createElement("select")
+var option1=document.createElement("option")
+var option2=document.createElement("option")
+var option3=document.createElement("option")
+var texto1= document.createTextNode("igual a");
+var texto2= document.createTextNode("menor que ");
+var texto3= document.createTextNode("mayor que");
+
+option1.appendChild(texto1)
+option2.appendChild(texto2)
+option3.appendChild(texto3)
+
+select.appendChild(option1)
+select.appendChild(option2)
+select.appendChild(option3)
+
+c2.appendChild(select)
+   
+var input=document.createElement("input")
+input.setAttribute("type","text")
+input.setAttribute("size","4")
+c3.appendChild(input)
+/*
+
+*/
+
+var  select2=document.createElement("select")
+var act1=document.createElement("option")
+var act2=document.createElement("option")
+
+
+
+var textoact1= document.createTextNode("ACT1");
+var textoact2= document.createTextNode("ACT2");
+
+
+act1.appendChild(textoact1)
+act2.appendChild(textoact2)
+
+select2.appendChild(act1)
+select2.appendChild(act2)
+
+c4.appendChild(select2)
+
+var  select3=document.createElement("select")
+var est1=document.createElement("option")
+var est2=document.createElement("option")
+
+
+
+var textoest1= document.createTextNode("ON");
+var textoest2= document.createTextNode("OFF");
+
+
+est1.appendChild(textoest1)
+est2.appendChild(textoest2)
+
+select3.appendChild(est1)
+select3.appendChild(est2)
+
+c5.appendChild(select3)
+
+
+
+
+  }
 
 
 

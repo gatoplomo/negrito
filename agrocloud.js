@@ -836,7 +836,7 @@ mongodb.connect(
       .collection(req.body.central)
       //.find({"fecha":formatted.substring(0,10)})
       .find({"fecha":formatted.substring(0,10)})
-      .toArray((err, data) => {
+      .toArray((err,) => {
         if (err) throw err;
 
 

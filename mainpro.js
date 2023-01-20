@@ -263,6 +263,83 @@ console.log(fechas)
 
 
 
+eventostabla2=[]
+
+$('#table2').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+                }, 
+
+  pagination: false,
+  search: false,
+   pageSize: 4,
+  columns: [ {
+    field: 'var',
+    title: 'Variable'
+  }, {
+    field: 'condi',
+    title: 'Condición'
+  }, 
+{
+    field: 'value',
+    title: 'Valor'},
+ {   
+      field: 'act',
+    title: 'Accionador'
+  },
+ {   
+      field: 'state',
+    title: 'Estado'
+  }
+  ],data: eventostabla2
+  
+})
+
+
+
+
+$('#table3').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+
+                    $('.info').removeClass('info');
+                    $($element).addClass('info');
+                }, 
+
+  pagination: false,
+  search: false,
+   pageSize: 4,
+  columns: [{
+    field: 'var',
+    title: 'Variable'
+  }, {
+    field: 'condi',
+    title: 'Condición'
+  }, 
+{
+    field: 'value',
+    title: 'Valor'
+  },
+
+  {
+    field: 'act',
+    title: 'Accionador'
+  },
+
+{
+    field: 'est',
+    title: 'Estado'
+  }
+
+
+
+
+
+  ],data: eventostabla2
+  
+})
+
 
 
 

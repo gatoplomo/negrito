@@ -25,7 +25,32 @@
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
 
 <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
-       
+
+
+
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/x-editable@1.5.1/dist/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+<link href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/x-editable@1.5.1/dist/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/editable/bootstrap-table-editable.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <title>Electrónica Educativa</title>
 <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/"> 
@@ -79,12 +104,6 @@
 <body id="cuerpo">
 
 
-
-
-</head>
-<body>
-
-
 <div class="container-fluid">
 
 
@@ -102,15 +121,72 @@
 </div>
 </div>
 
+
+
+<hr>
+
+<div>
+   <h1 style="font-size:15px;text-align:center">Registros</h1>
 <table id="table" >   </table>
-   
+</div>   
+
+<hr>
+
+<div class="container-fluid">
+
+<!--style="border:1px solid black"-->
+    <div class="row">
+        <div class="col-lg-6"  >
+          <h1 style="font-size:15px;;text-align:center" >Evento de tiempo</h1>
+<table id="table2" >   </table>
+      <a class="btn btn-primary rounded-0 btn-block" >Agregar</a>
+        </div>
+      
+        <div class="col-lg-6">
+         <h1 style="font-size:15px;text-align:center">Evento de Sensor</h1>
+<table id="table3" >   </table>
+     <a class="btn btn-primary rounded-0 btn-block" id="event" onclick="eventos(id)">Agregar</a>
 
 
+
+
+    </div>
+
+
+
+</div>
+
+<hr>
+<button type="button" class="btn btn-success">Guardar</button>
+<hr>
+</div>
  <button class="button" onclick="generar()";>Generar</button>
-
  <button  type="button" class="button2" onclick="apagar()">Encender</button>
-  <button  type="button" class="button2" onclick="">Subir</button>     
-  <button  type="button" class="button2" onclick="btnClick()">Subir</button>   
+
+ <button  type="button" class="button2" onclick="acciones()">Encender</button>
+
+
+<script>
+
+
+function add(tabla) 
+{
+  var $table = $('#table2')
+
+      $table.bootstrapTable('insertRow', {
+        index: 1,
+        row: {
+          var: "T°",
+          condi: "=",
+          value: 20 ,
+          act: "ac1:Ventilador",
+          state: "ON"
+        }
+      })
+
+
+}
+</script>
 
 <!--
 <div class="green led"></div>
@@ -131,73 +207,6 @@
 <script src="/mainpro.js"></script>
 
 <script src="/mqtt.js"></script>
-
-
-
-<!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close">&times;</span>
-      <h2></h2>
-    </div>
-    <div class="modal-body" id="ventana">
-     
-
-<div class="event-log">Event logs:<br>Picker Closed
-</div>
-
-    </div>
-
-    <div class="modal-footer">
-      <h3></h3>
-      <br>
-    </div>
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <style>
@@ -299,6 +308,28 @@ input:checked + .slider:before {
 
 </style>
 
+
+
+/*
+<!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2></h2>
+    </div>
+    <div class="modal-body" id="ventana">
+     
+
+<div class="event-log">Event logs:<br>Picker Closed
+</div>
+
+    </div>
+
+    <div class="modal-footer">
+      <h3></h3>
+      <br>
+    </div>
+  </div>
 
 
 <style>
