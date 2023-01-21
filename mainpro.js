@@ -311,24 +311,24 @@ $('#table3').bootstrapTable({
   search: false,
    pageSize: 4,
   columns: [{
-    field: 'var',
+    field: 'Variable',
     title: 'Variable'
   }, {
-    field: 'condi',
+    field: 'Condicion',
     title: 'Condición'
   }, 
 {
-    field: 'value',
+    field: 'Valor',
     title: 'Valor'
   },
 
   {
-    field: 'act',
+    field: 'Accionador',
     title: 'Accionador'
   },
 
 {
-    field: 'est',
+    field: 'Estado',
     title: 'Estado'
   }
 
@@ -340,20 +340,13 @@ $('#table3').bootstrapTable({
   
 })
 
+add1=document.createElement("button")
+add1.setAttribute("class","btn btn-success")
+add1.setAttribute("onclick","eventos()")
 
+ document.getElementById("eventosensor").appendChild(add1);
 
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 });
 
@@ -363,7 +356,7 @@ $('#table3').bootstrapTable({
 
 //FUNCION PARA GENERAR CSV POR NODO MEDIANTE BOTÖN
 function generar()
-{9
+{
 
 $( document ).ready(function() {
 

@@ -142,13 +142,9 @@
       <a class="btn btn-primary rounded-0 btn-block" >Agregar</a>
         </div>
       
-        <div class="col-lg-6">
+        <div class="col-lg-6" id="eventosensor">
          <h1 style="font-size:15px;text-align:center">Evento de Sensor</h1>
 <table id="table3" >   </table>
-     <a class="btn btn-primary rounded-0 btn-block" id="event" onclick="eventos(id)">Agregar</a>
-
-
-
 
     </div>
 
@@ -157,21 +153,29 @@
 </div>
 
 <hr>
-<button type="button" class="btn btn-success">Guardar</button>
+<button type="button" class="btn btn-success" id="guardar" >Guardar</button>
+
+<!--
+<button type="button" class="btn btn-success" onclick="add()" >add</button>
+
+
+-->
 <hr>
 </div>
  <button class="button" onclick="generar()";>Generar</button>
  <button  type="button" class="button2" onclick="apagar()">Encender</button>
 
- <button  type="button" class="button2" onclick="acciones()">Encender</button>
+ <button  type="button" class="button2" onclick="apagar()" >Encender</button>
 
 
 <script>
 
 
+/*
+
 function add(tabla) 
 {
-  var $table = $('#table2')
+  var $table = $('#table3')
 
       $table.bootstrapTable('insertRow', {
         index: 1,
@@ -186,6 +190,17 @@ function add(tabla)
 
 
 }
+*/
+
+  var $table = $('#table3')
+  var $button = $('#guardar')
+
+  $(function() {
+    $button.click(function () {
+      alert(JSON.stringify($table.bootstrapTable('getData')))
+    })
+  })
+
 </script>
 
 <!--

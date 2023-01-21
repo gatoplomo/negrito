@@ -390,6 +390,40 @@ fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toS
   );
 
 
+
+app.post("/eventosensor",function(req,res)
+
+{
+
+//console.log(req.body.Variable.toString())
+
+const db = client.db(dbName);
+const collection = db.collection('eventosensor');
+
+collection.insertOne({Variable:req.body.Variable.toString(),Condicion:req.body.Condicion.toString(),Valor:req.body.Valor.toString(),Accionador:req.body.Accionador.toString(),Estado:req.body.Estado.toString()});
+
+
+
+
+//const fsPromises = fs.promises;
+  
+/*  
+fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toString()).then(function() {
+    console.log('Directory created successfully');
+}).catch(function() {
+    console.log('failed to create directory');
+});
+*/
+
+res.send("Evento Registrado")
+
+
+}
+
+  );
+
+
+
 app.post("/eliminarcentral",function(req,res)
 
 {
@@ -700,6 +734,30 @@ console.log("peticion recibida")
 
 
 
+app.post("/geteventsensor",function(req,res)
+
+{
+
+ const db = client.db(dbName);
+//const collection = db.collection('directorios'+req.body.central);
+const collection = db.collection("eventosensor");
+
+
+collection.find({}).toArray(function(err, docs) {
+    //assert.equal(err, null);
+    //console.log("Found the following records");
+    console.log(docs)
+    //console.log("GATOQL")
+res.send(docs)
+  });
+console.log(req.body.central);
+console.log("peticion recibida")
+
+
+
+}
+
+  );
 
 
 
