@@ -293,6 +293,11 @@ $('#table2').bootstrapTable({
   }
   ],data: eventostabla2
   
+
+
+
+ 
+
 })
 
 
@@ -345,6 +350,14 @@ add1.setAttribute("class","btn btn-success")
 add1.setAttribute("onclick","eventos()")
 
  document.getElementById("eventosensor").appendChild(add1);
+
+
+ add2=document.createElement("button")
+add2.setAttribute("class","btn btn-success")
+add2.setAttribute("onclick","eventos2()")
+
+ document.getElementById("eventotiempo").appendChild(add2);
+
 
  
 

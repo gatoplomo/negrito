@@ -544,7 +544,7 @@ app.post("/tomers",function(req,res)
 const db = client.db(dbName);
 
 
-const collection = db.collection('timernodo1a');
+const collection = db.collection('eventosensor');
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -564,13 +564,18 @@ console.log("peticion recibida")
   );
 
 
-app.post("/reporte",function(req,res)
+
+
+
+
+
+app.post("/actualizar",function(req,res)
 
 {
 
 //const db = client.db(dbName);
 
-
+console.log(req.body)
 //const collection = db.collection('timernodo1a');
 
 //collection.find({}).toArray(function(err, docs) {
@@ -578,16 +583,36 @@ app.post("/reporte",function(req,res)
     //console.log("Found the following records");
     //console.log(docs)
 
-     res.setHeader('Content-Type', 'application/json');
-   res.send("ok , Conectado");
+     //res.setHeader('Content-Type', 'application/json');
+   //res.send("Respondiendo desde server");
 
    console.log("Nodo respondiendo")
-    
+const db = client.db(dbName);
+
+
+const collection = db.collection('eventosensor');
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+
+     res.setHeader('Content-Type', 'application/json');
+   res.json(docs);
+
+
 //res.send(docs)
+  });
+
+
+
   //});
 }
 
   );
+
+
+
 
 
 app.post("/limpiar",function(req,res)

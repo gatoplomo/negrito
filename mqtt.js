@@ -211,6 +211,12 @@ for ( var item = 0; item < numero ; item++) {
 }
 
 
+function actualizar()
+{
+alert("Reset")
+client.publish("nodo1control","reset")
+}   
+
 
 
 function comu3(canales,numero)
@@ -234,9 +240,16 @@ for ( var item = 0; item < numero ; item++) {
 client.subscribe(canales[item]+"reporte", { qos: 0 })
 
         }
+
+
+
+
+
 client.on('message', (topic, message, packet) => {
   //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
 })
+
+
   if (checkboxElem.checked) {
   var strong = checkboxElem.id.substring(
     checkboxElem.id.lastIndexOf(":") + 1, 
@@ -401,6 +414,7 @@ var lecturas3=[]
 var fechas3=[]
 
 var nodoanterior="";
+
 
 
 
@@ -1005,6 +1019,189 @@ add1.setAttribute("onclick","ingresar()")
 
 }
 
+
+
+function eventos2()
+{
+
+    /*
+  var $table = $('#table3')
+
+      $table.bootstrapTable('insertRow', {
+        index: 1,
+        row: {
+          var: "T°",
+          condi: "=",
+          value: 20 ,
+          act: "ac1:Ventilador",
+          state: "ON"
+        }
+      })
+
+      */
+      // Get the table element in which you want to add row
+      let table = document.getElementById("table2");
+   
+      // Create a row using the inserRow() method and
+      // specify the index where you want to add the row
+      let row = table.insertRow(-1); // We are adding at the end
+      row.setAttribute("id","nuevoevento")
+   
+      // Create table cells
+      let c1 = row.insertCell(0);
+      let c2 = row.insertCell(1);
+      let c3 = row.insertCell(2);
+            let c4 = row.insertCell(3);
+                  let c5 = row.insertCell(4);
+   
+   /*
+   <select name="cars" id="cars">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+</select>
+*/
+   
+/*
+   <input type="text" id="lname" name="lname">
+
+   */
+
+
+
+var texto3= document.createTextNode("T°");
+c1.appendChild(texto3)
+
+
+
+var  select=document.createElement("select")
+select.setAttribute("id","condi")
+var option1=document.createElement("option")
+var option2=document.createElement("option")
+var option3=document.createElement("option")
+var texto1= document.createTextNode("igual a");
+var texto2= document.createTextNode("menor que ");
+var texto3= document.createTextNode("mayor que");
+
+option1.appendChild(texto1)
+option2.appendChild(texto2)
+option3.appendChild(texto3)
+
+select.appendChild(option1)
+select.appendChild(option2)
+select.appendChild(option3)
+
+c2.appendChild(select)
+   
+var input=document.createElement("input")
+input.setAttribute("type","text")
+input.setAttribute("size","4")
+input.setAttribute("id","value")
+c3.appendChild(input)
+/*
+
+*/
+
+var  select2=document.createElement("select")
+var act1=document.createElement("option")
+var act2=document.createElement("option")
+select2.setAttribute("id","act")
+
+
+var textoact1= document.createTextNode("ACT1");
+var textoact2= document.createTextNode("ACT2");
+
+
+act1.appendChild(textoact1)
+act2.appendChild(textoact2)
+
+select2.appendChild(act1)
+select2.appendChild(act2)
+
+c4.appendChild(select2)
+
+var  select3=document.createElement("select")
+
+var est1=document.createElement("option")
+var est2=document.createElement("option")
+
+select3.setAttribute("id","state")
+
+
+
+
+var textoest1= document.createTextNode("ON");
+var textoest2= document.createTextNode("OFF");
+
+
+est1.appendChild(textoest1)
+est2.appendChild(textoest2)
+
+select3.appendChild(est1)
+select3.appendChild(est2)
+
+c5.appendChild(select3)
+
+
+var select = document.getElementById('eventotiempo');
+
+
+select.removeChild(select.lastChild);
+
+add1=document.createElement("button")
+add1.setAttribute("class","btn btn-primary")
+add1.setAttribute("id","ingresar")
+add1.setAttribute("onclick","ingresar()")
+ document.getElementById("eventotiempo").appendChild(add1);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function ingresar()
 {
 
@@ -1082,6 +1279,85 @@ add1.setAttribute("onclick","eventos()")
 
 }
 
+
+
+
+function ingresar2()
+{
+
+t=document.getElementById("nuevoevento")
+
+
+var condicion = document.getElementById("condi");
+var value = condicion.value;
+var text = condicion.options[condicion.selectedIndex].text;
+
+
+var accionador = document.getElementById("act");
+var value2 = accionador.value2;
+var text2 = accionador.options[accionador.selectedIndex].text;
+
+
+var valor = document.getElementById("value").value;
+
+
+
+var state = document.getElementById("state");
+var value3 = state.value3;
+var text3 = state.options[state.selectedIndex].text;
+//var input = getElementById("input")
+alert(t.cells[0].innerHTML+text+valor+text2+text3)
+
+  $.ajax({
+    url:'/eventosensor',
+    method:'POST',
+    data: {
+           Variable: t.cells[0].innerHTML,
+           Condicion: text,
+           Valor: valor,
+           Accionador: text2,
+           Estado: text3
+         },
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+  }).done(function(respuesta){
+console.log('Respuesta recibida:',respuesta)
+console.log(respuesta)
+element=document.getElementById("nuevoevento")
+element.remove()
+
+var select = document.getElementById('eventosensor');
+
+
+select.removeChild(select.lastChild);
+
+
+add1=document.createElement("button")
+add1.setAttribute("class","btn btn-success")
+add1.setAttribute("onclick","eventos()")
+
+ document.getElementById("eventosensor").appendChild(add1);
+
+  var $table = $('#table3')
+
+      $table.bootstrapTable('insertRow', {
+        index: 0,
+        row: {
+          Variable: t.cells[0].innerHTML,
+          Condicion: text,
+          Valor: valor,
+          Accionador: text2,
+          Estado: text3
+        }
+      })
+
+
+}).fail(function(err){
+    console.log(err)})
+
+}
 
 
 
