@@ -294,10 +294,14 @@ chart.setAttribute("height","200")
 chart.setAttribute("width","auto")
 chartconteiner.appendChild(chart)
 select.appendChild(chartconteiner)
+
+
+
 labelo=document.createElement("label")
 labelo.setAttribute("class","switch")
 inputo=document.createElement("input")
 inputo.setAttribute("type","checkbox")
+inputo.setAttribute("id","realtime")
 spano=document.createElement("span")
 spano.setAttribute("class","slider round")
 labelo.appendChild(inputo)
@@ -414,6 +418,8 @@ var lecturas3=[]
 var fechas3=[]
 
 var nodoanterior="";
+
+
 
 
 
@@ -1407,19 +1413,19 @@ window.location.reload()
 
 var flag=0;
 
- function apagar()
- {
-   for (var i = lecturas.length; i > 0; i--) {
- lecturas.pop();
-fechas.pop();
-}
-myChart.update()
-if(flag==0)
+const checkbox = document.getElementById('realtime')
+
+checkbox.addEventListener('change', (event) => {
+  if (event.currentTarget.checked) {
+ flag=1;
+  } else {
+   flag=0;
+  }
+})
 
 
-flag=1;
 
- }
+
 
 var modal = document.getElementById("myModal");
 
