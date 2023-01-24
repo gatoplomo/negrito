@@ -261,12 +261,12 @@ client.on('message', (topic, message, packet) => {
 );
 
 mySubString=strong+"control";
-    alert(strong2+"#ON;")
+    //alert(strong2+"#ON;")
     client.publish(mySubString,strong2+"#ON;")
     //console.log(mySubString,checkboxElem.id+"#ON;")
    
   } else {
-    alert(strong2+"#OFF");
+   // alert(strong2+"#OFF");
 
   var strong = checkboxElem.id.substring(
     checkboxElem.id.lastIndexOf(":") + 1, 
@@ -283,6 +283,18 @@ mySubString=strong+"control";
   }
 }
 
+
+
+
+
+
+function modo()
+{
+alert("modo")
+client.publish("nodo1control","reset2")
+
+
+}
 
 
 var select = document.getElementById('monitor2');
@@ -309,8 +321,12 @@ labelo.appendChild(spano)
 chartconteiner.appendChild(labelo)
 
 
-
-
+button3 =document.createElement("button")
+button3.setAttribute("class","btn")
+i=document.createElement("i")
+i.setAttribute("class","fa fa-trash")
+button3.appendChild(i)
+chartconteiner.appendChild(button3)
 
 var ctx = document.getElementById('myChart');
 /*
@@ -855,20 +871,62 @@ tabla.appendChild(tblBody)
  select.appendChild(tabla)
   }
 
+
+
+labelo2=document.createElement("label")
+labelo2.setAttribute("class","switch")
+inputo2=document.createElement("input")
+inputo2.setAttribute("type","checkbox")
+inputo2.setAttribute("id","realtime2")
+spano2=document.createElement("span")
+spano2.setAttribute("class","slider round")
+labelo2.appendChild(inputo2)
+labelo2.appendChild(spano2)
+select.appendChild(labelo2)
+
+
+ var modo = document.createElement("button");
+modo.setAttribute("class","button button1")
+modo.setAttribute("id","modo")
+modo.setAttribute("onclick","modo()")
+var textoCelda7 = document.createTextNode("Modo");
+modo.appendChild(textoCelda7)
+
+/*
+
  var eliminar = document.createElement("button");
 eliminar.setAttribute("class","button button1")
 eliminar.setAttribute("id",id)
 eliminar.setAttribute("onclick","borrar(this.id)")
 var textoCelda6 = document.createTextNode("Eliminar Nodo");
 eliminar.appendChild(textoCelda6)
+*/
 
-select.appendChild(eliminar)
+//select.appendChild(modo)
+
+//select.appendChild(eliminar)
 
 modal.style.display = "block";
 
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+
+
+
+
+
+const checkbox2 = document.getElementById('realtime2')
+
+checkbox2.addEventListener('change', (event) => {
+  if (event.currentTarget.checked) {
+client.publish("nodo1control","auto")
+  } else {
+client.publish("nodo1control","manual")
+  }
+})
+
+
 
 
 // When the user clicks on <span> (x), close the modal

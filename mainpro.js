@@ -19,6 +19,8 @@ $( document ).ready(function() {
 
     //ORDENAR
 
+
+
 for ( var item = 0; item < numero ; item++) {
 copia(respuesta[item]);
             var canv = document.createElement("canvas");
@@ -99,12 +101,38 @@ var celda3= document.createElement("td");
 var textoCelda3= document.createTextNode(respuesta[item].info);
 celda3.appendChild(textoCelda3);
 hilera3.appendChild(celda3)
+
+
+
 var hilera4 = document.createElement("tr");
 var celda4= document.createElement("td");
+
+
+
+
+button4 =document.createElement("button")
+button4.setAttribute("class","btn")
+button4.setAttribute("id",item)
+i2=document.createElement("i")
+i2.setAttribute("class","fa fa-eye")
+button4.setAttribute("onClick","ver(this.id)")
+button4.appendChild(i2)
+celda4.appendChild(button4)
+
+button5 =document.createElement("button")
+button5.setAttribute("class","btn")
+button5.setAttribute("id",item)
+i3=document.createElement("i")
+i3.setAttribute("class","fa fa-toggle-on")
+button5.setAttribute("onClick","acciones(this.id)")
+button5.appendChild(i3)
+celda4.appendChild(button5)
+
+
  var ul = document.createElement("ul");
  var li = document.createElement("li");
  var a1 = document.createElement("a");
- a1.setAttribute("id",item);
+ a1.setAttribute("id","pichula");
  a1.setAttribute("href","#");
   a1.setAttribute("onClick","ver(this.id)");
  var texto22 = document.createTextNode("Ver");
@@ -122,7 +150,7 @@ a13.appendChild(texto223);
  ul.appendChild(li)
 //ul.appendChild(li2)
 ul.appendChild(li3)
- celda4.appendChild(ul)
+ //celda4.appendChild(ul)
 hilera4.appendChild(celda4)
 tblBody.appendChild(hilera1);
 tblBody.appendChild(hilera2);
@@ -132,6 +160,8 @@ tabla.appendChild(tblBody);
 body.appendChild(tabla);
 tabla.setAttribute("border", "2");
 division.appendChild(tabla)
+
+
 }
 
 
