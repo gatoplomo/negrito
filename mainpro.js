@@ -376,14 +376,20 @@ $('#table3').bootstrapTable({
 })
 
 add1=document.createElement("button")
-add1.setAttribute("class","btn btn-success")
+add1.setAttribute("class","btn")
+i3=document.createElement("i")
+i3.setAttribute("class","fa fa-plus")
+add1.appendChild(i3)
 add1.setAttribute("onclick","eventos()")
 
  document.getElementById("eventosensor").appendChild(add1);
 
 
  add2=document.createElement("button")
-add2.setAttribute("class","btn btn-success")
+add2.setAttribute("class","btn")
+i4=document.createElement("i")
+i4.setAttribute("class","fa fa-plus")
+add2.appendChild(i4);
 add2.setAttribute("onclick","eventos2()")
 
  document.getElementById("eventotiempo").appendChild(add2);
