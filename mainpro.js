@@ -21,6 +21,100 @@ $( document ).ready(function() {
 
 
 
+
+
+
+/*
+<div id="liveToast" class="toast align-items-center text-bg-primary border-0 " role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+  <div class="d-flex">
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+*/
+
+
+function creartoast(cuenta)
+
+{
+var dav=document.createElement("div")
+dav.setAttribute("id","toast"+cuenta)
+dav.setAttribute("class","toast align-items-center text-bg-primary border-0 ")
+dav.setAttribute("role","alert")
+dav.setAttribute("aria-live","assertive")
+dav.setAttribute("aria-atomic","true")
+dav.setAttribute("data-bs-autohide","false")
+
+
+var dav2=document.createElement("div")
+dav2.setAttribute("class","d-flex")
+
+
+var dav3=document.createElement("div")
+dav3.setAttribute("class","toast-body")
+
+tosto=document.createTextNode("Hello, world! This is a toast message.")
+
+var botoni=document.createElement("button");
+botoni.setAttribute("type","button")
+botoni.setAttribute("class","btn-close btn-close-white me-2 m-auto")
+botoni.setAttribute("data-bs-dismiss","toast")
+botoni.setAttribute("aria-label","Close")
+
+
+dav3.appendChild(tosto);
+
+dav2.appendChild(dav3)
+dav2.appendChild(botoni)
+dav.appendChild(dav2)
+
+const pichula = document.getElementById('pichula')
+
+pichula.appendChild(dav)
+const toastLiveExample = document.getElementById("toast"+cuenta)
+const toast = new bootstrap.Toast(toastLiveExample)
+toast.show()
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 for ( var item = 0; item < numero ; item++) {
 copia(respuesta[item]);
             var canv = document.createElement("canvas");
@@ -49,7 +143,8 @@ var celda = document.createElement("td");
 
 
 led=document.createElement("div")
-led.setAttribute("class","green led")
+led.setAttribute("class","red led")
+led.setAttribute("id","indicadornodo1")
 
 
 

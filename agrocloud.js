@@ -51,7 +51,7 @@ var customers = [];
 var cron = require('node-cron');
 
 // ...
-cron.schedule("43 0-23 * * *", function () {
+cron.schedule("08 0-23 * * *", function () {
   console.log("---------------------");
   console.log("running a task every 15 seconds");
 
@@ -818,9 +818,13 @@ const db = client.db(dbName);
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 var formatted = dt.format('Y-m-d H:M:S');
-console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 
-collection.insertOne({lectura:message.toString(),date: formatted,fecha:formatted.substring(0,10)});
+const obj = JSON.parse(message);
+console.log(obj)
+console.log(obj.Lectura)
+//console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
+
+collection.insertOne({lectura:obj.Lectura,date: formatted,fecha:formatted.substring(0,10)});
 
 
 }
@@ -836,148 +840,8 @@ collection.insertOne({lectura:message.toString(),date: formatted,fecha:formatted
 app.post("/generar",function(req,res)
 
 {
-cantidad=1000;
 
-
-console.log(req.body.central);
-
-var dateTime = require('node-datetime');
-var dt = dateTime.create();
-var formatted = dt.format('Y-m-d H:M:S');
-console.log(formatted);
-
-
-const mongodb = require("mongodb").MongoClient;
-const fastcsv = require("fast-csv");
-const fs = require("fs");
-
-const dir = root+"/nodo2";
-
-//requiring path and fs modules
-const path = require('path');
-
-//joining path of directory 
-const directoryPath = path.join(__dirname, "/Datos2/"+req.body.central);
-//passsing directoryPath and callback function
-
-//const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
-const ws = fs.createWriteStream(root+req.body.central+"/"+formatted.substring(0,10)+".csv");
- let url = "mongodb://localhost:27017/";
- 
-
-
-
-//MONGO DB
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-
-
-
-
-const url2 = 'mongodb://localhost:27017';
-
-// Database Name
-const dbName = 'myproject';
-
-// Create a new MongoClient
-const client = new MongoClient(url2);
-
-// Use connect method to connect to the Server
-client.connect(function(err) {
-
- assert.equal(null, err);
-  console.log("Connected successfully to server");
-
-console.log(req.body.central)
-// Node.js program to demonstrate 
-// the fsPromises.mkdir() Method 
-    
-// Include fs and path module 
-var inicio="";
-var final="";
-
-
-fs.readdir(directoryPath, function (err, files) {
-    //handling error
-    if (err) {
-        return console.log('Unable to scan directory: ' + err);
-    }
-    console.log(files)
-
-});
-
-
-
-mongodb.connect(
-  url,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err, client) => {
-    if (err) throw err;
-
-    client
-      .db("myproject")
-      .collection(req.body.central)
-      //.find({"fecha":formatted.substring(0,10)})
-      .find({"fecha":formatted.substring(0,10)})
-      .toArray((err,) => {
-        if (err) throw err;
-
-
-        //mandar(cantidad,req.body.central)
-        fastcsv
-          .write(data, { headers: true})
-          .on("finish", function() {
-            console.log("Exportación lista");
-          })
-          .pipe(ws);
-
-      });
-
-
-
-
-  }
-);
-
-
-
-
-
-
-
-
-});
-
-function mandar(cantidad,nodo)
-{
-
-console.log(root2)
-console.log(formatted)
-var python = spawn('python3', [root2+"lecturas.py",formatted,nodo,cantidad.toString()]);
-
-var dataToSend;
-
- // spawn new child process to call the python script
-
- // collect data from script
- python.stdout.on('data', function (data) {
-  console.log('Pipe data from python script ...');
-  dataToSend = data.toString();
-  console.log(dataToSend)
- });
- // in close event we are sure that stream from child process is closed
-
-
-  python.on('close', (code) => {
- console.log(`child process close all stdio with code ${code}`);
- // send data to browser
-    client.close();
- //res.send(dataToSend)
- });
-
-}
-
-
+respaldar(req.body.central)
 
  
 }

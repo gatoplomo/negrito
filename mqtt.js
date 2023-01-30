@@ -51,98 +51,88 @@ client.on('connect', () => {
 
 
 
+
+function checked()
+{
+
+
 client.on('message', (topic, message, packet) => {
   //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
   
+
 var msn=message.toString();
 console.log(msn);
-console.log(topic);
-console.log(respuesta2[0].id+"reporte");
-console.log(msn.length)
+//console.log(msn.length)
+
+const obj = JSON.parse(message);
+console.log(obj)
 
 
 
-console.log(respuesta2);
-console.log(respuesta2.length)
+console.log(topic)
 
 
-for (let i = 0; i < respuesta2.length; i++) {
-if(respuesta2[i].id+"reporte"==topic)
+sele=localStorage.getItem('nodo');
+
+
+if(sele==topic)
 
 {
 console.log("match");
 console.log(i);
 
+console.log(obj.Act1)
+console.log(obj.Act2)
 
-if(message.toString()=="BoffAoff")
+
+if(obj.Act2==1)
 {
 
+var select = document.getElementById('EstadoAccionador0nodo1');
+select.removeChild(select.lastChild);
 
-  console.log(respuesta2[i].id+"/B");
-  var delayInMilliseconds = 500; //1 second
-
-
-setTimeout(function() {
-  //your code to be executed after 1 second
- //alert("**Mensaje desde la Central**: Actualizando Estados")
-}, delayInMilliseconds);
-
-// Check
-document.getElementById(":"+respuesta2[i].id+"/Accionador0").checked = false;
-document.getElementById(":"+respuesta2[i].id+"/Accionador1").checked = false;
+document.getElementById("EstadoAccionador0nodo1").appendChild(document.createTextNode("Encendido"));
 
 }
-else if (message.toString()=="BonAoff")
+else if(obj.Act2==0)
 {
 
+var select = document.getElementById('EstadoAccionador0nodo1');
+select.removeChild(select.lastChild);
+document.getElementById("EstadoAccionador0nodo1").appendChild(document.createTextNode("Apagado"));
 
-  console.log(respuesta2[i].id+"/B");
-  var delayInMilliseconds = 500; //1 second
 
-setTimeout(function() {
-  //your code to be executed after 1 second
-  //alert("**Mensaje desde la Central**: Actualizando Estados")
-}, delayInMilliseconds);
 
-// Check
-document.getElementById(":"+respuesta2[i].id+"/Accionador0").checked = false;
-document.getElementById(":"+respuesta2[i].id+"/Accionador1").checked = true;
 }
 
-else if (message.toString()=="BoffAon")
+
+
+if(obj.Act1==1)
 {
 
+var select22 = document.getElementById('EstadoAccionador1nodo1');
+select22.removeChild(select22.lastChild);
+document.getElementById("EstadoAccionador1nodo1").appendChild(document.createTextNode("Encendido"));
 
-  console.log(":"+respuesta2[i].id+"/Accionador0");
-  var delayInMilliseconds = 500; //1 second
 
-setTimeout(function() {
-  //your code to be executed after 1 second
-  //alert("**Mensaje desde la Central**: Actualizando Estados")
-}, delayInMilliseconds);
 
-// Check
-document.getElementById(":"+respuesta2[i].id+"/Accionador0").checked = true;
-document.getElementById(":"+respuesta2[i].id+"/Accionador1").checked = false;
 }
-else if (message.toString()=="BonAon")
+else if(obj.Act1==0)
 {
 
+var select22 = document.getElementById('EstadoAccionador1nodo1');
+select22.removeChild(select22.lastChild);
+document.getElementById("EstadoAccionador1nodo1").appendChild(document.createTextNode("Apagado"));
 
-  console.log(respuesta2[i].id+"/B");
-  var delayInMilliseconds = 500; //1 second
 
-setTimeout(function() {
-  //your code to be executed after 1 second
-  //alert("**Mensaje desde la Central**: Actualizando Estados")
-}, delayInMilliseconds);
 
-// Check
-document.getElementById(":"+respuesta2[i].id+"/Accionador0").checked = true;
-document.getElementById(":"+respuesta2[i].id+"/Accionador1").checked = true;
 }
-}}})
 
+
+}
+
+})
+}
 
 
 
@@ -179,18 +169,22 @@ var msn=message.toString();
 console.log(msn);
 //console.log(msn.length)
 
+const obj = JSON.parse(message);
+console.log(obj)
+console.log(obj.Lectura)
+
 //console.log(canales[0])
-if(message.length<6)
-{
+
 for ( var item = 0; item < numero ; item++) {
 
  if(topic.toString()==canales[item])
 
- 	gauges[item].value = parseFloat(msn)
+ 	gauges[item].value = parseFloat(obj.Lectura.toString())
  //console.log(canales[item]);
-
+document.getElementById("indicadornodo1").className = "green led";
+    
         }
-}
+
 })
 
 
@@ -232,25 +226,10 @@ for ( var item = 0; item < numero ; item++) {
 
  
 function doalert(checkboxElem,canales,numero) {
-let canales2=[];
-canales2=canales;
-for ( var item = 0; item < numero ; item++) {
-
- client.subscribe(canales[item], { qos: 0 })
-client.subscribe(canales[item]+"reporte", { qos: 0 })
-
-        }
-
-
-
-
-
-client.on('message', (topic, message, packet) => {
-  //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
-})
 
 
   if (checkboxElem.checked) {
+
   var strong = checkboxElem.id.substring(
     checkboxElem.id.lastIndexOf(":") + 1, 
     checkboxElem.id.lastIndexOf("/")
@@ -263,10 +242,11 @@ client.on('message', (topic, message, packet) => {
 mySubString=strong+"control";
     //alert(strong2+"#ON;")
     client.publish(mySubString,strong2+"#ON;")
+
     //console.log(mySubString,checkboxElem.id+"#ON;")
    
   } else {
-   // alert(strong2+"#OFF");
+   //alert(strong2+"#OFF");
 
   var strong = checkboxElem.id.substring(
     checkboxElem.id.lastIndexOf(":") + 1, 
@@ -281,6 +261,9 @@ mySubString=strong+"control";
  client.publish(mySubString,strong2+"#OFF;")
  console.log(mySubString,strong2+"#OFF;") 
   }
+
+
+
 }
 
 
@@ -323,10 +306,19 @@ chartconteiner.appendChild(labelo)
 
 button3 =document.createElement("button")
 button3.setAttribute("class","btn")
+button3.setAttribute("onClick","limpiar2()")
 i=document.createElement("i")
 i.setAttribute("class","fa fa-trash")
 button3.appendChild(i)
 chartconteiner.appendChild(button3)
+
+button4 =document.createElement("button")
+button4.setAttribute("class","btn")
+button4.setAttribute("onClick","generar()")
+i5=document.createElement("i")
+i5.setAttribute("class","fa fa-download")
+button4.appendChild(i5)
+chartconteiner.appendChild(button4)
 
 var ctx = document.getElementById('myChart');
 /*
@@ -437,6 +429,15 @@ var nodoanterior="";
 
 
 
+function limpiar2()
+{
+for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+  fechas.pop(); 
+}
+myChart.update();
+}
+
 
 
 
@@ -498,7 +499,7 @@ var $table2 = $('#table2')
 var $table3 = $('#table3')
 
 
-$table.bootstrapTable('load', respuesta.reverse())
+$table.bootstrapTable('load', respuesta)
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
@@ -769,23 +770,80 @@ myChart.update()
 
 
 
+function creartoast(cuenta,contenido)
 
+{
+var dav=document.createElement("div")
+dav.setAttribute("id","toast"+cuenta)
+dav.setAttribute("class","toast align-items-center text-bg-primary border-0 ")
+dav.setAttribute("role","alert")
+dav.setAttribute("aria-live","assertive")
+dav.setAttribute("aria-atomic","true")
+dav.setAttribute("data-bs-autohide","false")
+
+
+var dav2=document.createElement("div")
+dav2.setAttribute("class","d-flex")
+
+
+var dav3=document.createElement("div")
+dav3.setAttribute("class","toast-body")
+
+tosto=document.createTextNode(contenido)
+
+var botoni=document.createElement("button");
+botoni.setAttribute("type","button")
+botoni.setAttribute("class","btn-close btn-close-white me-2 m-auto")
+botoni.setAttribute("data-bs-dismiss","toast")
+botoni.setAttribute("aria-label","Close")
+
+
+dav3.appendChild(tosto);
+
+dav2.appendChild(dav3)
+dav2.appendChild(botoni)
+dav.appendChild(dav2)
+
+const pichula = document.getElementById('pichula')
+
+pichula.appendChild(dav)
+const toastLiveExample = document.getElementById("toast"+cuenta)
+const toast = new bootstrap.Toast(toastLiveExample)
+toast.show()
+
+
+}
+
+
+var cuenta=0;
 
 client.on('message', (topic, message, packet) => {
-  //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
-
+ 
 
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
 
 if(topic==seleccion && flag==1)
 {
-var msn=message.toString();
+
 console.log("seleccion"+seleccion)
-lecturas.push(msn)
+
+const obj = JSON.parse(message);
+console.log(obj)
+console.log(obj.Lectura)
+creartoast(cuenta,obj.Lectura);
+lecturas.push(obj.Lectura.toString())
 fechas.push(time)
 myChart.update();
+cuenta=cuenta+1;
+
 }
+
+
+//document.getElementById(":nodo1/Accionador0").checked = false;
+
+
+
 
 })
 
@@ -802,14 +860,19 @@ function acciones(id)
 
 id=0;
 alert(id)
+
 var select = document.getElementById('ventana');
 
 while (select.firstChild) {
   select.removeChild(select.firstChild);
 }
 
+
+
+
   var tabla   = document.createElement("table");
   var tblBody = document.createElement("tbody");
+
 
 for (var x = 0; x < 2; x++) {
 //botón 1
@@ -819,7 +882,7 @@ var newContent2 = document.createTextNode("OFF");
  var check= document.createElement("input");
             check.setAttribute('type', "checkbox")
             check.setAttribute('id',":"+respuesta2[id].id+"/"+"Accionador"+x)
-             check.setAttribute('onchange', "doalert(this)")
+            check.setAttribute('onClick', "doalert(this)")
 
             var label=document.createElement("label")
             label.setAttribute('id' , "sliderLabel")
@@ -848,8 +911,29 @@ var newContent2 = document.createTextNode("OFF");
              label.appendChild(check)
              label.appendChild(spa)
 
+var on=document.createElement("button")
+on.setAttribute("class","button button1")
+var texton=document.createTextNode("encender");
+on.setAttribute("onclick","accion(this.id)");
+on.setAttribute('id',":"+respuesta2[id].id+"/"+"Accionador"+x+"#ON")
+on.appendChild(texton);
 
-  for (var i = 0; i < 2; i++) {
+
+
+var off=document.createElement("button")
+off.setAttribute("class","button button2")
+var textoff=document.createTextNode("apagar");
+off.setAttribute("onclick","accion(this.id)");
+off.setAttribute('id',":"+respuesta2[id].id+"/"+"Accionador"+x+"#OFF")
+off.appendChild(textoff);
+
+
+var estado=document.createTextNode("Estado:")
+
+
+
+
+  for (var i = 0; i < 3; i++) {
     // Crea las hileras de la tabla
     var hilera = document.createElement("tr");
     for (var j = 0; j < 1; j++) {
@@ -862,7 +946,20 @@ var newContent2 = document.createTextNode("OFF");
      }
 if(i==1)
      {
-     celda.appendChild(label);
+   //celda.appendChild(on);
+      //celda.appendChild(off);
+      //celda.appendChild(led)
+    celda.appendChild(estado)
+    celda.setAttribute("id","Estado"+"Accionador"+x+respuesta2[id].id)
+    //celda.appendChild(estado2)
+     }
+     if(i==2)
+     {
+        celda.appendChild(on);
+        celda.appendChild(off)
+   //celda.appendChild(on);
+      //celda.appendChild(off);
+
      }
     }
     tblBody.appendChild(hilera);
@@ -926,7 +1023,7 @@ client.publish("nodo1control","manual")
   }
 })
 
-
+checked();
 
 
 // When the user clicks on <span> (x), close the modal
@@ -944,6 +1041,31 @@ window.onclick = function(event) {
 
 
   }
+
+
+
+function accion(id)
+{
+
+
+
+
+  var strong = id.substring(
+   id.lastIndexOf(":") + 1, 
+    id.lastIndexOf("/")
+);
+ var strong2 = id.substring(
+    id.lastIndexOf("/") + 1, 
+    id.length
+);
+
+
+
+client.publish(strong+"control",strong2+";")
+
+
+
+}
 
 
 
