@@ -154,7 +154,7 @@ var gauges=[];
 for ( var item = 0; item < numero ; item++) {
 
  client.subscribe(canales[item], { qos: 0 })
- client.subscribe(canales[item]+"reporte", { qos: 0 })
+ client.subscribe(canales[item]+"evento", { qos: 0 })
           
 gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 180,
     height: 210, id:item}).draw()
@@ -773,6 +773,8 @@ myChart.update()
 function creartoast(cuenta,contenido)
 
 {
+
+
 var dav=document.createElement("div")
 dav.setAttribute("id","toast"+cuenta)
 dav.setAttribute("class","toast align-items-center text-bg-primary border-0 ")
@@ -788,6 +790,7 @@ dav2.setAttribute("class","d-flex")
 
 var dav3=document.createElement("div")
 dav3.setAttribute("class","toast-body")
+
 
 tosto=document.createTextNode(contenido)
 
@@ -822,7 +825,6 @@ client.on('message', (topic, message, packet) => {
 
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
-
 if(topic==seleccion && flag==1)
 {
 
@@ -831,7 +833,7 @@ console.log("seleccion"+seleccion)
 const obj = JSON.parse(message);
 console.log(obj)
 console.log(obj.Lectura)
-creartoast(cuenta,obj.Lectura);
+creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+" Hora"+" ");
 lecturas.push(obj.Lectura.toString())
 fechas.push(time)
 myChart.update();
@@ -844,9 +846,23 @@ cuenta=cuenta+1;
 
 
 
-
 })
 
+
+client.on('message', (topic, message, packet) => {
+ 
+
+if(topic=="nodo1evento")
+{
+const obj = JSON.parse(message);
+
+creartoast(cuenta,"Mensaje:"+" "+obj.Nodo+" "+"Evento:"+" "+obj.Evento+" "+"Fecha"+" "+obj.Fecha+" "+"Hora"+" "+obj.Hora+" "+"Accionador:"+" "+obj.Act+" "+"Función:"+" "+obj.Func+" "+"Estado:"+" "+obj.Act1Est);
+
+cuenta=cuenta+1;
+
+}
+
+})
 
 
 
