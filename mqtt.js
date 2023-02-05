@@ -494,12 +494,15 @@ $.ajax({
 
   }).done(function(respuesta){
 console.log(respuesta.reverse())
+
 var $table = $('#table')
 var $table2 = $('#table2')
 var $table3 = $('#table3')
+var $table4 = $('#table4')
 
 
 $table.bootstrapTable('load', respuesta)
+$table4.bootstrapTable('load', respuesta)
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
@@ -526,10 +529,14 @@ $.ajax({
 
   }).done(function(respuesta){
 console.log(respuesta.reverse())
+
+
+
 var $table3 = $('#table3')
 
 
 $table3.bootstrapTable('load', respuesta.reverse())
+$table4.bootstrapTable('load', respuesta.reverse())
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
@@ -555,13 +562,13 @@ console.log(respuesta2[id].id)
 
 seleccion=respuesta2[id].id
 
-
+console.log("PICHULA")
+console.log(today)
 
 $.ajax({
     url:'/dataget',
     method:'POST',
     data: {'central':respuesta2[id].id,'fecha':today},
-
     beforeSend: function(data){
       console.log('Enviando...',data)
     },
@@ -833,7 +840,7 @@ console.log("seleccion"+seleccion)
 const obj = JSON.parse(message);
 console.log(obj)
 console.log(obj.Lectura)
-creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+" Hora"+" ");
+creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+obj.Fecha+" Hora"+" "+obj.Hora);
 lecturas.push(obj.Lectura.toString())
 fechas.push(time)
 myChart.update();
@@ -1118,6 +1125,11 @@ function eventos()
             let c4 = row.insertCell(3);
                   let c5 = row.insertCell(4);
    
+
+
+
+
+
    /*
    <select name="cars" id="cars">
   <option value="volvo">Volvo</option>

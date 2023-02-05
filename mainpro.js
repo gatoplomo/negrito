@@ -36,49 +36,6 @@ $( document ).ready(function() {
 */
 
 
-function creartoast(cuenta)
-
-{
-var dav=document.createElement("div")
-dav.setAttribute("id","toast"+cuenta)
-dav.setAttribute("class","toast align-items-center text-bg-primary border-0 ")
-dav.setAttribute("role","alert")
-dav.setAttribute("aria-live","assertive")
-dav.setAttribute("aria-atomic","true")
-dav.setAttribute("data-bs-autohide","false")
-
-
-var dav2=document.createElement("div")
-dav2.setAttribute("class","d-flex")
-
-
-var dav3=document.createElement("div")
-dav3.setAttribute("class","toast-body")
-
-tosto=document.createTextNode("Hello, world! This is a toast message.")
-
-var botoni=document.createElement("button");
-botoni.setAttribute("type","button")
-botoni.setAttribute("class","btn-close btn-close-white me-2 m-auto")
-botoni.setAttribute("data-bs-dismiss","toast")
-botoni.setAttribute("aria-label","Close")
-
-
-dav3.appendChild(tosto);
-
-dav2.appendChild(dav3)
-dav2.appendChild(botoni)
-dav.appendChild(dav2)
-
-const pichula = document.getElementById('pichula')
-
-pichula.appendChild(dav)
-const toastLiveExample = document.getElementById("toast"+cuenta)
-const toast = new bootstrap.Toast(toastLiveExample)
-toast.show()
-
-
-}
 
 
 
@@ -386,6 +343,48 @@ console.log(fechas)
   
 })
 
+$('#table4').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+                }, 
+
+  pagination: true,
+  search: true,
+   pageSize: 4,
+  columns: [{
+    field: 'tipo',
+    title: 'Tipo de Evento'
+  },{
+    field: 'id',
+    title: 'Nodo'
+  }
+
+  , {
+    field: 'date',
+    title: 'Fecha'
+  }, {
+    field: 'time',
+    title: 'Hora'
+  }, 
+{
+    field: 'act',
+    title: 'Accionador'
+  }, 
+{
+    field: 'funcion',
+    title: 'Función'
+  }, {
+    field: 'estado',
+    title: 'Estado'
+  },
+
+  {
+    field: 'origen',
+    title: 'origen'
+  }],data: directorios
+  
+})
 
 
 eventostabla2=[]
@@ -493,6 +492,8 @@ add2.setAttribute("onclick","eventos2()")
  
 
 });
+
+
 
 
 

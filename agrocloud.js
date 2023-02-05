@@ -824,7 +824,7 @@ console.log(obj)
 console.log(obj.Lectura)
 //console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 
-collection.insertOne({lectura:obj.Lectura,date: formatted,fecha:formatted.substring(0,10)});
+collection.insertOne({lectura:obj.Lectura,date: formatted,fecha:obj.Fecha,hora:obj.Hora});
 
 
 }
