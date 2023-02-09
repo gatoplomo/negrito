@@ -67,7 +67,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.0.170:1884')
+var client2  = mqtt.connect('mqtt://192.168.61.36:1884')
  
 
 
@@ -88,6 +88,11 @@ client2.subscribe('nodo2', function (err) {
   })
 
 client2.subscribe('nodo3', function (err) {
+    if (!err) {
+      //client2.publish('nodo2', 'Hello mqtt')
+    }
+  })
+client2.subscribe('nodo1evento', function (err) {
     if (!err) {
       //client2.publish('nodo2', 'Hello mqtt')
     }
@@ -804,6 +809,7 @@ client2.on('message', function (topic, message , nodo1 , nodo1b) {
 
 
 for (let i = 0; i <centrales.length; i++) {
+
    if(topic==centrales[i])
   {
   //console.log(message.toString())
@@ -828,6 +834,14 @@ collection.insertOne({lectura:obj.Lectura,date: formatted,fecha:obj.Fecha,hora:o
 
 
 }
+else if (topic==centrales[i]+"evento")
+{
+const obj = JSON.parse(message);
+console.log(obj)
+
+
+}
+
 
 }
 
