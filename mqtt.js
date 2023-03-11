@@ -24,7 +24,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.61.36:9001' 
+const host = 'ws://192.168.69.36:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -498,10 +498,42 @@ console.log(respuesta.reverse())
 var $table = $('#table')
 var $table2 = $('#table2')
 var $table3 = $('#table3')
-var $table4 = $('#table4')
+
 
 
 $table.bootstrapTable('load', respuesta)
+
+//$table2.bootstrapTable('load', respuesta.reverse())
+//$table3.bootstrapTable('load', respuesta.reverse())
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+
+
+
+    )
+
+
+
+
+
+$.ajax({
+    url:'/eventos',
+    method:'POST',
+    data: {'central':respuesta2[id].id},
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+var $table4 = $('#table4')
+
 $table4.bootstrapTable('load', respuesta)
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
@@ -514,6 +546,34 @@ $table4.bootstrapTable('load', respuesta)
 
 
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -782,6 +842,7 @@ function creartoast(cuenta,contenido)
 {
 
 
+
 var dav=document.createElement("div")
 dav.setAttribute("id","toast"+cuenta)
 dav.setAttribute("class","toast align-items-center text-bg-primary border-0 ")
@@ -863,7 +924,7 @@ if(topic=="nodo1evento")
 {
 const obj = JSON.parse(message);
 
-creartoast(cuenta,"Mensaje:"+" "+obj.Nodo+" "+"Evento:"+" "+obj.Evento+" "+"Fecha"+" "+obj.Fecha+" "+"Hora"+" "+obj.Hora+" "+"Accionador:"+" "+obj.Act+" "+"Función:"+" "+obj.Func+" "+"Estado:"+" "+obj.Act1Est);
+creartoast(cuenta,"Evento:"+" "+obj.Evento+" "+"Generado_por:"+" "+obj.Generado_por+" "+"Fecha"+" "+obj.Fecha+" "+"Hora"+" "+obj.Hora+" "+"Accionador:"+" "+obj.Accionador+" "+"Función:"+" "+obj.Funcion+" "+"Estado:"+" "+obj.Estado);
 
 cuenta=cuenta+1;
 

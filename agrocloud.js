@@ -67,7 +67,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.61.36:1884')
+var client2  = mqtt.connect('mqtt://192.168.69.36:1884')
  
 
 
@@ -429,6 +429,7 @@ res.send("Evento Registrado")
 
 
 
+
 app.post("/eliminarcentral",function(req,res)
 
 {
@@ -475,6 +476,27 @@ console.log("peticion recibida")
 
   );
 
+
+app.post("/eventos",function(req,res)
+
+{
+
+const db = client.db(dbName);
+
+
+const collection = db.collection('nodo1eventos');
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+res.send(docs)
+  });
+
+console.log("peticion recibida")
+}
+
+  );
 
 
 
@@ -836,10 +858,22 @@ collection.insertOne({lectura:obj.Lectura,date: formatted,fecha:obj.Fecha,hora:o
 }
 else if (topic==centrales[i]+"evento")
 {
+
+
+  var fecha= new Date();
+ var hora_actual = Date.now();
+
+
+var dateTime = require('node-datetime');
+var dt = dateTime.create();
+var formatted = dt.format('Y-m-d H:M:S');
+
+const db = client.db(dbName);
+const collection2 = db.collection(centrales[i]+"eventos");
 const obj = JSON.parse(message);
 console.log(obj)
 
-
+collection2.insertOne({Evento:obj.Evento,Generado_por:obj.Generado_por,Date: formatted,Fecha:obj.Fecha,Hora:obj.Hora,Accionador:obj.Accionador,Funcion:obj.Funcion,Funcion:obj.Funcion,Estado:obj.Estado,Info:obj.Info});
 }
 
 

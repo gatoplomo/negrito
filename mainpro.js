@@ -353,35 +353,33 @@ $('#table4').bootstrapTable({
   search: true,
    pageSize: 4,
   columns: [{
-    field: 'tipo',
-    title: 'Tipo de Evento'
+    field: 'Evento',
+    title: 'Evento'
   },{
-    field: 'id',
-    title: 'Nodo'
+    field: 'Generado_por',
+    title: 'Generado_por'
   }
 
   , {
-    field: 'date',
-    title: 'Fecha'
+    field: 'Info',
+    title: 'Info'
   }, {
-    field: 'time',
+    field: 'Hora',
     title: 'Hora'
   }, 
 {
-    field: 'act',
-    title: 'Accionador'
+    field: 'Fecha',
+    title: 'Fecha'
   }, 
 {
-    field: 'funcion',
-    title: 'Función'
+    field: 'Accionador',
+    title: 'Accionador'
   }, {
-    field: 'estado',
+    field: 'Funcion',
+    title: 'Funcion'
+  },{
+    field: 'Estado',
     title: 'Estado'
-  },
-
-  {
-    field: 'origen',
-    title: 'origen'
   }],data: directorios
   
 })
