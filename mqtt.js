@@ -24,7 +24,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.58.36:9001' 
+const host = 'ws://192.168.191.36:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -151,11 +151,12 @@ canales2=canales;
 
 var gauges=[];
 
-for ( var item = 0; item < numero ; item++) {
+for ( var item = 0; item < 3 ; item++) {
 
  client.subscribe(canales[item], { qos: 0 })
- client.subscribe(canales[item]+"evento", { qos: 0 })
-          
+ client.subscribe("nodo1evento", { qos: 0 })
+      
+
 gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 180,
     height: 210, id:item}).draw()
 
@@ -164,7 +165,9 @@ gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 180,
 
 client.on('message', (topic, message, packet) => {
   //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
-  
+
+if(topic=="nodo1")
+{
 var msn=message.toString();
 console.log(msn);
 //console.log(msn.length)
@@ -173,18 +176,25 @@ const obj = JSON.parse(message);
 console.log(obj)
 console.log(obj.Lectura)
 
+    gauges[0].value = parseFloat(obj.Lectura[0].toString())
+      gauges[1].value = parseFloat(obj.Lectura[1].toString())
+
+    document.getElementById("indicadornodo1").className = "green led";
+        //document.getElementById("indicadornodo2").className = "green led";
 //console.log(canales[0])
 
+/*
 for ( var item = 0; item < numero ; item++) {
 
  if(topic.toString()==canales[item])
 
- 	gauges[item].value = parseFloat(obj.Lectura.toString())
+ 	gauges[item].value = parseFloat(obj.Lectura[0].toString())
  //console.log(canales[item]);
 document.getElementById("indicadornodo1").className = "green led";
     
         }
-
+        */
+}
 })
 
 
@@ -534,19 +544,39 @@ console.log(respuesta.reverse())
 
 var $table4 = $('#table4')
 
+
 $table4.bootstrapTable('load', respuesta)
+
+
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
     console.log(err)
-    
-
-  }
+    })
 
 
+$.ajax({
+    url:'/reportes',
+    method:'POST',
+    data: {'central':respuesta2[id].id},
 
-    )
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
 
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+
+var $table5 = $('#table5')
+
+
+$table5.bootstrapTable('load', respuesta)
+
+}).fail(function(err){
+    console.log(err)
+    })
 
 
 
@@ -893,6 +923,7 @@ client.on('message', (topic, message, packet) => {
 
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
+
 if(topic==seleccion && flag==1)
 {
 
@@ -901,8 +932,8 @@ console.log("seleccion"+seleccion)
 const obj = JSON.parse(message);
 console.log(obj)
 console.log(obj.Lectura)
-creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+obj.Fecha+" Hora"+" "+obj.Hora);
-lecturas.push(obj.Lectura.toString())
+creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura[0]+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+obj.Fecha+" Hora"+" "+obj.Hora);
+lecturas.push(obj.Lectura[0].toString())
 fechas.push(time)
 myChart.update();
 cuenta=cuenta+1;
@@ -922,12 +953,10 @@ client.on('message', (topic, message, packet) => {
 
 if(topic=="nodo1evento")
 {
-const obj = JSON.parse(message);
-
+    const obj = JSON.parse(message);
+console.log(obj)
 creartoast(cuenta,"Evento:"+" "+obj.Evento+" "+"Generado_por:"+" "+obj.Generado_por+" "+"Fecha"+" "+obj.Fecha+" "+"Hora"+" "+obj.Hora+" "+"Accionador:"+" "+obj.Accionador+" "+"Función:"+" "+obj.Funcion+" "+"Estado:"+" "+obj.Estado);
-
 cuenta=cuenta+1;
-
 }
 
 })

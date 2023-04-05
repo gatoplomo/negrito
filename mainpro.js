@@ -384,6 +384,36 @@ $('#table4').bootstrapTable({
   
 })
 
+$('#table5').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+                }, 
+
+  pagination: true,
+  search: true,
+   pageSize: 4,
+  columns: [{
+    field: 'lectura',
+    title: 'temperatura c°'
+  },{
+    field: 'lectura2',
+    title: 'Humedad %'
+  },{
+    field: 'date',
+    title: 'date'
+  }
+
+  , {
+    field: 'fecha',
+    title: 'fecha'
+  }, {
+    field: 'hora',
+    title: 'hora'
+  }],data: directorios
+  
+})
+
 
 eventostabla2=[]
 

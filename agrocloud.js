@@ -67,7 +67,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.58234.36:1884')
+var client2  = mqtt.connect('mqtt://192.168.191.36:1884')
  
 
 
@@ -498,6 +498,27 @@ console.log("peticion recibida")
 
   );
 
+app.post("/reportes",function(req,res)
+
+{
+
+const db = client.db(dbName);
+
+
+const collection = db.collection('nodo1');
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+res.send(docs)
+  });
+
+console.log("peticion recibida")
+}
+
+  );
+
 
 
 
@@ -852,7 +873,7 @@ console.log(obj)
 console.log(obj.Lectura)
 //console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 
-collection.insertOne({lectura:obj.Lectura,date: formatted,fecha:obj.Fecha,hora:obj.Hora});
+collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
 
 
 }
