@@ -67,7 +67,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.191.36:1884')
+var client2  = mqtt.connect('mqtt://192.168.42.36:1884')
  
 
 
@@ -375,12 +375,12 @@ app.post("/crearcentral",function(req,res)
 
 {
 
-console.log(req.body.id.toString())
+console.log(req.body)
 
 const db = client.db(dbName);
     const collection = db.collection('nodos');
 
-  collection.insertOne({id:req.body.id.toString(),info:req.body.info.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString()});
+collection.insertOne({id:req.body.id.toString(),client:req.body.client.toString(),dir:req.body.dir.toString(),contact:req.body.contact.toString(),s1:req.body.s1.toString(),s1v1:req.body.s1v1.toString(),s1v2:req.body.s1v2.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString(),numbersvars:req.body.numbersvars.toString()});
 //const fsPromises = fs.promises;
   
 /*  
@@ -455,7 +455,7 @@ fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toS
   );
 
 
-app.post("/nodos",function(req,res)
+app.post("/nodo",function(req,res)
 
 {
 

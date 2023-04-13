@@ -204,6 +204,9 @@
 
 <body id="cuerpo">
 
+
+
+
 <div class="container-fluid">
 
 
@@ -236,7 +239,7 @@
    <h1 style="font-size:15px;text-align:center">Historial de Eventos</h1>
 <table id="table4" >   </table>
 <hr>
-   <h1 style="font-size:15px;text-align:center">Reportes</h1>
+   <h1 style="font-size:15px;text-align:center">Datos</h1>
 <table id="table5" >   </table>
 </div>  
 
@@ -360,25 +363,47 @@ function add(tabla)
 </style>
 </head>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!--
 <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
-
+-->
 
 <body>
+<!--
+<button id="chat-btn" class="btn btn-primary position-fixed bottom-0 end-0 mb-5 me-5">Chat</button>
+-->
+    <div id="chat-container" class="chat-container">
+      <div class="chat-header">
+        <h3>Chat en línea</h3>
+        <button class="close-btn">×</button>
+      </div>
+      <div class="chat-body">
+        <!-- Aquí irán los mensajes del chat -->
+      </div>
+      <div class="chat-footer">
+        <input type="text" placeholder="Escribe un mensaje">
+        <button class="send-btn">Enviar</button>
+      </div>
+    </div>
 
+   
+    <!-- JS personalizado -->
+    <script>
+      const chatBtn = document.querySelector('#chat-btn');
+      const chatContainer = document.querySelector('#chat-container');
+      const closeBtn = document.querySelector('.close-btn');
+
+      chatBtn.addEventListener('click', () => {
+        // Mostrar la ventana modal del chat
+        chatContainer.style.visibility = 'visible';
+        chatBtn.classList.add('d-none');
+      });
+
+      closeBtn.addEventListener('click', () => {
+        // Ocultar la ventana modal del chat
+        chatContainer.style.visibility = 'hidden';
+         chatBtn.classList.remove('d-none');
+      });
+    </script>
 
 <div id="myModal" class="modal">
 
@@ -888,3 +913,42 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 </style>
 
+
+
+
+<style>
+
+
+  
+</style>
+
+
+   <style>
+      .chat-container {
+        position: fixed;
+        bottom: 0;
+        right: 30px;
+        width: 300px;
+        height: 400px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        /* Propiedad visibility para ocultar el contenedor de chat */
+        visibility: hidden;
+      }
+
+      /* Estilos para el botón de cerrar la ventana modal */
+      .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+      }
+
+      #chat-btn {
+        z-index: 99;
+      }
+    </style>

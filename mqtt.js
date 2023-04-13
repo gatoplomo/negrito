@@ -1,3 +1,487 @@
+$( document ).ready(function() {
+  $.ajax({
+    url:'/nodo',
+    method:'POST',
+    datatype:"JSON",
+    contentType: "application/json",
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+  }).done(function(respuesta){
+    const numero = 2;
+    let nombres = respuesta;
+    let tags=["DTH11-V1","DTH11-V2"]
+    let tags2=["Temperatura","Humedad"]
+    let tags3=["nodo1","nodo2"]
+    const canales=[];
+    console.log('Respuesta recibida:',respuesta)
+console.log(respuesta)
+console.log(respuesta.length)
+
+for ( var item = 0; item < numero ; item++) {
+copia(respuesta[item]);
+            var canv = document.createElement("canvas");
+            var division= document.createElement("div");
+            division.setAttribute("class","align-center")
+            division.setAttribute("style" , "display:inline-block") 
+            var salto= document.createElement("br")
+            var porte= document.createElement("h1")
+            var newContent3 = document.createTextNode(tags[item]);
+            porte.appendChild(newContent3)
+            document.getElementById("monitor").appendChild(division);
+            canv.setAttribute('width', 400);
+            canv.setAttribute('height', 400);
+            canv.setAttribute('id', item);
+            canales.push("nodo1")     
+          
+var body = document.getElementsByTagName("body")[0];
+var tabla   = document.createElement("table");
+tabla.setAttribute("id","tabla"+tags3[item])
+var tblBody = document.createElement("tbody");
+var hilera1 = document.createElement("tr");
+var textoCelda = document.createTextNode(tags[item]);  
+var celda = document.createElement("td");
+
+led=document.createElement("div")
+led.setAttribute("class","red led")
+led.setAttribute("id","indicadornodo1")
+
+celda.appendChild(textoCelda);
+//celda.appendChild(led)
+hilera1.appendChild(celda);
+
+
+container=document.createElement("div")
+container.setAttribute("class","container")
+
+row=document.createElement("div")
+row.setAttribute("class","row")
+
+col1=document.createElement("div")
+col1.setAttribute("class","col-sm")
+col1.setAttribute("aling" ,"right")
+col1.appendChild(textoCelda)
+
+
+col2=document.createElement("div")
+col2.setAttribute("class","col-sm")
+col2.setAttribute("aling" ,"right")
+col2.appendChild(led)
+
+row.appendChild(col1)
+row.appendChild(col2)
+
+container.appendChild(row)
+
+celda.appendChild(row)
+
+var hilera2 = document.createElement("tr");
+var celda2= document.createElement("td");
+var textoCelda = document.createTextNode("");
+celda2.appendChild(textoCelda);
+celda2.appendChild(canv)
+celda2.appendChild(textoCelda);
+hilera2.appendChild(celda2)
+var hilera3 = document.createElement("tr");
+var celda3= document.createElement("td");
+var textoCelda3= document.createTextNode(tags2[item]);
+celda3.appendChild(textoCelda3);
+hilera3.appendChild(celda3)
+
+var hilera4 = document.createElement("tr");
+var celda4= document.createElement("td");
+
+button4 =document.createElement("button")
+button4.setAttribute("class","btn")
+button4.setAttribute("id",item)
+i2=document.createElement("i")
+i2.setAttribute("class","fa fa-eye")
+button4.setAttribute("onClick","ver(this.id)")
+button4.appendChild(i2)
+celda4.appendChild(button4)
+
+button5 =document.createElement("button")
+button5.setAttribute("class","btn")
+button5.setAttribute("id",item)
+i3=document.createElement("i")
+i3.setAttribute("class","fa fa-toggle-on")
+button5.setAttribute("onClick","acciones(this.id)")
+button5.appendChild(i3)
+celda4.appendChild(button5)
+
+ var ul = document.createElement("ul");
+ var li = document.createElement("li");
+ var a1 = document.createElement("a");
+ a1.setAttribute("id","pichula");
+ a1.setAttribute("href","#");
+  a1.setAttribute("onClick","ver(this.id)");
+ var texto22 = document.createTextNode("Ver");
+a1.appendChild(texto22);
+ li.appendChild(a1)
+var ul3 = document.createElement("ul");
+ var li3 = document.createElement("li");
+ var a13 = document.createElement("a");
+ a13.setAttribute("id",item);
+ a13.setAttribute("href","#");
+  a13.setAttribute("onClick","acciones(this.id)");
+ var texto223 = document.createTextNode("Acciones");
+a13.appendChild(texto223);
+ li3.appendChild(a13)
+ ul.appendChild(li)
+//ul.appendChild(li2)
+ul.appendChild(li3)
+ //celda4.appendChild(ul)
+hilera4.appendChild(celda4)
+tblBody.appendChild(hilera1);
+tblBody.appendChild(hilera2);
+tblBody.appendChild(hilera3);
+tblBody.appendChild(hilera4);
+tabla.appendChild(tblBody);
+body.appendChild(tabla);
+tabla.setAttribute("border", "2");
+division.appendChild(tabla)
+
+
+}
+
+comu(canales,numero);
+
+(function($) {
+    $.fn.selected = function(fn) {
+        return this.each(function() {
+            var clicknum = 0;
+            $(this).click(function() {
+                clicknum++;
+                if (clicknum == 1) {
+                    clicknum = 0;
+                    fn(this);
+                }
+            });
+        });
+    }
+})(jQuery);
+
+
+
+
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+
+    )
+
+ alert("Bienvenido a la sala de monitoreo")
+
+
+
+$('#table').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+  $.ajax({
+    url:'/filtrar',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo"),'archivo':row.date.substring(0,10)},
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(res){
+
+console.log(res)
+
+
+   for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop();
+
+  
+}
+
+
+for ( var item = 0; item < res.length ; item++) {
+
+
+lecturas.push(res[item].lectura)
+fechas.push(res[item].date.substring(10,20))
+
+
+        }
+console.log(lecturas)
+console.log(fechas)
+
+ myChart.update()
+   
+}).fail(function(err){
+
+    
+
+  }
+
+    )
+
+                    $('.info').removeClass('info');
+                    $($element).addClass('info');
+                }, 
+
+  pagination: true,
+  search: true,
+   pageSize: 4,
+  columns: [{
+    field: 'date',
+    title: 'Fecha Creación '
+  }, {
+    field: 'time',
+    title: 'Ultima Actualización'
+  }, 
+{
+    field: 'h2',
+    title: 'Ultimo Dato'
+  }, 
+{
+    field: 'h1',
+    title: 'Primer Dato'
+  }, 
+
+  {
+    field: 'dir',
+    title: 'Directorio'
+  }],data: directorios
+  
+})
+
+$('#table4').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+                }, 
+
+  pagination: true,
+  search: true,
+   pageSize: 4,
+  columns: [{
+    field: 'Evento',
+    title: 'Evento'
+  },{
+    field: 'Generado_por',
+    title: 'Generado_por'
+  }
+
+  , {
+    field: 'Info',
+    title: 'Info'
+  }, {
+    field: 'Hora',
+    title: 'Hora'
+  }, 
+{
+    field: 'Fecha',
+    title: 'Fecha'
+  }, 
+{
+    field: 'Accionador',
+    title: 'Accionador'
+  }, {
+    field: 'Funcion',
+    title: 'Funcion'
+  },{
+    field: 'Estado',
+    title: 'Estado'
+  }],data: directorios
+  
+})
+
+$('#table5').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+                }, 
+
+  pagination: true,
+  search: true,
+   pageSize: 4,
+  columns: [{
+    field: 'lectura',
+    title: 'temperatura c°'
+  },{
+    field: 'lectura2',
+    title: 'Humedad %'
+  },{
+    field: 'date',
+    title: 'date'
+  }
+
+  , {
+    field: 'fecha',
+    title: 'fecha'
+  }, {
+    field: 'hora',
+    title: 'hora'
+  }],data: directorios
+  
+})
+
+
+eventostabla2=[]
+
+$('#table2').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+                }, 
+
+  pagination: false,
+  search: false,
+   pageSize: 4,
+  columns: [ {
+    field: 'var',
+    title: 'Variable'
+  }, {
+    field: 'condi',
+    title: 'Condición'
+  }, 
+{
+    field: 'value',
+    title: 'Valor'},
+ {   
+      field: 'act',
+    title: 'Accionador'
+  },
+ {   
+      field: 'state',
+    title: 'Estado'
+  }
+  ],data: eventostabla2
+  
+
+
+
+ 
+
+})
+
+
+
+
+$('#table3').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+
+
+                    $('.info').removeClass('info');
+                    $($element).addClass('info');
+                }, 
+
+  pagination: false,
+  search: false,
+   pageSize: 4,
+  columns: [{
+    field: 'Variable',
+    title: 'Variable'
+  }, {
+    field: 'Condicion',
+    title: 'Condición'
+  }, 
+{
+    field: 'Valor',
+    title: 'Valor'
+  },
+
+  {
+    field: 'Accionador',
+    title: 'Accionador'
+  },
+
+{
+    field: 'Estado',
+    title: 'Estado'
+  }
+
+
+
+
+
+  ],data: eventostabla2
+  
+})
+
+add1=document.createElement("button")
+add1.setAttribute("class","btn")
+i3=document.createElement("i")
+i3.setAttribute("class","fa fa-plus")
+add1.appendChild(i3)
+add1.setAttribute("onclick","eventos()")
+
+ document.getElementById("eventosensor").appendChild(add1);
+
+
+ add2=document.createElement("button")
+add2.setAttribute("class","btn")
+i4=document.createElement("i")
+i4.setAttribute("class","fa fa-plus")
+add2.appendChild(i4);
+add2.setAttribute("onclick","eventos2()")
+
+ document.getElementById("eventotiempo").appendChild(add2);
+
+
+ 
+
+});
+
+
+
+
+
+
+
+//FUNCION PARA GENERAR CSV POR NODO MEDIANTE BOTÖN
+function generar()
+{
+
+$( document ).ready(function() {
+
+  $.ajax({
+    url:'/generar',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo")},
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+
+    const numero = respuesta.length;
+    let nombres = respuesta;
+    const canales=[];
+
+    console.log('Respuesta recibida:',respuesta)
+    console.log(respuesta)
+    console.log(respuesta.length)
+ 
+   //console.log(numero);
+
+   
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+
+    )
+
+ alert("Descargando información del usuario")
+
+
+});
+location.reload();
+}
+
+
+
 
 var lecturas=[];
 var fechas=[];
@@ -24,7 +508,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.191.36:9001' 
+const host = 'ws://192.168.42.36:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -61,15 +545,15 @@ client.on('message', (topic, message, packet) => {
   
 
 var msn=message.toString();
-console.log(msn);
+//console.log(msn);
 //console.log(msn.length)
 
 const obj = JSON.parse(message);
-console.log(obj)
+//console.log(obj)
 
 
 
-console.log(topic)
+//console.log(topic)
 
 
 sele=localStorage.getItem('nodo');
@@ -151,9 +635,9 @@ canales2=canales;
 
 var gauges=[];
 
-for ( var item = 0; item < 3 ; item++) {
+for ( var item = 0; item < numero; item++) {
 
- client.subscribe(canales[item], { qos: 0 })
+ client.subscribe("nodo1", { qos: 0 })
  client.subscribe("nodo1evento", { qos: 0 })
       
 
@@ -169,12 +653,12 @@ client.on('message', (topic, message, packet) => {
 if(topic=="nodo1")
 {
 var msn=message.toString();
-console.log(msn);
+//console.log(msn);
 //console.log(msn.length)
 
 const obj = JSON.parse(message);
-console.log(obj)
-console.log(obj.Lectura)
+//console.log(obj)
+//console.log(obj.Lectura)
 
     gauges[0].value = parseFloat(obj.Lectura[0].toString())
       gauges[1].value = parseFloat(obj.Lectura[1].toString())
@@ -199,39 +683,6 @@ document.getElementById("indicadornodo1").className = "green led";
 
 
 }
-
-
-
-
-
-
-function comu2(canales,numero)
-{
-  let canales3=[];
-canales3=canales;
-for ( var item = 0; item < numero ; item++) {
- client.publish(canales3[item],"80")
-        }
-}
-
-
-function actualizar()
-{
-alert("Reset")
-client.publish("nodo1control","reset")
-}   
-
-
-
-function comu3(canales,numero)
-{
-   let canales4=[];
-canales4=canales;
-for ( var item = 0; item < numero ; item++) {
- client.publish(canales4[item],"0")
-        }
-}
-
 
 
  
@@ -872,7 +1323,6 @@ function creartoast(cuenta,contenido)
 {
 
 
-
 var dav=document.createElement("div")
 dav.setAttribute("id","toast"+cuenta)
 dav.setAttribute("class","toast align-items-center text-bg-primary border-0 ")
@@ -949,12 +1399,12 @@ cuenta=cuenta+1;
 
 
 client.on('message', (topic, message, packet) => {
- 
+ console.log(topic)
 
 if(topic=="nodo1evento")
 {
     const obj = JSON.parse(message);
-console.log(obj)
+    console.log("HOLAAAAAAAA")
 creartoast(cuenta,"Evento:"+" "+obj.Evento+" "+"Generado_por:"+" "+obj.Generado_por+" "+"Fecha"+" "+obj.Fecha+" "+"Hora"+" "+obj.Hora+" "+"Accionador:"+" "+obj.Accionador+" "+"Función:"+" "+obj.Funcion+" "+"Estado:"+" "+obj.Estado);
 cuenta=cuenta+1;
 }

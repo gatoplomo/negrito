@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="https://getbootstrap.com/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Agrocloud</title>
+    <title>WatchDog</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
 
@@ -71,7 +71,7 @@
     
 
    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="https://getbootstrap.com/docs/4.0/examples/starter-template/#">Agrocloud</a>
+      <a class="navbar-brand" href="https://getbootstrap.com/docs/4.0/examples/starter-template/#">WatchDog</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -113,42 +113,93 @@
       </div>
     </nav>
 
-    <main role="main" class="container">
-
-      <div class="starter-template">
-    <br></br>
-      </div>
-
-    </main><!-- /.container -->
 
 
-
+<!--
 <div class="hero-image">
   <div class="hero-text">
   
   </div>
 </div>
-
+-->
 
 
 <html>
 <body>
-
 <br></br>
 <div class=div2>
      <form action="#">
-      
-            <label for="username">id</label> <br></br>
-            <input type="text" id="id"class="block w-full p-2 border rounded border-gray-500"/>
-       <br></br>
-            <br></br>
-            <label for="username">info</label> <br></br>
-            <input type="text" id="info"class="block w-full p-2 border rounded border-gray-500"/>
-<label for="username">Accionador1</label> <br></br>
+      <hr>
+ <label for="identificador">Identificador:</label>
+<input type="text" id="id" name="identificador" style="width: 200px; padding: 5px;">
+ <label for="identificador">Cliente</label>
+<input type="text" id="client" name="identificador" style="width: 200px; padding: 5px;">
+ <label for="identificador">Dirección</label>
+<input type="text" id="dir" name="identificador" style="width: 200px; padding: 5px;">
+<label for="identificador">Contacto Cliente</label>
+<input type="text" id="contact" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+
+     <hr>
+ <label for="identificador">Sensor1</label>
+<input type="text" id="s1" name="identificador" style="width: 200px; padding: 5px;">
+ <label for="identificador">Var1</label>
+<input type="text" id="s1v1" name="identificador" style="width: 200px; padding: 5px;">
+ <label for="identificador">Var2</label>
+<input type="text" id="s1v2" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+   <hr>
+ <label for="identificador">Accionador1</label>
+<input type="text" id="act1" name="identificador" style="width: 200px; padding: 5px;">
+
+<hr>
+  <hr>
+ <label for="identificador">Accionador2</label>
+<input type="text" id="act2" name="identificador" style="width: 200px; padding: 5px;">
+
+<hr>
+
+  <hr>
+ <label for="identificador">Cantidad de Variables</label>
+<input type="number" id="numbersvars" name="identificador" style="width: 200px; padding: 5px;">
+
+<hr>
+
+
+<!--
+     <hr>
+ <label for="identificador">Sensor2</label>
+<input type="text" id="identificador" name="identificador" style="width: 200px; padding: 5px;">
+ <label for="identificador">Var1</label>
+<input type="text" id="identificador" name="identificador" style="width: 200px; padding: 5px;">
+
+<hr>
+-->
+<!--
+           <label for="quantity">Numero de Sensores</label>
+
+           <br>
+-->
+  <!--<input type="number" id="quantity" name="quantity" min="1" max="5">
+  -->
+ 
+  <br>
+<br>
+
+<!--
+<label for="username">Accionador1</label> 
             <input type="text" id="act1"class="block w-full p-2 border rounded border-gray-500"/>
 
-<label for="username">Accionador2</label> <br></br>
+<label for="username">Accionador2</label> 
             <input type="text" id="act2"class="block w-full p-2 border rounded border-gray-500"/>
+
+-->
+<br>
+<!--
+   <label for="username">info</label> <br></br>
+            <input type="text" id="info"class="block w-full p-2 border rounded border-gray-500"/>
+            <br>
+-->
 
             <input
               type="submit"
@@ -158,7 +209,9 @@
             />
     
         </form>
+
       </div>
+
 
 </body>
 
@@ -210,9 +263,15 @@ $("#boton").click(function(event){
     method:'POST',
     data: {
             id: $("#id").val(),
-           info: $("#info").val(),
+           client: $("#client").val(),
+           dir: $("#dir").val(),
+           contact: $("#contact").val(),
+           s1: $("#s1").val(),
+           s1v1: $("#s1v1").val(),
+           s1v2: $("#s1v2").val(),
            act1: $("#act1").val(),
            act2: $("#act2").val(),
+           numbersvars: $("#numbersvars").val(),
          },
 
     beforeSend: function(data){
