@@ -508,7 +508,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.42.36:9001' 
+const host = 'ws://192.168.12.36:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -906,7 +906,7 @@ myChart.update();
 function ver(id)
 {
 
-localStorage.setItem('nodo', respuesta2[id].id);
+localStorage.setItem('nodo', "nodo1");
 
 console.log("PICHULAAAA")
 
