@@ -1,4 +1,39 @@
 $( document ).ready(function() {
+
+
+$.ajax({
+    url:'/centrales',
+    method:'POST',
+    datatype:"JSON",
+    contentType: "application/json",
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+var $table6 = $('#tablacentrales')
+
+
+
+
+$table6.bootstrapTable('load', respuesta)
+
+//$table2.bootstrapTable('load', respuesta.reverse())
+//$table3.bootstrapTable('load', respuesta.reverse())
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+
+
+
+    )
+
+
   $.ajax({
     url:'/nodo',
     method:'POST',
@@ -324,6 +359,49 @@ $('#table5').bootstrapTable({
   
 })
 
+$('#tablacentrales').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+    alert(row.id)
+    localStorage.setItem('nodo', row.id);
+
+                }, 
+
+  pagination: true,
+  search: true,
+   pageSize: 4,
+  columns: [{
+    field: 'id',
+    title: 'Id'
+  },{
+    field: 'client',
+    title: 'Cliente'
+  },{
+    field: 'dir',
+    title: 'Dirección'
+  },{
+    field: 'contact',
+    title: 'Contacto'
+  }
+
+  , {
+    field: 's1',
+    title: 'S1'
+  }, {
+    field: 's1v1',
+    title: 'S1V1'
+  },{
+    field: 's1v2',
+    title: 'S1V2'
+  },{
+    field: 'act1',
+    title: 'Act1'
+  },{
+    field: 'act2',
+    title: 'Act2'
+  }],data: directorios
+  
+})
 
 eventostabla2=[]
 
@@ -650,7 +728,7 @@ gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 180,
 client.on('message', (topic, message, packet) => {
   //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
 
-if(topic=="nodo1")
+if(topic==localStorage.getItem("nodo"))
 {
 var msn=message.toString();
 //console.log(msn);
@@ -746,8 +824,8 @@ var chartconteiner= document.createElement("div")
 chartconteiner.setAttribute("class","chart-container")
 var chart = document.createElement("canvas")
 chart.setAttribute("id","myChart")
-chart.setAttribute("height","200")
-chart.setAttribute("width","auto")
+chart.setAttribute("height","60")
+chart.setAttribute("width","100")
 chartconteiner.appendChild(chart)
 select.appendChild(chartconteiner)
 
@@ -906,7 +984,7 @@ myChart.update();
 function ver(id)
 {
 
-localStorage.setItem('nodo', "nodo1");
+alert(id)
 
 console.log("PICHULAAAA")
 
@@ -946,7 +1024,7 @@ console.log(today)
 $.ajax({
     url:'/basededatos',
     method:'POST',
-    data: {'central':respuesta2[id].id},
+    data: {'central':localStorage.getItem("nodo")},
 
     beforeSend: function(data){
       console.log('Enviando...',data)
@@ -980,10 +1058,13 @@ $table.bootstrapTable('load', respuesta)
 
 
 
+
+
+
 $.ajax({
     url:'/eventos',
     method:'POST',
-    data: {'central':respuesta2[id].id},
+    data: {'central':localStorage.getItem("nodo")},
 
     beforeSend: function(data){
       console.log('Enviando...',data)
@@ -1009,7 +1090,7 @@ $table4.bootstrapTable('load', respuesta)
 $.ajax({
     url:'/reportes',
     method:'POST',
-    data: {'central':respuesta2[id].id},
+    data: {'central':localStorage.getItem("nodo")},
 
     beforeSend: function(data){
       console.log('Enviando...',data)
@@ -1061,7 +1142,7 @@ $table5.bootstrapTable('load', respuesta)
 $.ajax({
     url:'/geteventsensor',
     method:'POST',
-    data: {'central':respuesta2[id].id},
+    data: {'central':localStorage.getItem("nodo")},
 
     beforeSend: function(data){
       console.log('Enviando...',data)
@@ -1090,7 +1171,7 @@ $table4.bootstrapTable('load', respuesta.reverse())
 
 
 
-alert("Abriendo.."+respuesta2[id].id)
+alert("Abriendo.."+localStorage.getItem("nodo"))
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
   fechas.pop();
@@ -1109,7 +1190,7 @@ console.log(today)
 $.ajax({
     url:'/dataget',
     method:'POST',
-    data: {'central':respuesta2[id].id,'fecha':today},
+    data: {'central':localStorage.getItem("nodo"),'fecha':today},
     beforeSend: function(data){
       console.log('Enviando...',data)
     },

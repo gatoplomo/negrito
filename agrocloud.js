@@ -477,6 +477,27 @@ console.log("peticion recibida")
   );
 
 
+app.post("/centrales",function(req,res)
+
+{
+
+const db = client.db(dbName);
+
+
+const collection = db.collection('nodos');
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+res.send(docs)
+  });
+
+console.log("peticion recibida")
+}
+
+  );
+
 app.post("/eventos",function(req,res)
 
 {
@@ -484,7 +505,7 @@ app.post("/eventos",function(req,res)
 const db = client.db(dbName);
 
 
-const collection = db.collection('nodo1eventos');
+const collection = db.collection(req.body.central+"eventos");
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -501,11 +522,11 @@ console.log("peticion recibida")
 app.post("/reportes",function(req,res)
 
 {
-
+console.log(req.body.central)
 const db = client.db(dbName);
 
 
-const collection = db.collection('nodo1');
+const collection = db.collection(req.body.central);
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
