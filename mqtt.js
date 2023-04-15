@@ -226,6 +226,8 @@ $('#table').bootstrapTable({
 
   }).done(function(res){
 
+
+
 console.log(res)
 
 
@@ -364,6 +366,187 @@ $('#tablacentrales').bootstrapTable({
   onClickRow:function (row,$element) {
     alert(row.id)
     localStorage.setItem('nodo', row.id);
+
+
+
+$.ajax({
+    url:'/geteventsensor',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo")},
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+
+
+var $table3 = $('#table3')
+
+
+$table3.bootstrapTable('load', respuesta.reverse())
+$table4.bootstrapTable('load', respuesta.reverse())
+//$table2.bootstrapTable('load', respuesta.reverse())
+//$table3.bootstrapTable('load', respuesta.reverse())
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+    )
+
+
+$.ajax({
+    url:'/eventos',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo")},
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+var $table4 = $('#table4')
+
+
+$table4.bootstrapTable('load', respuesta)
+
+
+//$table2.bootstrapTable('load', respuesta.reverse())
+//$table3.bootstrapTable('load', respuesta.reverse())
+}).fail(function(err){
+    console.log(err)
+    })
+
+
+$.ajax({
+    url:'/reportes',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo")},
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+
+var $table5 = $('#table5')
+
+
+$table5.bootstrapTable('load', respuesta)
+
+}).fail(function(err){
+    console.log(err)
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$.ajax({
+    url:'/basededatos',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo")},
+
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+
+
+  }).done(function(respuesta){
+console.log(respuesta.reverse())
+
+var $table = $('#table')
+var $table2 = $('#table2')
+var $table3 = $('#table3')
+
+
+
+$table.bootstrapTable('load', respuesta)
+
+//$table2.bootstrapTable('load', respuesta.reverse())
+//$table3.bootstrapTable('load', respuesta.reverse())
+}).fail(function(err){
+    console.log(err)
+    
+
+  }
+
+
+
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 }, 
 
@@ -562,6 +745,7 @@ location.reload();
 
 
 var lecturas=[];
+var lecturas2=[];
 var fechas=[];
 var seleccion=" "
 var directorios=[];
@@ -1021,156 +1205,6 @@ console.log(today)
 
 
 
-$.ajax({
-    url:'/basededatos',
-    method:'POST',
-    data: {'central':localStorage.getItem("nodo")},
-
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-
-
-  }).done(function(respuesta){
-console.log(respuesta.reverse())
-
-var $table = $('#table')
-var $table2 = $('#table2')
-var $table3 = $('#table3')
-
-
-
-$table.bootstrapTable('load', respuesta)
-
-//$table2.bootstrapTable('load', respuesta.reverse())
-//$table3.bootstrapTable('load', respuesta.reverse())
-}).fail(function(err){
-    console.log(err)
-    
-
-  }
-
-
-
-    )
-
-
-
-
-
-
-
-
-$.ajax({
-    url:'/eventos',
-    method:'POST',
-    data: {'central':localStorage.getItem("nodo")},
-
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-
-
-  }).done(function(respuesta){
-console.log(respuesta.reverse())
-
-var $table4 = $('#table4')
-
-
-$table4.bootstrapTable('load', respuesta)
-
-
-//$table2.bootstrapTable('load', respuesta.reverse())
-//$table3.bootstrapTable('load', respuesta.reverse())
-}).fail(function(err){
-    console.log(err)
-    })
-
-
-$.ajax({
-    url:'/reportes',
-    method:'POST',
-    data: {'central':localStorage.getItem("nodo")},
-
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-
-
-  }).done(function(respuesta){
-console.log(respuesta.reverse())
-
-
-var $table5 = $('#table5')
-
-
-$table5.bootstrapTable('load', respuesta)
-
-}).fail(function(err){
-    console.log(err)
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$.ajax({
-    url:'/geteventsensor',
-    method:'POST',
-    data: {'central':localStorage.getItem("nodo")},
-
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-
-
-  }).done(function(respuesta){
-console.log(respuesta.reverse())
-
-
-
-var $table3 = $('#table3')
-
-
-$table3.bootstrapTable('load', respuesta.reverse())
-$table4.bootstrapTable('load', respuesta.reverse())
-//$table2.bootstrapTable('load', respuesta.reverse())
-//$table3.bootstrapTable('load', respuesta.reverse())
-}).fail(function(err){
-    console.log(err)
-    
-
-  }
-    )
-
-
-
-
 alert("Abriendo.."+localStorage.getItem("nodo"))
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
@@ -1199,32 +1233,40 @@ $.ajax({
    const numero = respuesta.length;
    let nombres = respuesta;
 
-
+//console.log(respuesta)
 for ( var item = 0; item < numero ; item++) {
 
 
 lecturas.push(respuesta[item].lectura)
 fechas.push(respuesta[item].date.substring(10,20))
+lecturas2.push(respuesta[item].lectura2)
 
 
         }
-console.log(numero)
-console.log(lecturas)
-console.log(fechas)
+
+//console.log(numero)
+//console.log(lecturas)
+//console.log(fechas)
 
 
 var newArray = [];
 var newArray2=[];
+var newArray3=[];
 
-    function identical(array,array2){
+    function identical(array,array2,array3){
 
         
         newArray.push(array[0]);
         newArray2.push(array2[0]);
+        newArray3.push(array3[0]);
         for(var i = 0; i < array.length -1; i++) {
             if(array2[i].substring(0,3) != array2[i + 1].substring(0,3)) {
                 newArray.push(array[i + 1]);
                 newArray2.push(array2[i+1]);
+                newArray3.push(array3[i+1]);
+                console.log(newArray)
+                 console.log(newArray2)
+                 console.log(newArray3)
 
 
             }
@@ -1251,8 +1293,10 @@ fechas.push(newArray2[i]);
     }
 
 
-    identical(lecturas,fechas);
-
+identical(lecturas,fechas,lecturas2);
+console.log("HOLIWISSSS")
+console.log(newArray)
+console.log(newArray2)
 myChart.update();
 
 

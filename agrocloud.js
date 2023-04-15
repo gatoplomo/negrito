@@ -281,12 +281,12 @@ const findDocuments = function(db, callback) {
   collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
     callback(docs);
   for (let i = 0; i < docs.length; i++) {
-console.log(i);
+//console.log(i);
 centrales[i]=docs[i].id;
-console.log(centrales[i]);
+//console.log(centrales[i]);
 }
   });
 
@@ -299,7 +299,7 @@ console.log(centrales[i]);
 app.post("/registro",function(req,res)
 
 {
-console.log(req.body);
+//console.log(req.body);
 
  const db = client.db(dbName);
 const collection = db.collection('documents');
@@ -312,7 +312,7 @@ res.status(200).send("usuario registrado")
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
 
   });
 
@@ -327,7 +327,7 @@ app.post("/login",function(req,res)
 {
 
 
-console.log(req.body)
+//console.log(req.body)
 
 
  const db = client.db(dbName);
@@ -338,14 +338,14 @@ collection.find(req.body).toArray(function(err, docs) {
     assert.equal(err, null);
 
 
-    console.log("Found the following records");
-    console.log(docs)
-     console.log(docs.length)
+    //console.log("Found the following records");
+    //console.log(docs)
+     //console.log(docs.length)
 
 if(docs.length==0)
 {
 res.send("False")
-  console.log("usuario no registrado");
+  //console.log("usuario no registrado");
 
 }
 else
@@ -510,7 +510,7 @@ const collection = db.collection(req.body.central+"eventos");
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
 res.send(docs)
   });
 
@@ -531,7 +531,7 @@ const collection = db.collection(req.body.central);
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
 res.send(docs)
   });
 
@@ -549,11 +549,11 @@ app.post("/dataget",function(req,res)
 {
 
 const db = client.db(dbName);
-console.log(req.body.central);
-console.log(req.body.fecha);
+//console.log(req.body.central);
+//console.log(req.body.fecha);
 const collection = db.collection(req.body.central);
 fecha=req.body.fecha
-console.log(fecha)
+//console.log(fecha)
 collection.find({"fecha":fecha}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
@@ -618,7 +618,7 @@ const collection = db.collection('eventosensor');
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
 
      res.setHeader('Content-Type', 'application/json');
    res.json(docs);
@@ -644,7 +644,7 @@ app.post("/actualizar",function(req,res)
 
 //const db = client.db(dbName);
 
-console.log(req.body)
+//console.log(req.body)
 //const collection = db.collection('timernodo1a');
 
 //collection.find({}).toArray(function(err, docs) {
@@ -664,7 +664,7 @@ const collection = db.collection('eventosensor');
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
 
      res.setHeader('Content-Type', 'application/json');
    res.json(docs);
@@ -717,9 +717,11 @@ console.log(req.body.id)
 
 app.post('/filtrar', (req, res) => {
  var cantidad=300;
+ var sensor="lectura1"
  var dataToSend;
 console.log(req.body)
  // spawn new child process to call the python script
+//var python = spawn('python3', [root2+"filtrar.py",req.body.archivo,req.body.central,cantidad.toString()]);
 var python = spawn('python3', [root2+"filtrar.py",req.body.archivo,req.body.central,cantidad.toString()]);
  // collect data from script
  
@@ -727,9 +729,9 @@ var python = spawn('python3', [root2+"filtrar.py",req.body.archivo,req.body.cent
  python.stdout.on('data', function (data) {
   console.log('Pipe data from python script ...');
 result += data.toString();
-console.log(result)
+//console.log(result)
 x=JSON.parse(result)
-console.log(x.length)
+//console.log(x.length)
 
 dataToSend=x
 
@@ -780,12 +782,12 @@ fs.readdir(directoryPath, function (err, files) {
     if (err) {
         return console.log('Unable to scan directory: ' + err);
     }
-    console.log(files)
+    //console.log(files)
 
 
 for (let i = 0; i <files.length; i++) {
 
-console.log(files[i])
+//console.log(files[i])
 
 const query = { name: files[i]};
 const update = { $set: {id:req.body.central,date:files[i].substring(0,files[i].indexOf(".")),dir:root+req.body.central+"/"+files[i]}};
@@ -808,12 +810,12 @@ collection.updateOne(query, update, options);
 
 
 //const db = client.db(dbName);
-console.log("directorios"+req.body.central);
+//console.log("directorios"+req.body.central);
 
 collection.find({}).toArray(function(err, docs) {
     //assert.equal(err, null);
     //console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
     //console.log("GATOQL")
 res.send(docs)
   });
@@ -840,12 +842,12 @@ const collection = db.collection("eventosensor");
 collection.find({}).toArray(function(err, docs) {
     //assert.equal(err, null);
     //console.log("Found the following records");
-    console.log(docs)
+    //console.log(docs)
     //console.log("GATOQL")
 res.send(docs)
   });
-console.log(req.body.central);
-console.log("peticion recibida")
+//console.log(req.body.central);
+//console.log("peticion recibida")
 
 
 
@@ -890,8 +892,8 @@ var dt = dateTime.create();
 var formatted = dt.format('Y-m-d H:M:S');
 
 const obj = JSON.parse(message);
-console.log(obj)
-console.log(obj.Lectura)
+//console.log(obj)
+//console.log(obj.Lectura)
 //console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 
 collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
@@ -913,7 +915,7 @@ var formatted = dt.format('Y-m-d H:M:S');
 const db = client.db(dbName);
 const collection2 = db.collection(centrales[i]+"eventos");
 const obj = JSON.parse(message);
-console.log(obj)
+//console.log(obj)
 
 collection2.insertOne({Evento:obj.Evento,Generado_por:obj.Generado_por,Date: formatted,Fecha:obj.Fecha,Hora:obj.Hora,Accionador:obj.Accionador,Funcion:obj.Funcion,Funcion:obj.Funcion,Estado:obj.Estado,Info:obj.Info});
 }
