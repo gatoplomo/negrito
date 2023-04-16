@@ -1,4 +1,9 @@
+
+
+
 $( document ).ready(function() {
+
+
 
 
 $.ajax({
@@ -43,11 +48,60 @@ $table6.bootstrapTable('load', respuesta)
       console.log('Enviando...',data)
     },
   }).done(function(respuesta){
-    const numero = 2;
+
+// Crear el elemento ul
+var ul = document.createElement("ul");
+ul.style.listStyle = "none";
+
+// Crear el elemento li para el primer enlace
+var li1 = document.createElement("li");
+li1.style.display = "inline-block";
+li1.style.marginRight = "10px";
+
+// Crear el enlace para la función 1
+var a1 = document.createElement("a");
+a1.href = "#";
+a1.onclick = function(event) {
+  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+  functs1(); // Llamar a la función functs1
+};
+a1.innerHTML = "DTH11 Temperatura/Humedad";
+
+// Agregar el enlace al elemento li1
+li1.appendChild(a1);
+
+// Crear el elemento li para el segundo enlace
+var li2 = document.createElement("li");
+li2.style.display = "inline-block";
+
+// Crear el enlace para la función 2
+var a2 = document.createElement("a");
+a2.href = "#";
+a2.onclick = function(event) {
+  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+  functs2(); // Llamar a la función functs2
+};
+a2.innerHTML = "MQ2 Gas/Ppm";
+
+// Agregar el enlace al elemento li2
+li2.appendChild(a2);
+
+// Agregar los elementos li1 y li2 al elemento ul
+ul.appendChild(li1);
+ul.appendChild(li2);
+
+// Agregar el elemento ul al documento
+document.getElementById("sensores").appendChild(ul)
+
+
+function functs1() {
+
+const numero = 2;
     let nombres = respuesta;
-    let tags=["DTH11-V1","DTH11-V2"]
-    let tags2=["Temperatura","Humedad"]
-    let tags3=["nodo1","nodo2"]
+    let tags=["DTH11-V1","DTH11-V2","MQ2"]
+    let tags2=["Temperatura","Humedad","Gas/PPM"]
+    let tags3=["nodo1","nodo2","nodo3"]
+
     const canales=[];
     console.log('Respuesta recibida:',respuesta)
 console.log(respuesta)
@@ -180,6 +234,15 @@ division.appendChild(tabla)
 }
 
 comu(canales,numero);
+}
+
+function functs2() {
+  alert("hola2")
+}
+
+
+
+
 
 (function($) {
     $.fn.selected = function(fn) {
@@ -346,7 +409,15 @@ $('#table5').bootstrapTable({
   },{
     field: 'lectura2',
     title: 'Humedad %'
-  },{
+  },
+
+{
+    field: 'lectura3',
+    title: 'Gases PPM'
+  }
+
+,
+  {
     field: 'date',
     title: 'date'
   }

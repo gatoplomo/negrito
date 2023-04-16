@@ -896,7 +896,7 @@ const obj = JSON.parse(message);
 //console.log(obj.Lectura)
 //console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 
-collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
+collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],lectura3:obj.Lectura[2],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
 
 
 }
