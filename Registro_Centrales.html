@@ -132,22 +132,16 @@
       <hr>
  <label for="identificador">Identificador:</label>
 <input type="text" id="id" name="identificador" style="width: 200px; padding: 5px;">
- <label for="identificador">Cliente</label>
-<input type="text" id="client" name="identificador" style="width: 200px; padding: 5px;">
- <label for="identificador">Dirección</label>
-<input type="text" id="dir" name="identificador" style="width: 200px; padding: 5px;">
-<label for="identificador">Contacto Cliente</label>
-<input type="text" id="contact" name="identificador" style="width: 200px; padding: 5px;">
+ 
 <hr>
 
      <hr>
  <label for="identificador">Sensor1</label>
 <input type="text" id="s1" name="identificador" style="width: 200px; padding: 5px;">
- <label for="identificador">Var1</label>
-<input type="text" id="s1v1" name="identificador" style="width: 200px; padding: 5px;">
- <label for="identificador">Var2</label>
-<input type="text" id="s1v2" name="identificador" style="width: 200px; padding: 5px;">
 <hr>
+<label for="identificador">Sensor2</label>
+<input type="text" id="s2" name="identificador" style="width: 200px; padding: 5px;">
+
    <hr>
  <label for="identificador">Accionador1</label>
 <input type="text" id="act1" name="identificador" style="width: 200px; padding: 5px;">
@@ -158,13 +152,21 @@
 <input type="text" id="act2" name="identificador" style="width: 200px; padding: 5px;">
 
 <hr>
-
+<!--
   <hr>
  <label for="identificador">Cantidad de Variables</label>
 <input type="number" id="numbersvars" name="identificador" style="width: 200px; padding: 5px;">
 
 <hr>
-
+-->
+<label for="identificador">Cliente</label>
+<input type="text" id="client" name="identificador" style="width: 200px; padding: 5px;">
+ <label for="identificador">Ubicación</label>
+<input type="text" id="dir" name="identificador" style="width: 200px; padding: 5px;">
+<label for="identificador">Sector</label>
+<input type="text" id="sect" name="identificador" style="width: 200px; padding: 5px;">
+<label for="identificador">Contacto</label>
+<input type="text" id="contact" name="identificador" style="width: 200px; padding: 5px;">
 
 <!--
      <hr>
@@ -262,16 +264,15 @@ $("#boton").click(function(event){
     url:'/crearcentral',
     method:'POST',
     data: {
-            id: $("#id").val(),
-           client: $("#client").val(),
-           dir: $("#dir").val(),
-           contact: $("#contact").val(),
+          id: $("#id").val(),
            s1: $("#s1").val(),
-           s1v1: $("#s1v1").val(),
-           s1v2: $("#s1v2").val(),
+           s2: $("#s2").val(),
            act1: $("#act1").val(),
            act2: $("#act2").val(),
-           numbersvars: $("#numbersvars").val(),
+           client: $("#client").val(),
+           dir: $("#dir").val(),
+           sect: $("#sect").val(),
+           contact: $("#contact").val(),
          },
 
     beforeSend: function(data){

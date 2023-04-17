@@ -380,7 +380,7 @@ console.log(req.body)
 const db = client.db(dbName);
     const collection = db.collection('nodos');
 
-collection.insertOne({id:req.body.id.toString(),client:req.body.client.toString(),dir:req.body.dir.toString(),contact:req.body.contact.toString(),s1:req.body.s1.toString(),s1v1:req.body.s1v1.toString(),s1v2:req.body.s1v2.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString(),numbersvars:req.body.numbersvars.toString()});
+collection.insertOne({id:req.body.id.toString(),s1:req.body.s1.toString(),s2:req.body.s2.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString(),client:req.body.client.toString(),ubi:req.body.dir.toString(),sect:req.body.sect.toString(),contact:req.body.contact.toString()});
 //const fsPromises = fs.promises;
   
 /*  
@@ -547,17 +547,17 @@ console.log("peticion recibida")
 app.post("/dataget",function(req,res)
 
 {
-
+console.log(req.body.central)
 const db = client.db(dbName);
-//console.log(req.body.central);
-//console.log(req.body.fecha);
+console.log(req.body.central);
+console.log(req.body.fecha);
 const collection = db.collection(req.body.central);
 fecha=req.body.fecha
-//console.log(fecha)
+console.log(fecha)
 collection.find({"fecha":fecha}).toArray(function(err, docs) {
     assert.equal(err, null);
     console.log("Found the following records");
-    //console.log(docs)
+    console.log(docs)
 res.send(docs)
   });
 

@@ -1,11 +1,5 @@
 
-
-
 $( document ).ready(function() {
-
-
-
-
 $.ajax({
     url:'/centrales',
     method:'POST',
@@ -14,261 +8,19 @@ $.ajax({
     beforeSend: function(data){
       console.log('Enviando...',data)
     },
-
-
   }).done(function(respuesta){
 console.log(respuesta.reverse())
 
 var $table6 = $('#tablacentrales')
-
-
-
 
 $table6.bootstrapTable('load', respuesta)
 
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){
-    console.log(err)
-    
-
-  }
+    console.log(err)})
 
 
-
-    )
-
-
-  $.ajax({
-    url:'/nodo',
-    method:'POST',
-    datatype:"JSON",
-    contentType: "application/json",
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-  }).done(function(respuesta){
-
-// Crear el elemento ul
-var ul = document.createElement("ul");
-ul.style.listStyle = "none";
-
-// Crear el elemento li para el primer enlace
-var li1 = document.createElement("li");
-li1.style.display = "inline-block";
-li1.style.marginRight = "10px";
-
-// Crear el enlace para la función 1
-var a1 = document.createElement("a");
-a1.href = "#";
-a1.onclick = function(event) {
-  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
-  functs1(); // Llamar a la función functs1
-};
-a1.innerHTML = "DTH11 Temperatura/Humedad";
-
-// Agregar el enlace al elemento li1
-li1.appendChild(a1);
-
-// Crear el elemento li para el segundo enlace
-var li2 = document.createElement("li");
-li2.style.display = "inline-block";
-
-// Crear el enlace para la función 2
-var a2 = document.createElement("a");
-a2.href = "#";
-a2.onclick = function(event) {
-  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
-  functs2(); // Llamar a la función functs2
-};
-a2.innerHTML = "MQ2 Gas/Ppm";
-
-// Agregar el enlace al elemento li2
-li2.appendChild(a2);
-
-// Agregar los elementos li1 y li2 al elemento ul
-ul.appendChild(li1);
-ul.appendChild(li2);
-
-// Agregar el elemento ul al documento
-document.getElementById("sensores").appendChild(ul)
-
-
-function functs1() {
-
-const numero = 2;
-    let nombres = respuesta;
-    let tags=["DTH11-V1","DTH11-V2","MQ2"]
-    let tags2=["Temperatura","Humedad","Gas/PPM"]
-    let tags3=["nodo1","nodo2","nodo3"]
-
-    const canales=[];
-    console.log('Respuesta recibida:',respuesta)
-console.log(respuesta)
-console.log(respuesta.length)
-
-for ( var item = 0; item < numero ; item++) {
-copia(respuesta[item]);
-            var canv = document.createElement("canvas");
-            var division= document.createElement("div");
-            division.setAttribute("class","align-center")
-            division.setAttribute("style" , "display:inline-block") 
-            var salto= document.createElement("br")
-            var porte= document.createElement("h1")
-            var newContent3 = document.createTextNode(tags[item]);
-            porte.appendChild(newContent3)
-            document.getElementById("monitor").appendChild(division);
-            canv.setAttribute('width', 400);
-            canv.setAttribute('height', 400);
-            canv.setAttribute('id', item);
-            canales.push("nodo1")     
-          
-var body = document.getElementsByTagName("body")[0];
-var tabla   = document.createElement("table");
-tabla.setAttribute("id","tabla"+tags3[item])
-var tblBody = document.createElement("tbody");
-var hilera1 = document.createElement("tr");
-var textoCelda = document.createTextNode(tags[item]);  
-var celda = document.createElement("td");
-
-led=document.createElement("div")
-led.setAttribute("class","red led")
-led.setAttribute("id","indicadornodo1")
-
-celda.appendChild(textoCelda);
-//celda.appendChild(led)
-hilera1.appendChild(celda);
-
-
-container=document.createElement("div")
-container.setAttribute("class","container")
-
-row=document.createElement("div")
-row.setAttribute("class","row")
-
-col1=document.createElement("div")
-col1.setAttribute("class","col-sm")
-col1.setAttribute("aling" ,"right")
-col1.appendChild(textoCelda)
-
-
-col2=document.createElement("div")
-col2.setAttribute("class","col-sm")
-col2.setAttribute("aling" ,"right")
-col2.appendChild(led)
-
-row.appendChild(col1)
-row.appendChild(col2)
-
-container.appendChild(row)
-
-celda.appendChild(row)
-
-var hilera2 = document.createElement("tr");
-var celda2= document.createElement("td");
-var textoCelda = document.createTextNode("");
-celda2.appendChild(textoCelda);
-celda2.appendChild(canv)
-celda2.appendChild(textoCelda);
-hilera2.appendChild(celda2)
-var hilera3 = document.createElement("tr");
-var celda3= document.createElement("td");
-var textoCelda3= document.createTextNode(tags2[item]);
-celda3.appendChild(textoCelda3);
-hilera3.appendChild(celda3)
-
-var hilera4 = document.createElement("tr");
-var celda4= document.createElement("td");
-
-button4 =document.createElement("button")
-button4.setAttribute("class","btn")
-button4.setAttribute("id",item)
-i2=document.createElement("i")
-i2.setAttribute("class","fa fa-eye")
-button4.setAttribute("onClick","ver(this.id)")
-button4.appendChild(i2)
-celda4.appendChild(button4)
-
-button5 =document.createElement("button")
-button5.setAttribute("class","btn")
-button5.setAttribute("id",item)
-i3=document.createElement("i")
-i3.setAttribute("class","fa fa-toggle-on")
-button5.setAttribute("onClick","acciones(this.id)")
-button5.appendChild(i3)
-celda4.appendChild(button5)
-
- var ul = document.createElement("ul");
- var li = document.createElement("li");
- var a1 = document.createElement("a");
- a1.setAttribute("id","pichula");
- a1.setAttribute("href","#");
-  a1.setAttribute("onClick","ver(this.id)");
- var texto22 = document.createTextNode("Ver");
-a1.appendChild(texto22);
- li.appendChild(a1)
-var ul3 = document.createElement("ul");
- var li3 = document.createElement("li");
- var a13 = document.createElement("a");
- a13.setAttribute("id",item);
- a13.setAttribute("href","#");
-  a13.setAttribute("onClick","acciones(this.id)");
- var texto223 = document.createTextNode("Acciones");
-a13.appendChild(texto223);
- li3.appendChild(a13)
- ul.appendChild(li)
-//ul.appendChild(li2)
-ul.appendChild(li3)
- //celda4.appendChild(ul)
-hilera4.appendChild(celda4)
-tblBody.appendChild(hilera1);
-tblBody.appendChild(hilera2);
-tblBody.appendChild(hilera3);
-tblBody.appendChild(hilera4);
-tabla.appendChild(tblBody);
-body.appendChild(tabla);
-tabla.setAttribute("border", "2");
-division.appendChild(tabla)
-
-
-}
-
-comu(canales,numero);
-}
-
-function functs2() {
-  alert("hola2")
-}
-
-
-
-
-
-(function($) {
-    $.fn.selected = function(fn) {
-        return this.each(function() {
-            var clicknum = 0;
-            $(this).click(function() {
-                clicknum++;
-                if (clicknum == 1) {
-                    clicknum = 0;
-                    fn(this);
-                }
-            });
-        });
-    }
-})(jQuery);
-
-
-
-
-}).fail(function(err){
-    console.log(err)
-    
-
-  }
-
-    )
 
  alert("Bienvenido a la sala de monitoreo")
 
@@ -437,7 +189,415 @@ $('#tablacentrales').bootstrapTable({
   onClickRow:function (row,$element) {
     alert(row.id)
     localStorage.setItem('nodo', row.id);
+    localStorage.setItem('s1', row.s1);
+    localStorage.setItem('s2', row.s2);
 
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = yyyy + '-' + mm + '-' + dd;
+console.log(today)
+
+$.ajax({
+    url:'/dataget',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo"),'fecha':today},
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+  }).done(function(respuesta){
+ console.log(respuesta)
+ const numero = respuesta.length;
+   let nombres = respuesta;
+alert(respuesta.length)
+
+for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+ lecturas2.pop();
+ lecturas3.pop();
+fechas.pop(); 
+}
+
+for ( var item = 0; item < numero ; item++) {
+lecturas.push(respuesta[item].lectura)
+fechas.push(respuesta[item].date.substring(10,20))
+lecturas2.push(respuesta[item].lectura2)
+lecturas3.push(respuesta[item].lectura3)
+        }
+//console.log(numero)
+//console.log(lecturas)
+//console.log(fechas)
+    })
+
+
+function creargauges(name,vars)
+{
+
+
+const numero = name.vars.length
+//alert(numero); // 3
+
+
+    const parentElement = document.getElementById('monitor');
+    while (parentElement.firstChild) {
+      parentElement.removeChild(parentElement.firstChild);
+    }
+let tags=[name.variable1+"-V1",name.variable1+"-V2"]
+for ( var item = 0; item < numero ; item++) {
+tags.push(name.variable1+"V"+item)
+}
+let tags2=name.vars
+console.log(tags2)
+
+    let tags3=["nodo1","nodo2","nodo3"]
+    let sensores=tags2
+
+
+    const canales=[];
+    //console.log('Respuesta recibida:',respuesta)
+//console.log(respuesta)
+//console.log(respuesta.length)
+
+for ( var item = 0; item < numero ; item++) {
+//copia(respuesta[item]);
+            var canv = document.createElement("canvas");
+            var division= document.createElement("div");
+            division.setAttribute("class","align-center")
+            division.setAttribute("style" , "display:inline-block") 
+            var salto= document.createElement("br")
+            var porte= document.createElement("h1")
+            var newContent3 = document.createTextNode(tags[item]);
+            porte.appendChild(newContent3)
+            document.getElementById("monitor").appendChild(division);
+            canv.setAttribute('width', 400);
+            canv.setAttribute('height', 400);
+            canv.setAttribute('id', name.vars[item]);
+            canales.push("nodo1")     
+          
+var body = document.getElementsByTagName("body")[0];
+var tabla   = document.createElement("table");
+tabla.setAttribute("id","tabla"+tags3[item])
+var tblBody = document.createElement("tbody");
+var hilera1 = document.createElement("tr");
+var textoCelda = document.createTextNode(tags[item]);  
+var celda = document.createElement("td");
+
+led=document.createElement("div")
+led.setAttribute("class","red led")
+led.setAttribute("id","indicadornodo1")
+
+celda.appendChild(textoCelda);
+//celda.appendChild(led)
+hilera1.appendChild(celda);
+
+
+container=document.createElement("div")
+container.setAttribute("class","container")
+
+row=document.createElement("div")
+row.setAttribute("class","row")
+
+col1=document.createElement("div")
+col1.setAttribute("class","col-sm")
+col1.setAttribute("aling" ,"right")
+col1.appendChild(textoCelda)
+
+
+col2=document.createElement("div")
+col2.setAttribute("class","col-sm")
+col2.setAttribute("aling" ,"right")
+col2.appendChild(led)
+
+row.appendChild(col1)
+row.appendChild(col2)
+
+container.appendChild(row)
+
+celda.appendChild(row)
+
+var hilera2 = document.createElement("tr");
+var celda2= document.createElement("td");
+var textoCelda = document.createTextNode("");
+celda2.appendChild(textoCelda);
+celda2.appendChild(canv)
+celda2.appendChild(textoCelda);
+hilera2.appendChild(celda2)
+var hilera3 = document.createElement("tr");
+var celda3= document.createElement("td");
+var textoCelda3= document.createTextNode(tags2[item]);
+celda3.appendChild(textoCelda3);
+hilera3.appendChild(celda3)
+
+var hilera4 = document.createElement("tr");
+var celda4= document.createElement("td");
+
+button4 =document.createElement("button")
+button4.setAttribute("class","btn")
+button4.setAttribute("id",sensores[item])
+i2=document.createElement("i")
+i2.setAttribute("class","fa fa-eye")
+button4.setAttribute("onClick","ver(this.id)")
+button4.appendChild(i2)
+celda4.appendChild(button4)
+
+button5 =document.createElement("button")
+button5.setAttribute("class","btn")
+button5.setAttribute("id",item)
+i3=document.createElement("i")
+i3.setAttribute("class","fa fa-toggle-on")
+button5.setAttribute("onClick","acciones()")
+button5.appendChild(i3)
+celda4.appendChild(button5)
+
+ var ul = document.createElement("ul");
+ var li = document.createElement("li");
+ var a1 = document.createElement("a");
+ a1.setAttribute("id","pichula");
+ a1.setAttribute("href","#");
+  a1.setAttribute("onClick","ver(this.id)");
+ var texto22 = document.createTextNode("Ver");
+a1.appendChild(texto22);
+ li.appendChild(a1)
+var ul3 = document.createElement("ul");
+ var li3 = document.createElement("li");
+ var a13 = document.createElement("a");
+ a13.setAttribute("id",item);
+ a13.setAttribute("href","#");
+  a13.setAttribute("onClick","acciones(this.id)");
+ var texto223 = document.createTextNode("Acciones");
+a13.appendChild(texto223);
+ li3.appendChild(a13)
+ ul.appendChild(li)
+//ul.appendChild(li2)
+ul.appendChild(li3)
+ //celda4.appendChild(ul)
+hilera4.appendChild(celda4)
+tblBody.appendChild(hilera1);
+tblBody.appendChild(hilera2);
+tblBody.appendChild(hilera3);
+tblBody.appendChild(hilera4);
+tabla.appendChild(tblBody);
+body.appendChild(tabla);
+tabla.setAttribute("border", "2");
+division.appendChild(tabla)
+
+
+}
+
+var gauges=[];
+
+ let canales2=[];
+canales2=canales;
+
+
+
+for ( var item = 0; item < numero; item++) {
+
+ client.subscribe("nodo1", { qos: 0 })
+ client.subscribe("nodo1evento", { qos: 0 })
+      
+alert(name.vars[item])
+
+gauges[item] = new RadialGauge({ 
+  renderTo: name.vars[item],
+  width: 180,
+  height: 210, 
+  id: "gauge-" + item // Agrega un ID único usando el valor de "item"
+}).draw();
+
+gauges[item].id = name.vars[item]+"gauge"; // Establecer el ID después de crear el objeto
+
+        }
+
+for ( var item = 0; item < gauges.length ; item++) {
+alert("identificador "+ gauges[item].id)
+}
+   alert("Cantidad de Relojes "+gauges.length)     
+client.on('message', (topic, message, packet) => {
+  //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
+//alert(name.vars)
+
+
+
+
+
+
+if(topic==localStorage.getItem("nodo"))
+{
+var msn=message.toString();
+//console.log(msn);
+//console.log(msn.length)
+
+const obj = JSON.parse(message);
+//console.log(obj)
+//console.log(obj.Lectura)
+console.log(vars)
+console.log(vars.length)
+console.log(gauges[0].id)
+
+// Imprimir el array gauges en la consola
+console.log(gauges);
+
+
+  for (let i = 0; i < gauges.length; i++) {
+    if (gauges[i].id === "Temperaturagauge") {
+      gauges[i].value = parseFloat(obj.Lectura[0].toString())
+    }
+    else if (gauges[i].id === "Humedadgauge")
+    {
+    gauges[i].value = parseFloat(obj.Lectura[1].toString())
+
+    }
+    else if (gauges[i].id == "PpmGasgauge")
+        {
+    gauges[i].value = parseFloat(obj.Lectura[2].toString())
+
+    }
+  }
+
+
+
+
+
+
+
+
+
+/*
+for ( var item = 0; item < numero ; item++) {
+for(var item2=0 ; item2<vars.length;item2++)
+{
+ if(gauges[item].id==vars[item2])
+ {
+alert("match")
+ }
+}
+    //gauges[item].value = parseFloat(obj.Lectura[0].toString())
+ //console.log(canales[item]);
+//document.getElementById("indicadornodo1").className = "green led";
+    
+        }
+*/
+
+}
+})
+
+}
+
+
+
+/*
+for (var i = 0; i < numero; i++) {
+for (var i2 = 0; i2 <vars.length; i2++) {
+
+}
+ }   
+
+ */
+    //gauges[1].value = parseFloat(obj.Lectura[1].toString())
+//alert(gauges[0].id)
+   // document.getElementById("indicadornodo1").className = "green led";
+        //document.getElementById("indicadornodo2").className = "green led";
+//console.log(canales[0])
+
+/*
+
+        */
+
+
+
+
+
+
+
+
+
+// Crear el elemento ul
+var ul = document.createElement("ul");
+ul.style.listStyle = "none";
+
+// Crear el elemento li para el primer enlace
+var li1 = document.createElement("li");
+li1.style.display = "inline-block";
+li1.style.marginRight = "10px";
+
+// Crear el enlace para la función 1
+var a1 = document.createElement("a");
+a1.href = "#";
+a1.onclick = function(event) {
+  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+  functs1(); // Llamar a la función functs1
+};
+a1.innerHTML = localStorage.getItem("s1");
+
+// Agregar el enlace al elemento li1
+li1.appendChild(a1);
+
+// Crear el elemento li para el segundo enlace
+var li2 = document.createElement("li");
+li2.style.display = "inline-block";
+
+// Crear el enlace para la función 2
+var a2 = document.createElement("a");
+a2.href = "#";
+a2.onclick = function(event) {
+  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+  functs2(); // Llamar a la función functs2
+};
+a2.innerHTML = localStorage.getItem("s2");
+
+// Agregar el enlace al elemento li2
+li2.appendChild(a2);
+
+// Agregar los elementos li1 y li2 al elemento ul
+ul.appendChild(li1);
+ul.appendChild(li2);
+
+// Agregar el elemento ul al documento
+document.getElementById("sensores").appendChild(ul)
+
+
+
+let vars=["Temperatura","Humedad","PpmGas"]
+
+function functs1() {
+
+
+const name = localStorage.getItem("s1");
+const myArray1 = name.split("-");
+const myArray2 = myArray1[1].split("/");
+
+const DTH11 = {
+  variable1: myArray1[0],
+  vars: [myArray2[0], myArray2[1]]
+};
+
+//alert(DTH11.variable1); // MQ2
+//alert(DTH11.vars); // ["Temperatura", "Humedad"]
+
+//console.log(myObject.variable1); // DTH11
+//console.log(myObject.variable2); // Temperatura
+//console.log(myObject.variable3); // Humedad
+
+
+creargauges(DTH11,vars)
+
+
+}
+
+function functs2() {
+
+const name = localStorage.getItem("s2");
+
+const myArray = name.split("-");
+const MQ2 = {
+  variable1: myArray[0],
+  vars: [myArray[1]]
+};
+creargauges(MQ2,vars)
+}
 
 
 $.ajax({
@@ -518,33 +678,6 @@ $table5.bootstrapTable('load', respuesta)
 }).fail(function(err){
     console.log(err)
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $.ajax({
     url:'/basededatos',
@@ -627,33 +760,30 @@ $table.bootstrapTable('load', respuesta)
   columns: [{
     field: 'id',
     title: 'Id'
-  },{
-    field: 'client',
-    title: 'Cliente'
-  },{
-    field: 'dir',
-    title: 'Dirección'
-  },{
-    field: 'contact',
-    title: 'Contacto'
   }
-
   , {
     field: 's1',
-    title: 'S1'
+    title: 's1'
   }, {
-    field: 's1v1',
-    title: 'S1V1'
-  },{
-    field: 's1v2',
-    title: 'S1V2'
+    field: 's2',
+    title: 's2'
   },{
     field: 'act1',
     title: 'Act1'
   },{
     field: 'act2',
     title: 'Act2'
-  }],data: directorios
+  },{
+    field: 'client',
+    title: 'Cliente'
+  },{
+    field: 'ubi',
+    title: 'Ubicación'
+  },{
+    field: 'contact',
+    title: 'Contacto'
+  }
+],data: directorios
   
 })
 
@@ -786,8 +916,8 @@ $( document ).ready(function() {
 
   }).done(function(respuesta){
 
-    const numero = respuesta.length;
-    let nombres = respuesta;
+    //const numero = respuesta.length;
+    //let nombres = respuesta;
     const canales=[];
 
     console.log('Respuesta recibida:',respuesta)
@@ -813,10 +943,12 @@ location.reload();
 }
 
 
-
+var grafico=[];
+var fgraficos=[];
 
 var lecturas=[];
 var lecturas2=[];
+var lecturas3=[];
 var fechas=[];
 var seleccion=" "
 var directorios=[];
@@ -963,57 +1095,7 @@ document.getElementById("EstadoAccionador1nodo1").appendChild(document.createTex
 
 function comu(canales,numero)
 {
-  let canales2=[];
-canales2=canales;
-
-var gauges=[];
-
-for ( var item = 0; item < numero; item++) {
-
- client.subscribe("nodo1", { qos: 0 })
- client.subscribe("nodo1evento", { qos: 0 })
-      
-
-gauges[item] = new RadialGauge({ renderTo: item.toString() ,width: 180,
-    height: 210, id:item}).draw()
-
-
-        }
-
-client.on('message', (topic, message, packet) => {
-  //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
-
-if(topic==localStorage.getItem("nodo"))
-{
-var msn=message.toString();
-//console.log(msn);
-//console.log(msn.length)
-
-const obj = JSON.parse(message);
-//console.log(obj)
-//console.log(obj.Lectura)
-
-    gauges[0].value = parseFloat(obj.Lectura[0].toString())
-      gauges[1].value = parseFloat(obj.Lectura[1].toString())
-
-    document.getElementById("indicadornodo1").className = "green led";
-        //document.getElementById("indicadornodo2").className = "green led";
-//console.log(canales[0])
-
-/*
-for ( var item = 0; item < numero ; item++) {
-
- if(topic.toString()==canales[item])
-
- 	gauges[item].value = parseFloat(obj.Lectura[0].toString())
- //console.log(canales[item]);
-document.getElementById("indicadornodo1").className = "green led";
-    
-        }
-        */
-}
-})
-
+ 
 
 }
 
@@ -1159,12 +1241,12 @@ window.chartColors = {
 var config = {
   type: 'line',
   data: {
-    labels: fechas,
+    labels: fgraficos,
     datasets: [{
       label: "Temperatura nodo 1",
       backgroundColor: window.chartColors.red,
       borderColor: window.chartColors.red,
-      data: lecturas,  backgroundColor: [
+      data: grafico,  backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
                 'rgba(255, 206, 86, 0.2)',
@@ -1216,8 +1298,6 @@ var myChart = new Chart(ctx, config);
 
 
 
-var lecturas3=[]
-var fechas3=[]
 
 var nodoanterior="";
 
@@ -1235,14 +1315,183 @@ myChart.update();
 
 
 
+var newArray = [];
+var newArray2=[];
+    
 
 function ver(id)
 {
+    //alert(id)
+newArray = [];
+newArray2=[];
 
-alert(id)
 
-console.log("PICHULAAAA")
+ function filtro(array,array2){
+    //alert(array.length)
+    //alert(array2.length)
 
+newArray.push(array[0]);
+       newArray2.push(array2[0]);
+       for(var i = 0; i < array.length -1; i++) {
+            if(array2[i].substring(0,3) != array2[i + 1].substring(0,3)) {
+                newArray.push(array[i + 1]);
+                newArray2.push(array2[i+1]);
+    
+        
+            }
+        }
+
+//alert(newArray.length)
+//alert(newArray2.length)
+
+
+  for (var i = grafico.length; i > 0; i--) {
+ grafico.pop();
+fgraficos.pop(); 
+}
+myChart.update();
+   for (var i = 0; i < newArray.length; i++) {
+ grafico.push(newArray[i]);
+fgraficos.push(newArray2[i]); 
+}
+myChart.update();
+myChart.update();
+
+    }
+
+
+if (id=="Temperatura") {
+ filtro(lecturas,fechas);
+} else if (id=="Humedad") {
+ filtro(lecturas2,fechas);
+} else if (id=="gas") {
+filtro(lecturas3,fechas);
+} else {
+  alert("hola")
+}
+
+/*
+
+*/
+
+myChart.update();
+
+
+alert(localStorage.getItem("nodo"))
+
+
+
+  var cuenta=0;
+
+client.on('message', (topic, message, packet) => {
+ 
+
+var today = new Date();
+var time = today.getHours() + ":" + today.getMinutes();
+
+if(topic==localStorage.getItem("nodo") && flag==1)
+{
+
+console.log("seleccion"+seleccion)
+
+const obj = JSON.parse(message);
+console.log(obj)
+console.log(obj.Lectura)
+creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura[0]+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+obj.Fecha+" Hora"+" "+obj.Hora);
+grafico.push(obj.Lectura[0].toString())
+fgraficos.push(time)
+myChart.update();
+cuenta=cuenta+1;
+}
+
+
+//document.getElementById(":nodo1/Accionador0").checked = false;
+
+
+
+})
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+function ver()
+{
+alert(localStorage.getItem("nodo"))
+alert("VER")
+$.ajax({
+    url:'/dataget',
+    method:'POST',
+    data: {'central':localStorage.getItem("nodo"),'fecha':today},
+    beforeSend: function(data){
+      console.log('Enviando...',data)
+    },
+  }).done(function(respuesta){
+   const numero = respuesta.length;
+   let nombres = respuesta;
+console.log(respuesta)
+for ( var item = 0; item < numero ; item++) {
+lecturas.push(respuesta[item].lectura)
+fechas.push(respuesta[item].date.substring(10,20))
+lecturas2.push(respuesta[item].lectura2)
+        }
+//console.log(numero)
+//console.log(lecturas)
+//console.log(fechas)
+var newArray = [];
+var newArray2=[];
+
+    function identical(array,array2,){
+        newArray.push(array[0]);
+        newArray2.push(array2[0]);
+      
+        for(var i = 0; i < array.length -1; i++) {
+            if(array2[i].substring(0,3) != array2[i + 1].substring(0,3)) {
+                newArray.push(array[i + 1]);
+                newArray2.push(array2[i+1]);
+                console.log(newArray)
+                 console.log(newArray2)
+        
+            }
+        }
+        //console.log(array2[0].substring(3,4));
+        //console.log(array2[0].substring(3,4))
+    for (var i = lecturas.length; i > 0; i--) {
+ lecturas.pop();
+fechas.pop(); 
+}
+   for (var i = 0; i < newArray.length; i++) {
+ lecturas.push(newArray[i]);
+fechas.push(newArray2[i]); 
+}
+    }
+identical(lecturas,fechas,lecturas2);
+console.log("HOLIWISSSS")
+console.log(newArray)
+console.log(newArray2)
+myChart.update();
+myChart.update();
+}).fail(function(err){
+    console.log(err)
+    
+  }
+
+    )
 
 
         for(var i = 0; i < respuesta2.length; i++) {
@@ -1292,99 +1541,6 @@ seleccion=respuesta2[id].id
 console.log("PICHULA")
 console.log(today)
 
-$.ajax({
-    url:'/dataget',
-    method:'POST',
-    data: {'central':localStorage.getItem("nodo"),'fecha':today},
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-  }).done(function(respuesta){
-
-   const numero = respuesta.length;
-   let nombres = respuesta;
-
-//console.log(respuesta)
-for ( var item = 0; item < numero ; item++) {
-
-
-lecturas.push(respuesta[item].lectura)
-fechas.push(respuesta[item].date.substring(10,20))
-lecturas2.push(respuesta[item].lectura2)
-
-
-        }
-
-//console.log(numero)
-//console.log(lecturas)
-//console.log(fechas)
-
-
-var newArray = [];
-var newArray2=[];
-var newArray3=[];
-
-    function identical(array,array2,array3){
-
-        
-        newArray.push(array[0]);
-        newArray2.push(array2[0]);
-        newArray3.push(array3[0]);
-        for(var i = 0; i < array.length -1; i++) {
-            if(array2[i].substring(0,3) != array2[i + 1].substring(0,3)) {
-                newArray.push(array[i + 1]);
-                newArray2.push(array2[i+1]);
-                newArray3.push(array3[i+1]);
-                console.log(newArray)
-                 console.log(newArray2)
-                 console.log(newArray3)
-
-
-            }
-        }
-
-
-        //console.log(array2[0].substring(3,4));
-        //console.log(array2[0].substring(3,4))
-
-    for (var i = lecturas.length; i > 0; i--) {
- lecturas.pop();
-fechas.pop();
-
-  
-}
-
-   for (var i = 0; i < newArray.length; i++) {
- lecturas.push(newArray[i]);
-fechas.push(newArray2[i]);
-  
-}
-
-
-    }
-
-
-identical(lecturas,fechas,lecturas2);
-console.log("HOLIWISSSS")
-console.log(newArray)
-console.log(newArray2)
-myChart.update();
-
-
-
-
-myChart.update();
-
-
-
-
-}).fail(function(err){
-    console.log(err)
-    
-
-  }
-
-    )
 
 
 
@@ -1479,35 +1635,34 @@ myChart.update();
 
 this.limpiar =function()
 {
-
 console.log(respuesta2[id].id);
 $.ajax({
     url:'/limpiar',
     method:'POST',
     data: {'central':respuesta2[id].id},
-
     beforeSend: function(data){
-    
         },
   }).done(function(){
-
-
 }).fail(function(err){
     console.log(err)
-
-  }
-
-    )
-
+  } )
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
   fechas.pop();
-  
 }
 myChart.update()
 }
-
 }
+*/
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1562,36 +1717,6 @@ toast.show()
 }
 
 
-var cuenta=0;
-
-client.on('message', (topic, message, packet) => {
- 
-
-var today = new Date();
-var time = today.getHours() + ":" + today.getMinutes();
-
-if(topic==seleccion && flag==1)
-{
-
-console.log("seleccion"+seleccion)
-
-const obj = JSON.parse(message);
-console.log(obj)
-console.log(obj.Lectura)
-creartoast(cuenta,"Reporte"+" "+topic+" "+"Lectura"+" "+obj.Lectura[0]+" "+"Act1"+" "+obj.Act1+" "+"Act2"+" "+obj.Act2+" "+"Fecha"+" "+obj.Fecha+" Hora"+" "+obj.Hora);
-lecturas.push(obj.Lectura[0].toString())
-fechas.push(time)
-myChart.update();
-cuenta=cuenta+1;
-
-}
-
-
-//document.getElementById(":nodo1/Accionador0").checked = false;
-
-
-
-})
 
 
 client.on('message', (topic, message, packet) => {
