@@ -21,3 +21,5 @@ CREATE TABLE sesiones (
   actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES usuarios(id)
 );
+
+https://arduino.esp8266.com/stable/package_esp8266com_index.json
