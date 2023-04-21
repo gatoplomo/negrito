@@ -12,15 +12,35 @@ app.set('view engine', 'html');
 app.set('views',__dirname+'/');
 
 
-
 // Require library
 var xl = require('excel4node');
- 
 
 
 
+var bodyParser = require('body-parser');
 
 
+var urlencodedParser = bodyParser.urlencoded({extended:true});
+
+const mysql = require('mysql');
+
+
+// Configurar el middleware para analizar el cuerpo de las solicitudes
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Configurar la conexión a la base de datos
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'plomo1994',
+  database: 'WatchDog'
+});
+
+// Establecer la conexión a la base de datos
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Conectado a la base de datos MySQL');
+});
 
 var router = express.Router();
 
@@ -30,14 +50,56 @@ var root2="/home/tomas/Documentos/GitHub/negrito/"
 
 //ruta y Json , funcion que media entre las peticiones y el servidor 
 
-var bodyParser = require('body-parser');
-
-
-var urlencodedParser = bodyParser.urlencoded({extended:true});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 const {spawn} = require('child_process');
+
+
+
+
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+
+
+const options = {                 // setting connection options
+    host: 'localhost',
+    user: 'root',
+    password: 'plomo1994',
+    database: 'WatchDog',
+    clearExpired: true,
+    checkExpirationInterval: 60000, // 1 minuto en milisegundos
+    expiration: 60000,             // 1 minuto en milisegundos
+};
+
+const sessionStore = new MySQLStore(options);
+
+app.use(
+    session({
+        secret: 'cookie_secret',
+        resave: false,
+        saveUninitialized: false,
+        store: sessionStore,      // assigning sessionStore to the session
+        cookie: {
+            maxAge: 60000,       // 1 minuto en milisegundos
+        },
+    })
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -67,7 +129,7 @@ respaldar(centrales[step])
 });
 
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.12.36:1884')
+var client2  = mqtt.connect('mqtt://192.168.239.36:1884')
  
 
 
@@ -296,6 +358,39 @@ centrales[i]=docs[i].id;
 
 
 
+
+// Configurar las rutas
+app.post('/login', (req, res) => {
+  console.log(req.body)
+  const username = req.body.username;
+  const password = req.body.password;
+
+  console.log(username)
+  console.log(password)
+  
+  const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ?';
+
+  connection.query(query, [username, password], (err, result) => {
+    if (err) throw err;
+
+    if (result.length === 1) {
+      res.send('OK');
+      req.session.username = username
+        req.session.password = password;
+req.session.save((err) => {
+        if (err) throw err;
+        console.log('Datos de sesión guardados en la tabla sessions');
+      });
+    } else {
+      res.send('Nombre de usuario o contraseña incorrectos');
+    }
+  });
+});
+
+
+
+
+
 app.post("/registro",function(req,res)
 
 {
@@ -322,47 +417,6 @@ collection.find({}).toArray(function(err, docs) {
 
 
 
-app.post("/login",function(req,res)
-
-{
-
-
-//console.log(req.body)
-
-
- const db = client.db(dbName);
-const collection = db.collection('documents');
-
-
-collection.find(req.body).toArray(function(err, docs) {
-    assert.equal(err, null);
-
-
-    //console.log("Found the following records");
-    //console.log(docs)
-     //console.log(docs.length)
-
-if(docs.length==0)
-{
-res.send("False")
-  //console.log("usuario no registrado");
-
-}
-else
-{
-
-res.send("True")
-
-}
-
-
-
-  });
-
-}
-
-  );
-
 
 
 var nodo1;
@@ -380,7 +434,7 @@ console.log(req.body)
 const db = client.db(dbName);
     const collection = db.collection('nodos');
 
-collection.insertOne({id:req.body.id.toString(),s1:req.body.s1.toString(),s2:req.body.s2.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString(),client:req.body.client.toString(),ubi:req.body.dir.toString(),sect:req.body.sect.toString(),contact:req.body.contact.toString()});
+collection.insertOne({id:req.body.id.toString(),sector1:req.body.sector1.toString(),tipo1:req.body.tipo1.toString(),s1:req.body.s1.toString(),s2:req.body.s2.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString(),sector2:req.body.sector2.toString(),tipo2:req.body.tipo2.toString(),s3:req.body.s3.toString(),s4:req.body.s4.toString(),act3:req.body.act3.toString(),act4:req.body.act4.toString(),client:req.body.client.toString(),ubi:req.body.dir.toString(),sect:req.body.sect.toString(),contact:req.body.contact.toString()});
 //const fsPromises = fs.promises;
   
 /*  
@@ -454,27 +508,6 @@ fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toS
 
   );
 
-
-app.post("/nodo",function(req,res)
-
-{
-
-const db = client.db(dbName);
-
-
-const collection = db.collection('nodos');
-
-collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    console.log(docs)
-res.send(docs)
-  });
-
-console.log("peticion recibida")
-}
-
-  );
 
 
 app.post("/centrales",function(req,res)
@@ -895,8 +928,8 @@ const obj = JSON.parse(message);
 //console.log(obj)
 //console.log(obj.Lectura)
 //console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
-
-collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],lectura3:obj.Lectura[2],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
+console.log(obj)
+collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],lectura3:obj.Lectura[2],lectura4:obj.Lectura2[0],lectura5:obj.Lectura2[1],lectura6:obj.Lectura2[2],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
 
 
 }

@@ -136,6 +136,13 @@
 <hr>
 
      <hr>
+  <h style="font-size: 20px;">Principal</h><br>
+  <label for="identificador">Sector</label>
+<input type="text" id="sector1" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+<label for="identificador">Tipo</label>
+<input type="text" id="tipo1" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
  <label for="identificador">Sensor1</label>
 <input type="text" id="s1" name="identificador" style="width: 200px; padding: 5px;">
 <hr>
@@ -150,6 +157,30 @@
   <hr>
  <label for="identificador">Accionador2</label>
 <input type="text" id="act2" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+
+
+  <h style="font-size: 20px;">Child1</h><br>
+  <label for="identificador">Sector</label>
+<input type="text" id="sector2" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+<label for="identificador">Tipo</label>
+<input type="text" id="tipo2" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+ <label for="identificador">Sensor1</label>
+<input type="text" id="s3" name="identificador" style="width: 200px; padding: 5px;">
+<hr>
+<label for="identificador">Sensor2</label>
+<input type="text" id="s4" name="identificador" style="width: 200px; padding: 5px;">
+
+   <hr>
+ <label for="identificador">Accionador1</label>
+<input type="text" id="act3" name="identificador" style="width: 200px; padding: 5px;">
+
+<hr>
+  <hr>
+ <label for="identificador">Accionador2</label>
+<input type="text" id="act4" name="identificador" style="width: 200px; padding: 5px;">
 
 <hr>
 <!--
@@ -265,10 +296,18 @@ $("#boton").click(function(event){
     method:'POST',
     data: {
           id: $("#id").val(),
+           sector1: $("#sector1").val(),
+           tipo1: $("#tipo1").val(),
            s1: $("#s1").val(),
            s2: $("#s2").val(),
            act1: $("#act1").val(),
            act2: $("#act2").val(),
+           sector2: $("#sector2").val(),
+           tipo2: $("#tipo2").val(),
+           s3: $("#s3").val(),
+           s4: $("#s4").val(),
+           act3: $("#act3").val(),
+           act4: $("#act4").val(),
            client: $("#client").val(),
            dir: $("#dir").val(),
            sect: $("#sect").val(),

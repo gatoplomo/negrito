@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="https://getbootstrap.com/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>WatchDog</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
 
@@ -21,7 +21,7 @@
   <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="https://getbootstrap.com/docs/4.0/examples/starter-template/#">Agrocloud</a>
+      <a class="navbar-brand" href="https://getbootstrap.com/docs/4.0/examples/starter-template/#">WatchDog</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -34,11 +34,11 @@
           <li class="nav-item">
             <a class="nav-link" href=""></a>
           </li>
-        
+        <!--
           <li class="nav-item active">
             <a class="nav-link" href="/login.html">Ingresa</a>
           </li>
-        
+        -->
         </ul>
     
       </div>
@@ -77,7 +77,7 @@ body
  font-family:helvetica;
  background-color:#81DAF5;
 
- background: url(/images/banner.jpg) no-repeat center center fixed; 
+ background: url(/images/banner4.jpg) no-repeat center center fixed; 
  -webkit-background-size: cover;
  -moz-background-size: cover;
  -o-background-size: cover;
@@ -185,7 +185,7 @@ $("#boton").click(function(event){
   $.ajax({
     url:'/login',
     method:'POST',
-    data: {first_name: $("#name").val(),
+    data: {username: $("#name").val(),
         
             password: $("#password").val()},
 
@@ -195,25 +195,12 @@ $("#boton").click(function(event){
   }).done(function(respuesta){
 
 
-
-
-
   	console.log('Respuesta recibida:',respuesta)
   	console.log(respuesta)
-if(respuesta=="False")
-{
-
-	 alert("Usuario no Encontrado");
+    if(respuesta=="OK")
+    {
+ window.location.href = "monitor.html";
 }
-else
-{
-
-
-	self.location="monitor.html";
-}
-
-
-
 }).fail(function(err){
   	console.log(err)
   	

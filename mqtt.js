@@ -189,8 +189,222 @@ $('#tablacentrales').bootstrapTable({
   onClickRow:function (row,$element) {
     alert(row.id)
     localStorage.setItem('nodo', row.id);
-    localStorage.setItem('s1', row.s1);
-    localStorage.setItem('s2', row.s2);
+   
+
+
+
+  const nodo1 = {
+    Sector:row.sector1,
+    Tipo:row.tipo1,
+    Sensor1: row.s1,
+    Sensor2: row.s2,
+    Accionador1: "Madrid",
+    Accionador2: "Madrid"
+  };
+
+  
+  const nodo2 = {
+    Sector:row.sector2,
+    Tipo:row.tipo2,
+    Sensor1: row.s1,
+    Sensor2: row.s2,
+    Accionador1: "Madrid",
+    Accionador2: "Madrid"
+  };
+
+ 
+
+  const personaJSON1 = JSON.stringify(nodo1);
+  const personaJSON2 = JSON.stringify(nodo2);
+  
+
+  const lista = [personaJSON1, personaJSON2];
+
+  // Crear la tabla
+  var tabla = document.createElement("table");
+  tabla.setAttribute("id", "tabla-personas");
+  tabla.setAttribute("class", "table table-striped");
+
+  // Crear el encabezado de la tabla
+  var encabezado = tabla.createTHead();
+  var filaEncabezado = encabezado.insertRow();
+
+  var celdaNombreEncabezado2 = filaEncabezado.insertCell();
+  celdaNombreEncabezado2.innerHTML = "Sector";
+
+    var tipo = filaEncabezado.insertCell();
+  tipo.innerHTML = "Tipo";
+
+  var celdaNombreEncabezado = filaEncabezado.insertCell();
+  celdaNombreEncabezado.innerHTML = "Sensor1";
+
+  var celdaApellidoEncabezado = filaEncabezado.insertCell();
+  celdaApellidoEncabezado.innerHTML = "Sensor2";
+
+  var celdaEdadEncabezado = filaEncabezado.insertCell();
+  celdaEdadEncabezado.innerHTML = "Accionador1";
+
+  var celdaEdad2Encabezado = filaEncabezado.insertCell();
+  celdaEdad2Encabezado.innerHTML = "Accionador2";
+
+  // Crear el cuerpo de la tabla
+  var cuerpoTabla = tabla.createTBody();
+
+  lista.forEach(function(personaJSON) {
+    var persona = JSON.parse(personaJSON);
+    var fila = cuerpoTabla.insertRow();
+
+
+
+
+    var celdaNombre2 = fila.insertCell();
+    celdaNombre2.innerHTML = persona.Sector;
+
+     var celdaNombre2 = fila.insertCell();
+    celdaNombre2.innerHTML = persona.Tipo;
+
+    var celdaNombre = fila.insertCell();
+    celdaNombre.innerHTML = persona.Sensor1;
+    var celdaApellido = fila.insertCell();
+    celdaApellido.innerHTML = persona.Sensor2;
+    var celdaEdad = fila.insertCell();
+    celdaEdad.innerHTML = persona.Accionador1;
+     var celdaEdad2 = fila.insertCell();
+    celdaEdad2.innerHTML = persona.Accionador2;
+  });
+
+  // Agregar la tabla al contenedor
+  var contenedor = document.getElementById("tabla-container");
+  contenedor.appendChild(tabla);
+
+// Agregar evento de clic a las filas de la tabla
+var filas = document.querySelectorAll("#tabla-personas tbody tr");
+filas.forEach(function(fila) {
+  fila.addEventListener("click", function() {
+    var nombre = this.cells[0].textContent;
+    var apellido = this.cells[1].textContent;
+    var edad = this.cells[2].textContent;
+    console.log("Clic en fila: " + nombre + " " + apellido + " (" + edad + " años)");
+    alert(nombre)
+    // Aquí puedes hacer lo que necesites con la fila seleccionada, por ejemplo redirigir a otra página
+
+
+// Crear el elemento ul
+var ul = document.createElement("ul");
+ul.style.listStyle = "none";
+
+// Crear el elemento li para el primer enlace
+var li1 = document.createElement("li");
+li1.style.display = "inline-block";
+li1.style.marginRight = "10px";
+
+// Crear el enlace para la función 1
+var a1 = document.createElement("a");
+a1.href = "#";
+a1.onclick = function(event) {
+  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+  functs1(); // Llamar a la función functs1
+};
+a1.innerHTML = localStorage.getItem("s1");
+
+// Agregar el enlace al elemento li1
+li1.appendChild(a1);
+
+// Crear el elemento li para el segundo enlace
+var li2 = document.createElement("li");
+li2.style.display = "inline-block";
+
+// Crear el enlace para la función 2
+var a2 = document.createElement("a");
+a2.href = "#";
+a2.onclick = function(event) {
+  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+  functs2(); // Llamar a la función functs2
+};
+a2.innerHTML = localStorage.getItem("s2");
+
+// Agregar el enlace al elemento li2
+li2.appendChild(a2);
+
+// Agregar los elementos li1 y li2 al elemento ul
+ul.appendChild(li1);
+ul.appendChild(li2);
+
+// Agregar el elemento ul al documento
+document.getElementById("sensores").appendChild(ul)
+
+
+
+let vars=["Temperatura","Humedad","PpmGas"]
+
+function functs1() {
+
+
+const name = localStorage.getItem("s1");
+const myArray1 = name.split("-");
+const myArray2 = myArray1[1].split("/");
+
+const DTH11 = {
+  variable1: myArray1[0],
+  vars: [myArray2[0], myArray2[1]]
+};
+
+//alert(DTH11.variable1); // MQ2
+//alert(DTH11.vars); // ["Temperatura", "Humedad"]
+
+//console.log(myObject.variable1); // DTH11
+//console.log(myObject.variable2); // Temperatura
+//console.log(myObject.variable3); // Humedad
+
+
+creargauges(DTH11,vars)
+
+
+}
+
+function functs2() {
+
+const name = localStorage.getItem("s2");
+
+const myArray = name.split("-");
+const MQ2 = {
+  variable1: myArray[0],
+  vars: [myArray[1]]
+};
+creargauges(MQ2,vars)
+}
+
+  });
+});
+
+// Agregar evento de clic y mouseover a las filas de la tabla
+var filas = document.querySelectorAll("#tabla-personas tbody tr");
+filas.forEach(function(fila) {
+  fila.addEventListener("click", function() {
+    var nombre = this.cells[1].textContent;
+    var apellido = this.cells[2].textContent;
+    var edad = this.cells[3].textContent;
+    console.log("Clic en fila: " + nombre + " " + apellido + " (" + edad + " años)");
+    // Aquí puedes hacer lo que necesites con la fila seleccionada, por ejemplo redirigir a otra página
+
+ localStorage.setItem('s1', nombre );
+localStorage.setItem('s2', apellido);
+
+  });
+
+
+  fila.addEventListener("mouseover", function() {
+    this.style.backgroundColor = "#ccc"; // Cambiar el color de fondo a gris claro
+  });
+  fila.addEventListener("mouseout", function() {
+    this.style.backgroundColor = ""; // Restaurar el color de fondo original
+  });
+});
+
+
+
+
+
 
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -450,7 +664,7 @@ console.log(gauges);
     gauges[i].value = parseFloat(obj.Lectura[1].toString())
 
     }
-    else if (gauges[i].id == "PpmGasgauge")
+    else if (gauges[i].id == "GasPpmgauge")
         {
     gauges[i].value = parseFloat(obj.Lectura[2].toString())
 
@@ -514,90 +728,6 @@ for (var i2 = 0; i2 <vars.length; i2++) {
 
 
 
-// Crear el elemento ul
-var ul = document.createElement("ul");
-ul.style.listStyle = "none";
-
-// Crear el elemento li para el primer enlace
-var li1 = document.createElement("li");
-li1.style.display = "inline-block";
-li1.style.marginRight = "10px";
-
-// Crear el enlace para la función 1
-var a1 = document.createElement("a");
-a1.href = "#";
-a1.onclick = function(event) {
-  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
-  functs1(); // Llamar a la función functs1
-};
-a1.innerHTML = localStorage.getItem("s1");
-
-// Agregar el enlace al elemento li1
-li1.appendChild(a1);
-
-// Crear el elemento li para el segundo enlace
-var li2 = document.createElement("li");
-li2.style.display = "inline-block";
-
-// Crear el enlace para la función 2
-var a2 = document.createElement("a");
-a2.href = "#";
-a2.onclick = function(event) {
-  event.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
-  functs2(); // Llamar a la función functs2
-};
-a2.innerHTML = localStorage.getItem("s2");
-
-// Agregar el enlace al elemento li2
-li2.appendChild(a2);
-
-// Agregar los elementos li1 y li2 al elemento ul
-ul.appendChild(li1);
-ul.appendChild(li2);
-
-// Agregar el elemento ul al documento
-document.getElementById("sensores").appendChild(ul)
-
-
-
-let vars=["Temperatura","Humedad","PpmGas"]
-
-function functs1() {
-
-
-const name = localStorage.getItem("s1");
-const myArray1 = name.split("-");
-const myArray2 = myArray1[1].split("/");
-
-const DTH11 = {
-  variable1: myArray1[0],
-  vars: [myArray2[0], myArray2[1]]
-};
-
-//alert(DTH11.variable1); // MQ2
-//alert(DTH11.vars); // ["Temperatura", "Humedad"]
-
-//console.log(myObject.variable1); // DTH11
-//console.log(myObject.variable2); // Temperatura
-//console.log(myObject.variable3); // Humedad
-
-
-creargauges(DTH11,vars)
-
-
-}
-
-function functs2() {
-
-const name = localStorage.getItem("s2");
-
-const myArray = name.split("-");
-const MQ2 = {
-  variable1: myArray[0],
-  vars: [myArray[1]]
-};
-creargauges(MQ2,vars)
-}
 
 
 $.ajax({
@@ -711,47 +841,6 @@ $table.bootstrapTable('load', respuesta)
 
 
     )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 }, 
 
   pagination: true,
@@ -761,19 +850,7 @@ $table.bootstrapTable('load', respuesta)
     field: 'id',
     title: 'Id'
   }
-  , {
-    field: 's1',
-    title: 's1'
-  }, {
-    field: 's2',
-    title: 's2'
-  },{
-    field: 'act1',
-    title: 'Act1'
-  },{
-    field: 'act2',
-    title: 'Act2'
-  },{
+  ,{
     field: 'client',
     title: 'Cliente'
   },{
@@ -973,7 +1050,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.12.36:9001' 
+const host = 'ws://192.168.239.36:9001' 
 
 
 console.log('Connecting mqtt client')
