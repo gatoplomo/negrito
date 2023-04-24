@@ -23,3 +23,42 @@ CREATE TABLE sesiones (
 );
 
 https://arduino.esp8266.com/stable/package_esp8266com_index.json
+
+curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+https://tecadmin.net/how-to-install-mongodb-on-ubuntu-22-04/
+
+
+ALTER USER 'root'@'localhost'IDENTIFIED WITH mysql_native_password BY 'plomo1994';
+
+
+Objeto grupo para grupos /grupos
+
+
+{
+  "id_grupo": "identificador_externo",
+  "nodos_grupo": [
+    {
+      "posicion_nodo": "valor_posicion_nodo1",
+      "sensores": [
+        {
+          "modelo_sensor": "valor_modelo1",
+          "variables_sensor": "valor_variables1"
+        },
+        {
+          "modelo_sensor": "valor_modelo2",
+          "variables_sensor": "valor_variables2"
+        }
+      ],
+      "accionadores": [
+        {
+          "num_accionador": "valor_num_accionador1",
+          "accion": "valor_accion1"
+        },
+        {
+          "num_accionador": "valor_num_accionador2",
+          "accion": "valor_accion2"
+        }
+      ]
+    }
+  ]
+}

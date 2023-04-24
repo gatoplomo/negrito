@@ -109,7 +109,7 @@ var path = __dirname + '/';
 
 var customers = [];
 
-
+/*
 var cron = require('node-cron');
 
 // ...
@@ -127,9 +127,9 @@ respaldar(centrales[step])
 
 
 });
-
+*/
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.239.36:1884')
+var client2  = mqtt.connect('mqtt://192.168.116.36:1884')
  
 
 
@@ -137,7 +137,7 @@ var client2  = mqtt.connect('mqtt://192.168.239.36:1884')
 client2.on('connect', function () {
 
 
-  client2.subscribe('nodo1', function (err) {
+  client2.subscribe('grupo_001', function (err) {
     if (!err) {
      // client2.publish('nodo1', 'Hello mqtt')
     }
@@ -424,32 +424,6 @@ var nodo1b;
 
 
 
-
-app.post("/crearcentral",function(req,res)
-
-{
-
-console.log(req.body)
-
-const db = client.db(dbName);
-    const collection = db.collection('nodos');
-
-collection.insertOne({id:req.body.id.toString(),sector1:req.body.sector1.toString(),tipo1:req.body.tipo1.toString(),s1:req.body.s1.toString(),s2:req.body.s2.toString(),act1:req.body.act1.toString(),act2:req.body.act2.toString(),sector2:req.body.sector2.toString(),tipo2:req.body.tipo2.toString(),s3:req.body.s3.toString(),s4:req.body.s4.toString(),act3:req.body.act3.toString(),act4:req.body.act4.toString(),client:req.body.client.toString(),ubi:req.body.dir.toString(),sect:req.body.sect.toString(),contact:req.body.contact.toString()});
-//const fsPromises = fs.promises;
-  
-/*  
-fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toString()).then(function() {
-    console.log('Directory created successfully');
-}).catch(function() {
-    console.log('failed to create directory');
-});
-*/
-}
-
-  );
-
-
-
 app.post("/eventosensor",function(req,res)
 
 {
@@ -510,14 +484,89 @@ fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toS
 
 
 
-app.post("/centrales",function(req,res)
+app.post("/crear_grupo", function(req, res) {
+  console.log("Insertando Grupo")
+  const db = client.db(dbName);
+  const collection = db.collection("grupo");
+
+ const grupo = {
+  id_grupo: "grupo_001",
+  nodos_grupo: [
+    {
+      id_nodo: "nodo_001",
+      sensores: [
+        {
+          id_sensor:"sensor_001",
+          modelo_sensor: "DTH11",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }, {
+          id_sensor:"sensor_002",
+          modelo_sensor: "MQ2",
+          variables_sensor: {
+            ppm: true
+          }
+        }
+      ],
+      accionadores: [
+        {
+          num_accionador: 1,
+          accion: "encender"
+        },
+        {
+          num_accionador: 2,
+          accion: "apagar"
+        }
+      ]
+    },{
+      id_nodo: "nodo_002",
+      sensores: [
+        {
+          modelo_sensor: "sensor_001",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }, {
+          modelo_sensor: "sensor_001",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }
+      ],
+      accionadores: [
+        {
+          num_accionador: 1,
+          accion: "encender"
+        },
+        {
+          num_accionador: 2,
+          accion: "apagar"
+        }
+      ]
+    }
+  ]
+};
+
+
+  collection.insertOne(grupo, (err, result) => {
+    if (err) throw err;
+    
+    console.log('El objeto "Grupo" ha sido insertado exitosamente en la colección "grupo"');
+  });
+});
+
+app.post("/grupos",function(req,res)
 
 {
 
 const db = client.db(dbName);
 
 
-const collection = db.collection('nodos');
+const collection = db.collection("grupo");
 
 collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -528,8 +577,45 @@ res.send(docs)
 
 console.log("peticion recibida")
 }
-
   );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/eventos",function(req,res)
 
@@ -901,8 +987,8 @@ res.send(docs)
 
 
 
-
-client2.on('message', function (topic, message , nodo1 , nodo1b) {
+/*
+client2.on('message', function (topic, message , grupo_001 , nodo1b) {
   // message is Buffer
 
 
@@ -929,7 +1015,7 @@ const obj = JSON.parse(message);
 //console.log(obj.Lectura)
 //console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
 console.log(obj)
-collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],lectura3:obj.Lectura[2],lectura4:obj.Lectura2[0],lectura5:obj.Lectura2[1],lectura6:obj.Lectura2[2],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
+//collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],lectura3:obj.Lectura[2],lectura4:obj.Lectura2[0],lectura5:obj.Lectura2[1],lectura6:obj.Lectura2[2],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
 
 
 }
@@ -959,7 +1045,7 @@ collection2.insertOne({Evento:obj.Evento,Generado_por:obj.Generado_por,Date: for
 
 })
 
-
+*/
 
 
 app.post("/generar",function(req,res)

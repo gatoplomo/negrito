@@ -292,10 +292,11 @@ input[type=submit]:hover {
 
 $("#boton").click(function(event){
   $.ajax({
-    url:'/crearcentral',
+    url:'/crear_grupo',
     method:'POST',
     data: {
           id: $("#id").val(),
+          /*
            sector1: $("#sector1").val(),
            tipo1: $("#tipo1").val(),
            s1: $("#s1").val(),
@@ -312,6 +313,7 @@ $("#boton").click(function(event){
            dir: $("#dir").val(),
            sect: $("#sect").val(),
            contact: $("#contact").val(),
+           */
          },
 
     beforeSend: function(data){
@@ -319,24 +321,7 @@ $("#boton").click(function(event){
     },
   }).done(function(respuesta){
 
-
-
-
-    console.log('Respuesta recibida:',respuesta)
-    console.log(respuesta)
-if(respuesta=="False")
-{
-
-   alert("Usuario no Encontrado");
-}
-else
-{
-
-
-  self.location="centrales.html";
-}
-
-
+console.log(respuesta)
 
 }).fail(function(err){
     console.log(err)

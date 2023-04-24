@@ -54,10 +54,10 @@ float datos[3];
 String valor="30";
 
 int bandera=0;
-const char* ssid = "negrito2";
-const char* password = "plomo1994";
-const char* mqtt_server = "192.168.239.36";
-const char* clientID = "nodo1";
+const char* ssid = "negrito";
+const char* password = "13921994";
+const char* mqtt_server = "192.168.116.36";
+const char* clientID = "grupo_001";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -248,7 +248,7 @@ doc["Estado"]="APAGADO";
 
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
-client.publish("nodo1evento",mensaje.c_str());
+client.publish("evento",mensaje.c_str());
 
 
 
@@ -274,7 +274,7 @@ Serial.println(myPins[1]);
 
 
 doc["Evento"] = "Cambio de estado";
-doc["Generado_por"] = "nodo1";
+doc["Generado_por"] = "";
 doc["Info"] = "Respuesta_Solicitud_Cambio_de_estado_WEB/MANUAL";
 doc["Fecha"] = String(t2);
 doc["Hora"] = String(t3);
@@ -285,7 +285,7 @@ doc["Estado"]="APAGADO";
 
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
-client.publish("nodo1evento",mensaje.c_str());
+client.publish("evento",mensaje.c_str());
 
  
 }
@@ -309,7 +309,7 @@ Serial.println(myPins[1]);
   Serial.println(String(t2));
 
 doc["Evento"] = "Cambio de estado";
-doc["Generado_por"] = "nodo1";
+doc["Generado_por"] = "";
 doc["Info"] = "Respuesta_Solicitud_Cambio_de_estado_WEB/MANUAL";
 doc["Fecha"] = String(t2);
 doc["Hora"] = String(t3);
@@ -319,7 +319,7 @@ doc["Estado"]="APAGADO";
 
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
-client.publish("nodo1evento",mensaje.c_str());
+client.publish("evento",mensaje.c_str());
 
 }
 else if(orden==" Accionador1#OFF;")
@@ -342,7 +342,7 @@ Serial.println(myPins[1]);
   Serial.println(String(t2));
 
 doc["Evento"] = "Cambio de estado";
-doc["Generado_por"] = "nodo1";
+doc["Generado_por"] = "";
 doc["Info"] = "Respuesta_Solicitud_Cambio_de_estado_WEB/MANUAL";
 doc["Fecha"] = String(t2);
 doc["Hora"] = String(t3);
@@ -352,7 +352,7 @@ doc["Estado"]="APAGADO";
 
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
-client.publish("nodo1evento",mensaje.c_str());
+client.publish("evento",mensaje.c_str());
 
 }
 
@@ -425,7 +425,7 @@ if(myPins[0]==1 && myPins[1]==0)
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    client.subscribe("nodo1");
+    client.subscribe("");
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
     if (client.connect(clientID)) {
@@ -441,7 +441,7 @@ void reconnect() {
       delay(5000);
     }
   }
-  client.subscribe("nodo1control");
+  client.subscribe("control");
 }
 
 
@@ -616,7 +616,7 @@ else
 
 String mensaje="";
 
-  //client.publish("nodo1",String(t).c_str());
+  //client.publish("",String(t).c_str());
 
 
 //Serial.print(digitalRead(D8));
@@ -673,7 +673,7 @@ String Estado1="";
 String Estado2="";
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
-client.publish("nodo1",mensaje.c_str());
+client.publish("grupo_001",mensaje.c_str());
 
 lcd.clear();
 lcd.setCursor (0,0) ;
@@ -713,7 +713,7 @@ Serial.println(myPins[1]);
   Serial.println(String(t2));
 
 
-doc["Nodo"] = "nodo1";
+doc["Nodo"] = "";
 doc["Evento"] = "Cambio de Estado";
 doc["Origen"] = "Botón/Manual";
 doc["Fecha"] = String(t2);
@@ -724,7 +724,7 @@ doc["Estado"] = myPins[0];
 
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
-client.publish("nodo1evento",mensaje.c_str());
+client.publish("evento",mensaje.c_str());
  lcd.setCursor (0,3) ;
    lcd.print("Cambio de Estado");
 

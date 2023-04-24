@@ -1,7 +1,284 @@
 
+
 $( document ).ready(function() {
+
+// CONECCIÓN MQTT
+const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+
+const options = {
+  keepalive: 60,
+  clientId: clientId,
+  protocolId: 'MQTT',
+  protocolVersion: 4,
+  clean: true,
+  reconnectPeriod: 1000,
+  connectTimeout: 30 * 1000,
+  will: {
+    topic: 'WillMsg',
+    payload: 'Connection Closed abnormally..!',
+    qos: 0,
+    retain: false
+  },
+}
+
+
+const host = 'ws://192.168.116.36:9001' 
+
+
+console.log('Connecting mqtt client')
+const client = mqtt.connect(host, options)
+
+client.on('error', (err) => {
+  console.log('Connection error: ', err)
+  //client.end()
+})
+
+client.on('reconnect', () => {
+  console.log('Reconnecting...')
+})
+
+
+
+
+//FUNCION CREAR TABLAS+CANVAS+GAUGES
+function creargauges(name,variables_sensor)
+{
+alert("holaa"+variables_sensor)
+var arreglo_variables = variables_sensor.split(",");
+var numero = arreglo_variables.length;
+arreglo_variables = arreglo_variables.map(function(elemento) {
+  return elemento.trim();
+});
+
+
+alert(numero)
+
+const parentElement = document.getElementById('monitor');
+    while (parentElement.firstChild) {
+      parentElement.removeChild(parentElement.firstChild);
+    }
+
+
+
+var tags=[];
+
+
+for ( var item = 0; item < numero ; item++) {
+tags.push(name+"V"+item)
+}
+alert(tags)
+
+
+
+let tags2=arreglo_variables
+
+
+    let tags3=["nodo1","nodo2","nodo3"]
+    let sensores=tags2
+
+
+    const canales=[];
+    //console.log('Respuesta recibida:',respuesta)
+//console.log(respuesta)
+//console.log(respuesta.length)
+
+for ( var item = 0; item < numero ; item++) {
+//copia(respuesta[item]);
+            var canv = document.createElement("canvas");
+            var division= document.createElement("div");
+            division.setAttribute("class","align-center")
+            division.setAttribute("style" , "display:inline-block") 
+            var salto= document.createElement("br")
+            var porte= document.createElement("h1")
+            var newContent3 = document.createTextNode(tags[item]);
+            porte.appendChild(newContent3)
+            document.getElementById("monitor").appendChild(division);
+            canv.setAttribute('width', 400);
+            canv.setAttribute('height', 400);
+            canv.setAttribute('id', arreglo_variables[item]);
+            canales.push("nodo1")     
+          
+var body = document.getElementsByTagName("body")[0];
+var tabla   = document.createElement("table");
+tabla.setAttribute("id","tabla"+tags3[item])
+var tblBody = document.createElement("tbody");
+var hilera1 = document.createElement("tr");
+var textoCelda = document.createTextNode(tags[item]);  
+var celda = document.createElement("td");
+
+led=document.createElement("div")
+led.setAttribute("class","red led")
+led.setAttribute("id","indicadornodo1")
+
+celda.appendChild(textoCelda);
+//celda.appendChild(led)
+hilera1.appendChild(celda);
+
+
+container=document.createElement("div")
+container.setAttribute("class","container")
+
+row=document.createElement("div")
+row.setAttribute("class","row")
+
+col1=document.createElement("div")
+col1.setAttribute("class","col-sm")
+col1.setAttribute("aling" ,"right")
+col1.appendChild(textoCelda)
+
+
+col2=document.createElement("div")
+col2.setAttribute("class","col-sm")
+col2.setAttribute("aling" ,"right")
+col2.appendChild(led)
+
+row.appendChild(col1)
+row.appendChild(col2)
+
+container.appendChild(row)
+
+celda.appendChild(row)
+
+var hilera2 = document.createElement("tr");
+var celda2= document.createElement("td");
+var textoCelda = document.createTextNode("");
+celda2.appendChild(textoCelda);
+celda2.appendChild(canv)
+celda2.appendChild(textoCelda);
+hilera2.appendChild(celda2)
+var hilera3 = document.createElement("tr");
+var celda3= document.createElement("td");
+var textoCelda3= document.createTextNode(tags2[item]);
+celda3.appendChild(textoCelda3);
+hilera3.appendChild(celda3)
+
+var hilera4 = document.createElement("tr");
+var celda4= document.createElement("td");
+
+button4 =document.createElement("button")
+button4.setAttribute("class","btn")
+button4.setAttribute("id",sensores[item])
+i2=document.createElement("i")
+i2.setAttribute("class","fa fa-eye")
+button4.setAttribute("onClick","ver(this.id)")
+button4.appendChild(i2)
+celda4.appendChild(button4)
+
+button5 =document.createElement("button")
+button5.setAttribute("class","btn")
+button5.setAttribute("id",item)
+i3=document.createElement("i")
+i3.setAttribute("class","fa fa-toggle-on")
+button5.setAttribute("onClick","acciones()")
+button5.appendChild(i3)
+celda4.appendChild(button5)
+
+ var ul = document.createElement("ul");
+ var li = document.createElement("li");
+ var a1 = document.createElement("a");
+ a1.setAttribute("id","pichula");
+ a1.setAttribute("href","#");
+  a1.setAttribute("onClick","ver(this.id)");
+ var texto22 = document.createTextNode("Ver");
+a1.appendChild(texto22);
+ li.appendChild(a1)
+var ul3 = document.createElement("ul");
+ var li3 = document.createElement("li");
+ var a13 = document.createElement("a");
+ a13.setAttribute("id",item);
+ a13.setAttribute("href","#");
+  a13.setAttribute("onClick","acciones(this.id)");
+ var texto223 = document.createTextNode("Acciones");
+a13.appendChild(texto223);
+ li3.appendChild(a13)
+ ul.appendChild(li)
+//ul.appendChild(li2)
+ul.appendChild(li3)
+ //celda4.appendChild(ul)
+hilera4.appendChild(celda4)
+tblBody.appendChild(hilera1);
+tblBody.appendChild(hilera2);
+tblBody.appendChild(hilera3);
+tblBody.appendChild(hilera4);
+tabla.appendChild(tblBody);
+body.appendChild(tabla);
+tabla.setAttribute("border", "2");
+division.appendChild(tabla)
+
+
+}
+
+var gauges=[];
+
+ let canales2=[];
+canales2=canales;
+
+
+
+for ( var item = 0; item < numero; item++) {
+      
+alert(arreglo_variables[item])
+
+gauges[item] = new RadialGauge({ 
+  renderTo: arreglo_variables[item],
+  width: 180,
+  height: 210, 
+  id: "gauge-" + item // Agrega un ID único usando el valor de "item"
+}).draw();
+
+//plomo
+gauges[item].id = "gauge"+localStorage.getItem("id_sensor")+localStorage.getItem("modelo_sensor")+arreglo_variables[item]; // Establecer el ID después de crear el objeto
+
+        }
+for ( var item = 0; item < gauges.length ; item++) {
+alert("identificador "+ gauges[item].id)
+}
+  alert("Cantidad de Relojes "+gauges.length)     
+
+
+client.on('message', (topic, message, packet) => {
+  if(topic==localStorage.getItem('id_grupo')) {
+    let mensaje = JSON.parse(message);
+    console.log(mensaje);
+
+    for(let i=0; i<mensaje.nodos.length; i++) {
+      if(mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
+        let sensores = mensaje.nodos[i].sensores;
+        for(let j=0; j<sensores.length; j++) {
+          if(sensores[j].modelo === localStorage.getItem('modelo_sensor')) {
+            let lecturas = sensores[j].lecturas;
+            for(let k=0; k<arreglo_variables.length; k++) {
+              let variable = arreglo_variables[k];
+              if(lecturas.hasOwnProperty(variable)) {
+                let gaugeId = "gauge" + localStorage.getItem('id_sensor') + localStorage.getItem('modelo_sensor') + variable;
+                for(let l=0; l<gauges.length; l++) {
+                  if(gauges[l].id === gaugeId) {
+                    gauges[l].value = lecturas[variable];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+
+
+
+
+
+
+
+}
+//FIN DE LA FUNCION CREAR GAUGES
+
+
+
+
 $.ajax({
-    url:'/centrales',
+    url:'/grupos',
     method:'POST',
     datatype:"JSON",
     contentType: "application/json",
@@ -9,11 +286,164 @@ $.ajax({
       console.log('Enviando...',data)
     },
   }).done(function(respuesta){
-console.log(respuesta.reverse())
+console.log("Lista de grupos")
+console.log(respuesta)
+console.log(respuesta[0].nodos_grupo)
 
-var $table6 = $('#tablacentrales')
 
-$table6.bootstrapTable('load', respuesta)
+alert(respuesta.length)
+
+// SUBCRIBCIÖN CANALES POR GRUPO_ID
+client.on('connect', () => {
+  console.log('Client connected:' + clientId)
+
+  for (let i = 0; i < respuesta.length; i++) {
+   client.subscribe(respuesta[i].id_grupo, { qos: 0 })
+}
+
+  
+})
+
+
+
+
+
+
+
+
+//TABLAS
+
+var $tabla_grupos = $('#tabla_grupos')
+var $tabla_nodos = $('#tabla_nodos')
+var $tabla_sensores = $('#tabla_sensores')
+
+  $('#tabla_grupos').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+ 
+localStorage.setItem('id_grupo', row.id_grupo);
+alert(localStorage.getItem('id_grupo'))
+localStorage.setItem('variables_sensor', row.variables_sensor);
+alert("holaa"+localStorage.getItem('variables_sensor'));
+ $('#tabla_nodos').bootstrapTable({ 
+
+  onClickRow:function (row,$element) {
+localStorage.setItem('id_nodo', row.id_nodo);
+alert(localStorage.getItem('id_nodo'))
+
+$('#tabla_sensores').bootstrapTable({
+  onClickRow: function(row, $element) {
+     localStorage.setItem('id_sensor', row.id_sensor);
+     alert(localStorage.getItem('id_sensor'));
+ localStorage.setItem('modelo_sensor', row.modelo_sensor);
+     alert(localStorage.getItem('modelo_sensor'));
+
+
+    var variables = Object.keys(row.variables_sensor).join(', ');
+   alert(variables);
+   creargauges("DTH11",variables)
+    // Aquí puedes hacer lo que necesites con las variables
+  },
+  pagination: false,
+  search: false,
+  pageSize: 4,
+  columns: [{
+      field: 'id_sensor',
+      title: 'id_sensor'
+    },{
+      field: 'modelo_sensor',
+      title: 'modelo_sensor'
+    },
+    {
+      field: 'variables_sensor',
+      title: 'variables_sensor',
+      formatter: function(value) {
+        var arreglo= Object.keys(value).join(', ');
+
+var strWithoutSpaces = arreglo.replace(/ /g, "");
+
+
+
+        return strWithoutSpaces;
+      }
+    }
+  ],
+  data: directorios
+});
+
+
+
+$tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[0].sensores)
+
+                }, 
+
+  pagination: false,
+  search: false,
+   pageSize: 4,
+  columns: [ {
+    field: 'id_nodo',
+    title: 'id_nodo'
+  },{
+     field: 'sensores',
+      title: 'sensores_nodo',
+ formatter: function(value) {
+  let sensors = '';
+  for (const key in value) {
+    if (value.hasOwnProperty(key)) {
+      if (typeof value[key] === 'object') {
+        sensors += `${key}: ${JSON.stringify(value[key])}`;
+      } else {
+        sensors += `${key}: ${value[key]}`;
+      }
+    }
+  }
+  return sensors;
+}
+  },
+  {
+     field: 'accionadores',
+      title: 'accionadores_nodo',
+ formatter: function(value) {
+  let accionadores = '';
+  for (const key in value) {
+    if (value.hasOwnProperty(key)) {
+      if (typeof value[key] === 'object') {
+        accionadores += `${key}: ${JSON.stringify(value[key])}<br>`;
+      } else {
+        accionadores += `${key}: ${value[key]}<br>`;
+      }
+    }
+  }
+  return accionadores;
+}
+  }
+
+  ],data:directorios
+  
+})
+
+
+
+
+$tabla_nodos.bootstrapTable('load', respuesta[0].nodos_grupo)
+
+
+
+
+                }, 
+
+  pagination: false,
+  search: false,
+   pageSize: 4,
+  columns: [ {
+    field: 'id_grupo',
+    title: 'id_grupo'
+  }
+  ],data:directorios
+  
+})
+
+$tabla_grupos.bootstrapTable('load', respuesta)
 
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
@@ -22,7 +452,37 @@ $table6.bootstrapTable('load', respuesta)
 
 
 
- alert("Bienvenido a la sala de monitoreo")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //alert("Bienvenido a la sala de monitoreo")
 
 
 
@@ -184,11 +644,35 @@ $('#table5').bootstrapTable({
   
 })
 
-$('#tablacentrales').bootstrapTable({ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('#ejemplo').bootstrapTable({ 
 
   onClickRow:function (row,$element) {
     alert(row.id)
-    localStorage.setItem('nodo', row.id);
+    
    
 
 
@@ -371,7 +855,7 @@ const MQ2 = {
   variable1: myArray[0],
   vars: [myArray[1]]
 };
-creargauges(MQ2,vars)
+
 }
 
   });
@@ -445,260 +929,6 @@ lecturas3.push(respuesta[item].lectura3)
 //console.log(fechas)
     })
 
-
-function creargauges(name,vars)
-{
-
-
-const numero = name.vars.length
-//alert(numero); // 3
-
-
-    const parentElement = document.getElementById('monitor');
-    while (parentElement.firstChild) {
-      parentElement.removeChild(parentElement.firstChild);
-    }
-let tags=[name.variable1+"-V1",name.variable1+"-V2"]
-for ( var item = 0; item < numero ; item++) {
-tags.push(name.variable1+"V"+item)
-}
-let tags2=name.vars
-console.log(tags2)
-
-    let tags3=["nodo1","nodo2","nodo3"]
-    let sensores=tags2
-
-
-    const canales=[];
-    //console.log('Respuesta recibida:',respuesta)
-//console.log(respuesta)
-//console.log(respuesta.length)
-
-for ( var item = 0; item < numero ; item++) {
-//copia(respuesta[item]);
-            var canv = document.createElement("canvas");
-            var division= document.createElement("div");
-            division.setAttribute("class","align-center")
-            division.setAttribute("style" , "display:inline-block") 
-            var salto= document.createElement("br")
-            var porte= document.createElement("h1")
-            var newContent3 = document.createTextNode(tags[item]);
-            porte.appendChild(newContent3)
-            document.getElementById("monitor").appendChild(division);
-            canv.setAttribute('width', 400);
-            canv.setAttribute('height', 400);
-            canv.setAttribute('id', name.vars[item]);
-            canales.push("nodo1")     
-          
-var body = document.getElementsByTagName("body")[0];
-var tabla   = document.createElement("table");
-tabla.setAttribute("id","tabla"+tags3[item])
-var tblBody = document.createElement("tbody");
-var hilera1 = document.createElement("tr");
-var textoCelda = document.createTextNode(tags[item]);  
-var celda = document.createElement("td");
-
-led=document.createElement("div")
-led.setAttribute("class","red led")
-led.setAttribute("id","indicadornodo1")
-
-celda.appendChild(textoCelda);
-//celda.appendChild(led)
-hilera1.appendChild(celda);
-
-
-container=document.createElement("div")
-container.setAttribute("class","container")
-
-row=document.createElement("div")
-row.setAttribute("class","row")
-
-col1=document.createElement("div")
-col1.setAttribute("class","col-sm")
-col1.setAttribute("aling" ,"right")
-col1.appendChild(textoCelda)
-
-
-col2=document.createElement("div")
-col2.setAttribute("class","col-sm")
-col2.setAttribute("aling" ,"right")
-col2.appendChild(led)
-
-row.appendChild(col1)
-row.appendChild(col2)
-
-container.appendChild(row)
-
-celda.appendChild(row)
-
-var hilera2 = document.createElement("tr");
-var celda2= document.createElement("td");
-var textoCelda = document.createTextNode("");
-celda2.appendChild(textoCelda);
-celda2.appendChild(canv)
-celda2.appendChild(textoCelda);
-hilera2.appendChild(celda2)
-var hilera3 = document.createElement("tr");
-var celda3= document.createElement("td");
-var textoCelda3= document.createTextNode(tags2[item]);
-celda3.appendChild(textoCelda3);
-hilera3.appendChild(celda3)
-
-var hilera4 = document.createElement("tr");
-var celda4= document.createElement("td");
-
-button4 =document.createElement("button")
-button4.setAttribute("class","btn")
-button4.setAttribute("id",sensores[item])
-i2=document.createElement("i")
-i2.setAttribute("class","fa fa-eye")
-button4.setAttribute("onClick","ver(this.id)")
-button4.appendChild(i2)
-celda4.appendChild(button4)
-
-button5 =document.createElement("button")
-button5.setAttribute("class","btn")
-button5.setAttribute("id",item)
-i3=document.createElement("i")
-i3.setAttribute("class","fa fa-toggle-on")
-button5.setAttribute("onClick","acciones()")
-button5.appendChild(i3)
-celda4.appendChild(button5)
-
- var ul = document.createElement("ul");
- var li = document.createElement("li");
- var a1 = document.createElement("a");
- a1.setAttribute("id","pichula");
- a1.setAttribute("href","#");
-  a1.setAttribute("onClick","ver(this.id)");
- var texto22 = document.createTextNode("Ver");
-a1.appendChild(texto22);
- li.appendChild(a1)
-var ul3 = document.createElement("ul");
- var li3 = document.createElement("li");
- var a13 = document.createElement("a");
- a13.setAttribute("id",item);
- a13.setAttribute("href","#");
-  a13.setAttribute("onClick","acciones(this.id)");
- var texto223 = document.createTextNode("Acciones");
-a13.appendChild(texto223);
- li3.appendChild(a13)
- ul.appendChild(li)
-//ul.appendChild(li2)
-ul.appendChild(li3)
- //celda4.appendChild(ul)
-hilera4.appendChild(celda4)
-tblBody.appendChild(hilera1);
-tblBody.appendChild(hilera2);
-tblBody.appendChild(hilera3);
-tblBody.appendChild(hilera4);
-tabla.appendChild(tblBody);
-body.appendChild(tabla);
-tabla.setAttribute("border", "2");
-division.appendChild(tabla)
-
-
-}
-
-var gauges=[];
-
- let canales2=[];
-canales2=canales;
-
-
-
-for ( var item = 0; item < numero; item++) {
-
- client.subscribe("nodo1", { qos: 0 })
- client.subscribe("nodo1evento", { qos: 0 })
-      
-alert(name.vars[item])
-
-gauges[item] = new RadialGauge({ 
-  renderTo: name.vars[item],
-  width: 180,
-  height: 210, 
-  id: "gauge-" + item // Agrega un ID único usando el valor de "item"
-}).draw();
-
-gauges[item].id = name.vars[item]+"gauge"; // Establecer el ID después de crear el objeto
-
-        }
-
-for ( var item = 0; item < gauges.length ; item++) {
-alert("identificador "+ gauges[item].id)
-}
-   alert("Cantidad de Relojes "+gauges.length)     
-client.on('message', (topic, message, packet) => {
-  //console.log('Received Message: ' + message.toString() + '\nOn topic: ' + topic)
-//alert(name.vars)
-
-
-
-
-
-
-if(topic==localStorage.getItem("nodo"))
-{
-var msn=message.toString();
-//console.log(msn);
-//console.log(msn.length)
-
-const obj = JSON.parse(message);
-//console.log(obj)
-//console.log(obj.Lectura)
-console.log(vars)
-console.log(vars.length)
-console.log(gauges[0].id)
-
-// Imprimir el array gauges en la consola
-console.log(gauges);
-
-
-  for (let i = 0; i < gauges.length; i++) {
-    if (gauges[i].id === "Temperaturagauge") {
-      gauges[i].value = parseFloat(obj.Lectura[0].toString())
-    }
-    else if (gauges[i].id === "Humedadgauge")
-    {
-    gauges[i].value = parseFloat(obj.Lectura[1].toString())
-
-    }
-    else if (gauges[i].id == "GasPpmgauge")
-        {
-    gauges[i].value = parseFloat(obj.Lectura[2].toString())
-
-    }
-  }
-
-
-
-
-
-
-
-
-
-/*
-for ( var item = 0; item < numero ; item++) {
-for(var item2=0 ; item2<vars.length;item2++)
-{
- if(gauges[item].id==vars[item2])
- {
-alert("match")
- }
-}
-    //gauges[item].value = parseFloat(obj.Lectura[0].toString())
- //console.log(canales[item]);
-//document.getElementById("indicadornodo1").className = "green led";
-    
-        }
-*/
-
-}
-})
-
-}
 
 
 
@@ -863,6 +1093,24 @@ $table.bootstrapTable('load', respuesta)
 ],data: directorios
   
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 eventostabla2=[]
 
@@ -1031,48 +1279,7 @@ var seleccion=" "
 var directorios=[];
 
 
-const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
 
-const options = {
-  keepalive: 60,
-  clientId: clientId,
-  protocolId: 'MQTT',
-  protocolVersion: 4,
-  clean: true,
-  reconnectPeriod: 1000,
-  connectTimeout: 30 * 1000,
-  will: {
-    topic: 'WillMsg',
-    payload: 'Connection Closed abnormally..!',
-    qos: 0,
-    retain: false
-  },
-}
-
-
-const host = 'ws://192.168.239.36:9001' 
-
-
-console.log('Connecting mqtt client')
-const client = mqtt.connect(host, options)
-
-client.on('error', (err) => {
-  console.log('Connection error: ', err)
-  //client.end()
-})
-
-client.on('reconnect', () => {
-  console.log('Reconnecting...')
-})
-
-
-
-client.on('connect', () => {
-  console.log('Client connected:' + clientId)
-  // Subscribe
-
-  
-})
 
 
 
@@ -1462,7 +1669,7 @@ alert(localStorage.getItem("nodo"))
 
 client.on('message', (topic, message, packet) => {
  
-
+console.log(message)
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes();
 
