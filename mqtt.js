@@ -22,7 +22,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.116.36:9001' 
+const host = 'ws://192.168.85.36:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -43,7 +43,7 @@ client.on('reconnect', () => {
 //FUNCION CREAR TABLAS+CANVAS+GAUGES
 function creargauges(name,variables_sensor)
 {
-alert("holaa"+variables_sensor)
+//alert("holaa"+variables_sensor)
 var arreglo_variables = variables_sensor.split(",");
 var numero = arreglo_variables.length;
 arreglo_variables = arreglo_variables.map(function(elemento) {
@@ -51,7 +51,7 @@ arreglo_variables = arreglo_variables.map(function(elemento) {
 });
 
 
-alert(numero)
+//alert(numero)
 
 const parentElement = document.getElementById('monitor');
     while (parentElement.firstChild) {
@@ -66,7 +66,7 @@ var tags=[];
 for ( var item = 0; item < numero ; item++) {
 tags.push(name+"V"+item)
 }
-alert(tags)
+//alert(tags)
 
 
 
@@ -217,7 +217,7 @@ canales2=canales;
 
 for ( var item = 0; item < numero; item++) {
       
-alert(arreglo_variables[item])
+//alert(arreglo_variables[item])
 
 gauges[item] = new RadialGauge({ 
   renderTo: arreglo_variables[item],
@@ -231,9 +231,9 @@ gauges[item].id = "gauge"+localStorage.getItem("id_sensor")+localStorage.getItem
 
         }
 for ( var item = 0; item < gauges.length ; item++) {
-alert("identificador "+ gauges[item].id)
+//alert("identificador "+ gauges[item].id)
 }
-  alert("Cantidad de Relojes "+gauges.length)     
+  //alert("Cantidad de Relojes "+gauges.length)     
 
 
 client.on('message', (topic, message, packet) => {
@@ -291,7 +291,7 @@ console.log(respuesta)
 console.log(respuesta[0].nodos_grupo)
 
 
-alert(respuesta.length)
+//alert(respuesta.length)
 
 // SUBCRIBCIÖN CANALES POR GRUPO_ID
 client.on('connect', () => {
@@ -322,25 +322,25 @@ var $tabla_sensores = $('#tabla_sensores')
   onClickRow:function (row,$element) {
  
 localStorage.setItem('id_grupo', row.id_grupo);
-alert(localStorage.getItem('id_grupo'))
+//alert(localStorage.getItem('id_grupo'))
 localStorage.setItem('variables_sensor', row.variables_sensor);
-alert("holaa"+localStorage.getItem('variables_sensor'));
+//alert("holaa"+localStorage.getItem('variables_sensor'));
  $('#tabla_nodos').bootstrapTable({ 
 
   onClickRow:function (row,$element) {
 localStorage.setItem('id_nodo', row.id_nodo);
-alert(localStorage.getItem('id_nodo'))
+//alert(localStorage.getItem('id_nodo'))
 
 $('#tabla_sensores').bootstrapTable({
   onClickRow: function(row, $element) {
      localStorage.setItem('id_sensor', row.id_sensor);
-     alert(localStorage.getItem('id_sensor'));
+   //  alert(localStorage.getItem('id_sensor'));
  localStorage.setItem('modelo_sensor', row.modelo_sensor);
-     alert(localStorage.getItem('modelo_sensor'));
+     //alert(localStorage.getItem('modelo_sensor'));
 
 
     var variables = Object.keys(row.variables_sensor).join(', ');
-   alert(variables);
+   //alert(variables);
    creargauges("DTH11",variables)
     // Aquí puedes hacer lo que necesites con las variables
   },
@@ -671,7 +671,7 @@ $('#table5').bootstrapTable({
 $('#ejemplo').bootstrapTable({ 
 
   onClickRow:function (row,$element) {
-    alert(row.id)
+    //alert(row.id)
     
    
 
@@ -769,7 +769,7 @@ filas.forEach(function(fila) {
     var apellido = this.cells[1].textContent;
     var edad = this.cells[2].textContent;
     console.log("Clic en fila: " + nombre + " " + apellido + " (" + edad + " años)");
-    alert(nombre)
+    //alert(nombre)
     // Aquí puedes hacer lo que necesites con la fila seleccionada, por ejemplo redirigir a otra página
 
 
@@ -909,7 +909,7 @@ $.ajax({
  console.log(respuesta)
  const numero = respuesta.length;
    let nombres = respuesta;
-alert(respuesta.length)
+//alert(respuesta.length)
 
 for (var i = lecturas.length; i > 0; i--) {
  lecturas.pop();
@@ -1260,7 +1260,7 @@ $( document ).ready(function() {
 
     )
 
- alert("Descargando información del usuario")
+ //alert("Descargando información del usuario")
 
 
 });

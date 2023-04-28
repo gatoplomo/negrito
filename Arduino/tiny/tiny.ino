@@ -1,4 +1,6 @@
 
+
+
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27,20,4);
 
@@ -48,7 +50,9 @@ unsigned long TiempoAhora = 0;
 float sensorValue; 
 void loop()
 { 
-
+lcd.setCursor(0,1)
+lcd.print("hola");
+/*
 if(millis() > TiempoAhora + periodo){
  //cargamos los datos en la variable datos[]
 
@@ -75,5 +79,5 @@ if(millis() > TiempoAhora + periodo){
    TiempoAhora = millis();
     }
   
- 
+ */
 }

@@ -1,3 +1,4 @@
+#include <SPI.h>
 #include <Arduino.h>
 #define Threshold 400
 #define MQ2pin 0
@@ -31,7 +32,7 @@ String valor="30";
 int bandera=0;
 const char* ssid = "negrito";
 const char* password = "13921994";
-const char* mqtt_server = "192.168.116.36";
+const char* mqtt_server = "192.168.85.36";
 const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -187,6 +188,28 @@ void loop() {
   if (!client.connected()) {
     reconnect();
   }
+   uint8_t numero_canal;
+
+ if ( radio.available() )
+ {    
+     radio.read(datos,sizeof(datos));
+     Serial.print("Dato0= " );
+     Serial.print(datos[0]);
+     Serial.print(" V, ");
+     Serial.print("Dato1= " );
+     Serial.print(datos[1]);
+     Serial.print(" ms, ");
+     Serial.print("Dato2= " );
+     Serial.println(datos[2]);
+
+     lcd.setCursor (0,2) ;
+     lcd.print("nodo_002_RFOK");
+ }
+ else
+ {
+    //lcd.setCursor (0,2) ;
+     //lcd.print("n002error");
+ }
   client.loop();
   if(millis() > TiempoAhora + periodo){
     sensor();
@@ -199,6 +222,8 @@ void loop() {
 
 
 void sensor(){
+lcd.setCursor (0,3) ;
+lcd.print("          ");
   sensorValue = analogRead(MQ2pin); // read analog input pin 0
   Serial.print("Sensor Value: ");
   Serial.println(sensorValue);
@@ -235,24 +260,9 @@ void sensor(){
 
 String mensaje="";
 
- uint8_t numero_canal;
 
- if ( radio.available() )
- {    
-     radio.read(datos,sizeof(datos));
-     Serial.print("Dato0= " );
-     Serial.print(datos[0]);
-     Serial.print(" V, ");
-     Serial.print("Dato1= " );
-     Serial.print(datos[1]);
-     Serial.print(" ms, ");
-     Serial.print("Dato2= " );
-     Serial.println(datos[2]);
- }
- else
- {
-     Serial.println("No hay datos de radio disponibles");
- }
+
+
  
 StaticJsonDocument<768> doc;
 
@@ -262,6 +272,7 @@ doc["hora"] = "13:30";
 
 JsonArray nodos = doc.createNestedArray("nodos");
 
+//gateway
 JsonObject nodos_0 = nodos.createNestedObject();
 nodos_0["id_nodo"] = "nodo_001";
 
@@ -271,42 +282,47 @@ JsonObject nodos_0_sensores_0 = nodos_0_sensores.createNestedObject();
 nodos_0_sensores_0["modelo"] = "DTH11";
 
 JsonObject nodos_0_sensores_0_lecturas = nodos_0_sensores_0.createNestedObject("lecturas");
-nodos_0_sensores_0_lecturas["temperatura"] = 20;
-nodos_0_sensores_0_lecturas["humedad"] = 50;
+nodos_0_sensores_0_lecturas["temperatura"] =t;
+nodos_0_sensores_0_lecturas["humedad"] =h;
 
 JsonObject nodos_0_sensores_1 = nodos_0_sensores.createNestedObject();
 nodos_0_sensores_1["modelo"] = "MQ2";
 
 JsonObject nodos_0_sensores_1_lecturas = nodos_0_sensores_1.createNestedObject("lecturas");
-nodos_0_sensores_1_lecturas["ppm"] = 22;
+nodos_0_sensores_1_lecturas["ppm"] = sensorValue;
 
 JsonObject nodos_1 = nodos.createNestedObject();
 nodos_1["id_nodo"] = "nodo_002";
 
+//RF1
 JsonArray nodos_1_sensores = nodos_1.createNestedArray("sensores");
 
 JsonObject nodos_1_sensores_0 = nodos_1_sensores.createNestedObject();
 nodos_1_sensores_0["modelo"] = "DTH11";
 
 JsonObject nodos_1_sensores_0_lecturas = nodos_1_sensores_0.createNestedObject("lecturas");
-nodos_1_sensores_0_lecturas["temperatura"] = 21;
-nodos_1_sensores_0_lecturas["humedad"] = 55;
+nodos_1_sensores_0_lecturas["temperatura"] = datos[2];
+nodos_1_sensores_0_lecturas["humedad"] = datos[1];
 
 JsonObject nodos_1_sensores_1 = nodos_1_sensores.createNestedObject();
 nodos_1_sensores_1["modelo"] = "MQ2";
 
 JsonObject nodos_1_sensores_1_lecturas = nodos_1_sensores_1.createNestedObject("lecturas");
-nodos_1_sensores_1_lecturas["ppm"] = 23;
+nodos_1_sensores_1_lecturas["ppm"] = datos[0];
 
 serializeJson(doc, mensaje);
 Serial.println(mensaje);
 client.publish("grupo_001",mensaje.c_str());
 
-lcd.clear();
+//lcd.clear();
 lcd.setCursor (0,0) ;
 lcd.print(String(t3)+" "+String(t2));
 lcd.setCursor (0,1) ;
-lcd.print(String(t));
+lcd.print("t/h:"+String(t)+"/"+String(h));
+lcd.setCursor (0,3) ;
+lcd.print("Conectado");
+lcd.setCursor (0,2) ;
+lcd.print("                 ");
   }
 
 
