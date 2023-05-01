@@ -565,12 +565,14 @@ app.post("/crear_grupo", function(req, res) {
       id_nodo: "nodo_002",
       sensores: [
         {
+           id_sensor:"sensor_001",
           modelo_sensor: "sensor_001",
           variables_sensor: {
             temperatura: true,
             humedad: true
           }
         }, {
+           id_sensor:"sensor_002",
           modelo_sensor: "sensor_001",
           variables_sensor: {
             temperatura: true,

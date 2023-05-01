@@ -61,16 +61,17 @@ function NodosScreen({ route, navigation }) {
   useEffect(() => {
     console.log('nodos_grupo:', route.params.nodos_grupo);
     alert('nodos_grupo: ' + route.params.nodos_grupo);
+    setNodos(route.params.nodos_grupo); // Actualizar los nodos con los datos del grupo seleccionado
   }, [route.params.nodos_grupo]);
 
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={route.params.nodos_grupo}
+        data={nodos}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={{ padding: 10 }}
-            onPress={() => navigation.navigate('Nodo', { id_nodo: item.id_nodo })}
+            onPress={() => navigation.navigate('Nodo', { sensores: item.sensores})}
           >
             <Text>{item.id_nodo}</Text>
           </TouchableOpacity>
@@ -81,21 +82,31 @@ function NodosScreen({ route, navigation }) {
   );
 }
 
-function SettingsScreen() {
+function NodoScreen({ route }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={route.params.sensores}
+        renderItem={({ item }) => (
+          <View style={{ flexDirection: 'row', padding: 5 }}>
+            <View style={{ flex: 1, backgroundColor: '#F0F8FF', padding: 5 }}>
+              <Text>Sensor ID: {item.id_sensor}</Text>
+              <Text>Modelo: {item.modelo_sensor}</Text>
+            </View>
+            {Object.keys(item.variables_sensor).map((variable, index) => (
+              <View style={{ flex: 1, backgroundColor: '#E6E6FA', padding: 5 }} key={index}>
+                <Text>{variable}</Text>
+                <Text>{item.variables_sensor[variable]}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+        keyExtractor={(item) => item.id_sensor.toString()}
+      />
     </View>
   );
 }
 
-function NodoScreen({ route }) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>{route.params.id_nodo}</Text>
-    </View>
-  );
-}
 
 const Stack = createStackNavigator();
 
@@ -106,7 +117,6 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Nodos" component={NodosScreen} />
         <Stack.Screen name="Nodo" component={NodoScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
