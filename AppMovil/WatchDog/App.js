@@ -4,6 +4,12 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import React, { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 
+
+
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -55,6 +61,13 @@ function HomeScreen({ navigation }) {
   return <FlatListBasics navigation={navigation} />;
 }
 
+
+
+
+
+
+
+
 function NodosScreen({ route, navigation }) {
   const [nodos, setNodos] = useState([]);
 
@@ -82,6 +95,34 @@ function NodosScreen({ route, navigation }) {
   );
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function NodoScreen({ route }) {
   return (
     <View style={{ flex: 1 }}>
@@ -94,9 +135,8 @@ function NodoScreen({ route }) {
               <Text>Modelo: {item.modelo_sensor}</Text>
             </View>
             {Object.keys(item.variables_sensor).map((variable, index) => (
-              <View style={{ flex: 1, backgroundColor: '#E6E6FA', padding: 5 }} key={index}>
+              <View style={{ flex: 1, backgroundColor: '#E6E6FA', padding: 5, textAlign: 'center' }} key={index}>
                 <Text>{variable}</Text>
-                <Text>{item.variables_sensor[variable]}</Text>
               </View>
             ))}
           </View>
@@ -106,7 +146,6 @@ function NodoScreen({ route }) {
     </View>
   );
 }
-
 
 const Stack = createStackNavigator();
 
