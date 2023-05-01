@@ -4,6 +4,7 @@ const app = express()
 //PUERTO A UTILIZAR PARA SERVER
 const port = 3000
 
+
 //EJS
 let ejs = require('ejs');
 app.use(express.static('./'));
@@ -17,6 +18,7 @@ var xl = require('excel4node');
 
 
 
+
 var bodyParser = require('body-parser');
 
 
@@ -25,8 +27,47 @@ var urlencodedParser = bodyParser.urlencoded({extended:true});
 const mysql = require('mysql');
 
 
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+
+
+
+
+
 // Configurar el middleware para analizar el cuerpo de las solicitudes
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+
+const cors = require('cors');
+
+
+app.use(cors());
+
+app.get('/datos', (req, res) => {
+const db = client.db(dbName);
+
+
+const collection = db.collection("grupo");
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+ res.json(docs);
+  });
+});
+
+
+
+
+
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
@@ -129,7 +170,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.85.36:1884')
+var client2  = mqtt.connect('mqtt://192.168.119.36:1884')
  
 
 
