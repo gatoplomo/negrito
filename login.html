@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)https://getbootstrap.com/docs/4.0/examples/starter-template/ -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="https://getbootstrap.com/docs/4.0/assets/img/favicons/favicon.ico">
-
-    <title>WatchDog</title>
+    <title>RTM</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
 
@@ -19,51 +16,333 @@
   </head>
 
   <body>
-
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="https://getbootstrap.com/docs/4.0/examples/starter-template/#">WatchDog</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li >
-            <a class="nav-link" href="/index.html"> <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href=""></a>
-          </li>
-        <!--
-          <li class="nav-item active">
-            <a class="nav-link" href="/login.html">Ingresa</a>
-          </li>
-        -->
-        </ul>
+    <br>
     
-      </div>
-    </nav>
 
-    <main role="main" class="container">
+<div class="wrapper fadeInDown">
+  <div id="formContent">
 
-      <div class="starter-template">
-    <br></br>
-      </div>
+    <!-- Icon -->
+    <div class="fadeIn first">
+     <img src="/images/logo.png" alt="logo" class="mx-auto mb-8" style="width: 70%; height: 70%;">
+    </div>
 
-    </main><!-- /.container -->
+    <!-- Login Form -->
+    <form>
+      <input type="text" id="name" class="fadeIn second" name="login" placeholder="login">
+      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+     <input type="button" class="fadeIn fourth" value="Log In" id="login-button">
+    </form>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="./Starter Template for Bootstrap_files/jquery-3.2.1.slim.min.js.descarga" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="./Starter Template for Bootstrap_files/popper.min.js.descarga"></script>
-    <script src="./Starter Template for Bootstrap_files/bootstrap.min.js.descarga"></script>
-  
+  </div>
+</div>
+
+<script type="text/javascript">
 
 
 
 
+
+ document.getElementById("login-button").onclick = function() {
+
+    // Tu código de la función aquí
+    $.ajax({
+      url: '/login',
+      method: 'POST',
+      data: {
+        username: $("#name").val(),
+        password: $("#password").val()
+      },
+      beforeSend: function(data) {
+        console.log('Enviando...', data);
+      },
+      success: function(respuesta) {
+        console.log('Respuesta recibida:', respuesta);
+        console.log(respuesta);
+        if (respuesta == "OK") {
+          window.location.href = "monitor.html";
+        }
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+
+};
+
+
+
+
+
+
+
+
+</script>
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+/* BASIC */
+
+
+a {
+  color: #92badd;
+  display:inline-block;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+h2 {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display:inline-block;
+  margin: 40px 8px 10px 8px; 
+  color: #cccccc;
+}
+
+
+
+/* STRUCTURE */
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column; 
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 20px;
+}
+
+#formContent {
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
+  background: #fff;
+  padding: 30px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  padding: 0px;
+  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+#formFooter {
+  background-color: #f6f6f6;
+  border-top: 1px solid #dce8f1;
+  padding: 25px;
+  text-align: center;
+  -webkit-border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
+}
+
+
+
+/* TABS */
+
+h2.inactive {
+  color: #cccccc;
+}
+
+h2.active {
+  color: #0d0d0d;
+  border-bottom: 2px solid #5fbae9;
+}
+
+
+
+/* FORM TYPOGRAPHY*/
+
+input[type=button], input[type=submit], input[type=reset]  {
+  background-color: #56baed;
+  border: none;
+  color: white;
+  padding: 15px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 13px;
+  -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+  box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 20px 40px 20px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
+  background-color: #39ace7;
+}
+
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
+  -moz-transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -o-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
+}
+
+input[type=text] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 85%;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+input[type=text]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid #5fbae9;
+}
+
+input[type=text]:placeholder {
+  color: #cccccc;
+}
+
+
+
+/* ANIMATIONS */
+
+/* Simple CSS3 Fade-in-down Animation */
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+/* Simple CSS3 Fade-in Animation */
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.fadeIn {
+  opacity:0;
+  -webkit-animation:fadeIn ease-in 1;
+  -moz-animation:fadeIn ease-in 1;
+  animation:fadeIn ease-in 1;
+
+  -webkit-animation-fill-mode:forwards;
+  -moz-animation-fill-mode:forwards;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:1s;
+  -moz-animation-duration:1s;
+  animation-duration:1s;
+}
+
+.fadeIn.first {
+  -webkit-animation-delay: 0.4s;
+  -moz-animation-delay: 0.4s;
+  animation-delay: 0.4s;
+}
+
+.fadeIn.second {
+  -webkit-animation-delay: 0.6s;
+  -moz-animation-delay: 0.6s;
+  animation-delay: 0.6s;
+}
+
+.fadeIn.third {
+  -webkit-animation-delay: 0.8s;
+  -moz-animation-delay: 0.8s;
+  animation-delay: 0.8s;
+}
+
+.fadeIn.fourth {
+  -webkit-animation-delay: 1s;
+  -moz-animation-delay: 1s;
+  animation-delay: 1s;
+}
+
+/* Simple CSS3 Fade-in Animation */
+.underlineHover:after {
+  display: block;
+  left: 0;
+  bottom: -10px;
+  width: 0;
+  height: 2px;
+  background-color: #56baed;
+  content: "";
+  transition: width 0.2s;
+}
+
+.underlineHover:hover {
+  color: #0d0d0d;
+}
+
+.underlineHover:hover:after{
+  width: 100%;
+}
+
+
+
+/* OTHERS */
+
+*:focus {
+    outline: none;
+} 
+
+#icon {
+  width:60%;
+}
+
+* {
+  box-sizing: border-box;
+}
+</style>
+
+   
 
 
 
@@ -83,18 +362,19 @@ body
  -o-background-size: cover;
  background-size: cover;
 }
+
 #wrapper
 {
  text-align:center;
  margin:0 auto;
  padding:0px;
- width:995px;
+ width:400px;
 }
 h1
 {
- margin-top:150px;  
+ margin-top:100px;  
  color:white;
- font-size:45px;
+ font-size:30px;
 }
 </style>
 
@@ -102,64 +382,10 @@ h1
 
 
 
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.4.6/tailwind.min.css" />
-    <!-- Login Form -->
-    <div class="container mx-auto p-2">
-      <div class="max-w-sm mx-auto my-24 bg-white px-5 py-10 rounded shadow-xl">
-        <div class="text-center mb-8">
-          <h1 class="font-bold text-2xl font-bold">Ingresa</h1>
-        </div>
-        <form action="#">
-          <div class="mt-5">
-            <label for="username">Nombre de usuario</label>
-            <input
-              type="text"
-              id="name"
-              class="block w-full p-2 border rounded border-gray-500"
-            />
-          </div>
-          <div class="mt-5">
-            <label for="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              class="block w-full p-2 border rounded border-gray-500"
-            />
-          </div>
-          <div class="mt-10">
-            <input
-              type="submit"
-              value="Login"
-              id="boton"
-              class="py-3 bg-green-500 hover:bg-green-600 rounded text-white text-center w-full"
-            />
-          </div>
-        </form>
-      
-
- </div>
-          
-      </div>
-
-    </div>
-
-
-
-
-
-
-
 
 
 </body>
-
-
-
-
-
-
-
 <link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
 
 
@@ -169,58 +395,6 @@ h1
 <script src="js/jquery-1.11.1.min.js"></script> 
 
    <script src="js/bootstrap.js"></script>
-
-
-<script src="js/gauge.min.js">  </script> 
-
-
-
-
-
-
-<script type="text/javascript">
-
-
-$("#boton").click(function(event){
-  $.ajax({
-    url:'/login',
-    method:'POST',
-    data: {username: $("#name").val(),
-        
-            password: $("#password").val()},
-
-    beforeSend: function(data){
-      console.log('Enviando...',data)
-    },
-  }).done(function(respuesta){
-
-
-  	console.log('Respuesta recibida:',respuesta)
-  	console.log(respuesta)
-    if(respuesta=="OK")
-    {
- window.location.href = "monitor.html";
-}
-}).fail(function(err){
-  	console.log(err)
-  	
-
-
-
-
-
-  }
-
-  	)
-
-
-
-
-})
-
-
-</script>
-
 
 	</div>
 

@@ -302,7 +302,7 @@ mongodb.connect(
 }
 
 app.get("/",function(req,res){
-  res.sendFile(path + "cover.html");
+  res.sendFile(path + "login.html");
 });
 
 
@@ -565,18 +565,17 @@ app.post("/crear_grupo", function(req, res) {
       id_nodo: "nodo_002",
       sensores: [
         {
-           id_sensor:"sensor_001",
-          modelo_sensor: "sensor_001",
+          id_sensor:"sensor_001",
+          modelo_sensor: "DTH11",
           variables_sensor: {
             temperatura: true,
             humedad: true
           }
         }, {
-           id_sensor:"sensor_002",
-          modelo_sensor: "sensor_001",
+          id_sensor:"sensor_002",
+          modelo_sensor: "MQ2",
           variables_sensor: {
-            temperatura: true,
-            humedad: true
+            ppm: true
           }
         }
       ],

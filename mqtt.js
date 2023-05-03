@@ -22,7 +22,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.119.36:9001' 
+const host = 'ws://192.168.247.36:9001' 
 
 
 console.log('Connecting mqtt client')
@@ -41,7 +41,7 @@ client.on('reconnect', () => {
 
 
 //FUNCION CREAR TABLAS+CANVAS+GAUGES
-function creargauges(name,variables_sensor)
+function creargauges(variables_sensor)
 {
 //alert("holaa"+variables_sensor)
 var arreglo_variables = variables_sensor.split(",");
@@ -330,9 +330,11 @@ localStorage.setItem('variables_sensor', row.variables_sensor);
   onClickRow:function (row,$element) {
 localStorage.setItem('id_nodo', row.id_nodo);
 //alert(localStorage.getItem('id_nodo'))
-
+var index = $element.data('index');
+    alert(index)
 $('#tabla_sensores').bootstrapTable({
   onClickRow: function(row, $element) {
+
      localStorage.setItem('id_sensor', row.id_sensor);
    //  alert(localStorage.getItem('id_sensor'));
  localStorage.setItem('modelo_sensor', row.modelo_sensor);
@@ -341,7 +343,7 @@ $('#tabla_sensores').bootstrapTable({
 
     var variables = Object.keys(row.variables_sensor).join(', ');
    //alert(variables);
-   creargauges("DTH11",variables)
+   creargauges(variables)
     // Aquí puedes hacer lo que necesites con las variables
   },
   pagination: false,
@@ -373,7 +375,7 @@ var strWithoutSpaces = arreglo.replace(/ /g, "");
 
 
 
-$tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[0].sensores)
+$tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
 
                 }, 
 
