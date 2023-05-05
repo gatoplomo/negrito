@@ -1,32 +1,18 @@
 const express = require('express')
 const app = express()
-
 //PUERTO A UTILIZAR PARA SERVER
 const port = 3000
-
-
 //EJS
 let ejs = require('ejs');
 app.use(express.static('./'));
 app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
 app.set('views',__dirname+'/');
-
-
 // Require library
 var xl = require('excel4node');
-
-
-
-
 var bodyParser = require('body-parser');
-
-
 var urlencodedParser = bodyParser.urlencoded({extended:true});
-
 const mysql = require('mysql');
-
-
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -34,19 +20,9 @@ app.use(function(req, res, next) {
     next();
 });
 
-
-
-
-
-
 // Configurar el middleware para analizar el cuerpo de las solicitudes
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
-
-
 const cors = require('cors');
-
 
 app.use(cors());
 
@@ -63,11 +39,6 @@ collection.find({}).toArray(function(err, docs) {
  res.json(docs);
   });
 });
-
-
-
-
-
 
 // Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
@@ -95,8 +66,6 @@ var root2="/home/tomas/Documentos/GitHub/negrito/"
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 const {spawn} = require('child_process');
-
-
 
 
 const session = require('express-session');
@@ -127,23 +96,6 @@ app.use(
     })
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.use(express.static('2'));
 
 var path = __dirname + '/';
@@ -164,48 +116,20 @@ for (let step = 0; step < centrales.length; step++) {
 respaldar(centrales[step])
 }
 
-
-
-
 });
 */
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.119.36:1884')
- 
-
-
-
+var client2  = mqtt.connect('mqtt://192.168.19.36:1884')
 client2.on('connect', function () {
-
-
   client2.subscribe('grupo_001', function (err) {
     if (!err) {
      // client2.publish('nodo1', 'Hello mqtt')
     }
   })
-
-client2.subscribe('nodo2', function (err) {
-    if (!err) {
-      //client2.publish('nodo2', 'Hello mqtt')
-    }
-  })
-
-client2.subscribe('nodo3', function (err) {
-    if (!err) {
-      //client2.publish('nodo2', 'Hello mqtt')
-    }
-  })
-client2.subscribe('nodo1evento', function (err) {
-    if (!err) {
-      //client2.publish('nodo2', 'Hello mqtt')
-    }
-  })
-
 })
 
 function respaldar(nodo)
 {
-
 
 
 cantidad=1000;
@@ -227,14 +151,9 @@ const ws = fs.createWriteStream(root+nodo+"/"+formatted.substring(0,10)+".csv");
  let url = "mongodb://localhost:27017/";
  
 
-
-
 //MONGO DB
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-
-
-
 
 const url2 = 'mongodb://localhost:27017';
 
@@ -288,28 +207,11 @@ mongodb.connect(
 
 });
 
-
-
-
-
-
-
-
-
-
-
-
 }
 
 app.get("/",function(req,res){
   res.sendFile(path + "login.html");
 });
-
-
-
-//Jquery
-
-
 
 //ESCUCHA PUERTO
 app.listen(port, () => {
@@ -350,9 +252,6 @@ client.connect(function(err) {
   });
 });
 
-
-
-
 //FUNCION INSERTAR DOCUMENTO
 const insertDocuments = function(db, callback) {
   // Get the documents collection
@@ -379,7 +278,6 @@ const findDocuments = function(db, callback) {
   const collection = db.collection('nodos');
   // Find some documents
 
- 
 
   collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -396,8 +294,6 @@ centrales[i]=docs[i].id;
  
 
 }
-
-
 
 
 // Configurar las rutas
@@ -429,9 +325,6 @@ req.session.save((err) => {
 });
 
 
-
-
-
 app.post("/registro",function(req,res)
 
 {
@@ -456,14 +349,8 @@ collection.find({}).toArray(function(err, docs) {
 
   );
 
-
-
-
-
 var nodo1;
 var nodo1b;
-
-
 
 app.post("/eventosensor",function(req,res)
 
@@ -475,9 +362,6 @@ const db = client.db(dbName);
 const collection = db.collection('eventosensor');
 
 collection.insertOne({Variable:req.body.Variable.toString(),Condicion:req.body.Condicion.toString(),Valor:req.body.Valor.toString(),Accionador:req.body.Accionador.toString(),Estado:req.body.Estado.toString()});
-
-
-
 
 //const fsPromises = fs.promises;
   
@@ -495,9 +379,6 @@ res.send("Evento Registrado")
 }
 
   );
-
-
-
 
 app.post("/eliminarcentral",function(req,res)
 
@@ -601,6 +482,9 @@ app.post("/crear_grupo", function(req, res) {
   });
 });
 
+
+
+
 app.post("/grupos",function(req,res)
 
 {
@@ -625,11 +509,55 @@ console.log("peticion recibida")
 
 
 
+client2.on('message', (topic, message) => {
+  console.log(`Mensaje recibido en el tópico ${topic}: ${message.toString()}`);
+  const db = client.db(dbName);
+  try {
+    // Convertir el mensaje MQTT a objeto JavaScript
+    const lectura = JSON.parse(message.toString());
+
+    // Agregar la hora en que se crea el registro en MongoDB
+    const fechaActual = new Date();
+    lectura.rtc_server = {
+      fecha: fechaActual.toISOString().slice(0, 10),
+      hora: fechaActual.toTimeString().slice(0, 8)
+    };
+
+    // Insertar la lectura en MongoDB
+    const collection = db.collection('lecturas_grupo_001');
+    collection.insertOne(lectura, (err, result) => {
+      if (err) {
+        console.error(`Error al insertar lectura en MongoDB: ${err}`);
+      } else {
+        //console.log(`Lectura insertada en MongoDB con éxito: ${result}`);
+      }
+    });
+  } catch (error) {
+    console.error(`Error al analizar el JSON: ${error}`);
+  }
+});
 
 
 
+app.post("/lecturas_grupo",function(req,res)
+
+{
+
+const db = client.db(dbName);
 
 
+const collection = db.collection("lecturas_grupo_001");
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+res.send(docs)
+  });
+
+console.log("peticion recibida")
+}
+  );
 
 
 
@@ -704,7 +632,7 @@ console.log("peticion recibida")
 
 
 
-
+/*
 app.post("/dataget",function(req,res)
 
 {
@@ -726,76 +654,7 @@ console.log("peticion recibida")
 }
 
   );
-
-
-
-
-
-app.post("/timers",function(req,res)
-
-{
-
-/*
-const db = client.db(dbName);
-
-
-const collection = db.collection('nodos');
-
-collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    console.log(docs)
-res.send(docs)
-  });
-
 */
-const db = client.db(dbName);
-    const collection = db.collection('timernodo1a');
-
-collection.insertOne(req.body);
-
-
-res.send("hola");
-console.log(req.body)
-
-console.log("peticion recibida")
- 
-
-}
-
-  );
-
-
-
-app.post("/tomers",function(req,res)
-
-{
-
-const db = client.db(dbName);
-
-
-const collection = db.collection('eventosensor');
-
-collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    //console.log(docs)
-
-     res.setHeader('Content-Type', 'application/json');
-   res.json(docs);
-
-
-//res.send(docs)
-  });
-
-console.log("peticion recibida")
-}
-
-  );
-
-
-
-
 
 
 
@@ -1018,76 +877,6 @@ res.send(docs)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-/*
-client2.on('message', function (topic, message , grupo_001 , nodo1b) {
-  // message is Buffer
-
-
-
-for (let i = 0; i <centrales.length; i++) {
-
-   if(topic==centrales[i])
-  {
-  //console.log(message.toString())
-const db = client.db(dbName);
-  const collection = db.collection(centrales[i]);
-  // Insert some documents
-
-  var fecha= new Date();
- var hora_actual = Date.now();
-
-
-var dateTime = require('node-datetime');
-var dt = dateTime.create();
-var formatted = dt.format('Y-m-d H:M:S');
-
-const obj = JSON.parse(message);
-//console.log(obj)
-//console.log(obj.Lectura)
-//console.log(topic+" "+"Fecha:"+" "+formatted+" "+"Lectura:"+" "+message.toString());
-console.log(obj)
-//collection.insertOne({lectura:obj.Lectura[0],lectura2:obj.Lectura[1],lectura3:obj.Lectura[2],lectura4:obj.Lectura2[0],lectura5:obj.Lectura2[1],lectura6:obj.Lectura2[2],date: formatted,fecha:obj.Fecha,hora:obj.Hora});
-
-
-}
-else if (topic==centrales[i]+"evento")
-{
-
-
-  var fecha= new Date();
- var hora_actual = Date.now();
-
-
-var dateTime = require('node-datetime');
-var dt = dateTime.create();
-var formatted = dt.format('Y-m-d H:M:S');
-
-const db = client.db(dbName);
-const collection2 = db.collection(centrales[i]+"eventos");
-const obj = JSON.parse(message);
-//console.log(obj)
-
-collection2.insertOne({Evento:obj.Evento,Generado_por:obj.Generado_por,Date: formatted,Fecha:obj.Fecha,Hora:obj.Hora,Accionador:obj.Accionador,Funcion:obj.Funcion,Funcion:obj.Funcion,Estado:obj.Estado,Info:obj.Info});
-}
-
-
-}
-
-
-})
-
-*/
 
 
 app.post("/generar",function(req,res)

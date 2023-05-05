@@ -5,6 +5,12 @@ import React, { useEffect, useState , useRef} from 'react';
 import 'react-native-gesture-handler';
 // Agregar estas líneas
 
+
+
+
+import { connectMQTT } from './mqttapp.js';
+
+
 import LoginScreen from './login.js';
 
 
@@ -13,55 +19,13 @@ import { Svg, Circle, Text as SVGText } from 'react-native-svg'
 
 
 
-const ID = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
-
-
-
-
-import { Client, Message } from 'react-native-paho-mqtt';
-
-//Set up an in-memory alternative to global localStorage
-const myStorage = {
-  setItem: (key, item) => {
-    myStorage[key] = item;
-  },
-  getItem: (key) => myStorage[key],
-  removeItem: (key) => {
-    delete myStorage[key];
-  },
-};
-
-// Create a client instance
-const client = new Client({ uri: 'ws://192.168.247.36:9001/ws', clientId: 'clientId', storage: myStorage });
-
-// set event handlers
-client.on('connectionLost', (responseObject) => {
-  if (responseObject.errorCode !== 0) {
-    console.log(responseObject.errorMessage);
-  }
-});
-
-// connect the client
-client.connect()
-  .then(() => {
-    // Once a connection has been made, make a subscription and send a message.
-    console.log('onConnect');
-    return client.subscribe('grupo_001');
-  })
-  .then(() => {
-
-  })
-  .catch((responseObject) => {
-    if (responseObject.errorCode !== 0) {
-      console.log('onConnectionLost:' + responseObject.errorMessage);
-    }
-  })
-;
-
-
-
 function HomeScreen({ navigation }) {
-  return <FlatListBasics navigation={navigation} />;
+
+
+  return (
+    
+      <FlatListBasics navigation={navigation}/>
+  );
 }
 
 
@@ -182,6 +146,7 @@ function NodosScreen({ route, navigation }) {
   const [nodos, setNodos] = useState([]);
   const { nodos_grupo, grupo, id_grupo } = route.params;
 
+
   useEffect(() => {
     console.log('nodos_grupo:', nodos_grupo);
     alert('nodos_grupo: ' + nodos_grupo);
@@ -205,6 +170,8 @@ function NodosScreen({ route, navigation }) {
       <View style={{ position: 'absolute', bottom: 10, left: 0, right: 0, alignItems: 'center' }}>
         <Text>Grupo: {grupo}</Text>
       </View>
+
+
     </View>
   );
 }
@@ -213,13 +180,18 @@ function NodosScreen({ route, navigation }) {
 
 function NodoScreen({ route }) {
 
-const id_vars = [];
+    const [mqttMessage, setMqttMessage] = useState(null);
 
-client.on('messageReceived', (message) => {
-  const idsLecturas = [];
-  const mensajeJSON = JSON.parse(message.payloadString);
+  useEffect(() => {
+    connectMQTT(setMqttMessage);
+  }, []);
+
+  const id_vars = useRef([]);
+  const { mensajeJSON } = route.params;
+  const [progreso, setProgreso] = useState({});
 
   const obtenerIdsLecturas = (objeto) => {
+    const idsLecturas = [];
     objeto.nodos.forEach((nodo) => {
       nodo.sensores.forEach((sensor) => {
         const idSensor = sensor.id_sensor;
@@ -227,76 +199,98 @@ client.on('messageReceived', (message) => {
         for (const [key, value] of Object.entries(sensor.lecturas)) {
           idsLecturas.push({
             id: `${objeto.grupo}${nodo.id_nodo}${idSensor}${modelo}${key}`,
-            lectura: value.toFixed(2) // limitamos a 2 decimales
+            lectura: value.toFixed(2),
           });
         }
       });
     });
+    return idsLecturas;
   };
 
-  obtenerIdsLecturas(mensajeJSON);
+ useEffect(() => {
+  if (mqttMessage) {
+    const mensajeJSON = mqttMessage;
+    const idsLecturas = obtenerIdsLecturas(mensajeJSON);
+    console.log(JSON.stringify(mensajeJSON))
 
-  for (let i = 0; i < idsLecturas.length; i++) {
-    for (let i2 = 0; i2 < id_vars.length; i2++) {
-      if (idsLecturas[i].id == id_vars[i2]) {
-        console.log("MATCH");
+    for (let i = 0; i < idsLecturas.length; i++) {
+      if (id_vars.current.includes(idsLecturas[i].id)) {
         setProgreso((prevState) => ({
           ...prevState,
-          [id_vars[i2]]: Number(idsLecturas[i].lectura) // convertimos a número
+          [idsLecturas[i].id]: Number(idsLecturas[i].lectura),
         }));
       }
     }
   }
-});
+  return () => {
+    // Limpieza
+  };
+}, [mqttMessage]);
 
-const { sensores, nodo, grupo } = route.params;
-const [progreso, setProgreso] = useState({});
+
+  const { sensores, nodo, grupo } = route.params;
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
         data={sensores}
-        renderItem={({ item }) => (
-          <View style={{ flexDirection: 'row', padding: 5 }}>
-            <View style={{ flex: 1, backgroundColor: '#F0F8FF', padding: 5 }}>
-              <Text>Sensor ID: {item.id_sensor}</Text>
-              <Text>Modelo: {item.modelo_sensor}</Text>
-            </View>
-            {Object.keys(item.variables_sensor).map((variable, index) => {
-              alert(variable)
-              const id =
-                grupo + nodo + item.id_sensor + item.modelo_sensor + variable;
-                id_vars.push(id)
+        renderItem={({ item }) => {
+          const variables = Object.keys(item.variables_sensor);
 
-              return (
-                <TouchableOpacity
-                  onPress={() => handleCircularPress(id)}
-                  key={index}
-                >
-                  <View
-                    style={{
-                      flex: 1,
-                      backgroundColor: '#E6E6FA',
-                      padding: 5,
-                      textAlign: 'center',
-                    }}
+          id_vars.current.push(
+            ...variables.map(
+              (variable) =>
+                `${grupo}${nodo}${item.id_sensor}${item.modelo_sensor}${variable}`
+            )
+          );
+
+          return (
+            <View style={{ flexDirection: 'row', padding: 5 }}>
+              <View
+                style={{ flex: 1, backgroundColor: '#F0F8FF', padding: 5 }}
+              >
+                <Text>Sensor ID: {item.id_sensor}</Text>
+                <Text>Modelo: {item.modelo_sensor}</Text>
+              </View>
+              {variables.map((variable, index) => {
+                const id = `${grupo}${nodo}${item.id_sensor}${item.modelo_sensor}${variable}`;
+
+                return (
+                  <TouchableOpacity
+                    onPress={() => handleCircularPress(id)}
+                    key={index}
                   >
                     <View
-                      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                      style={{
+                        flex: 1,
+                        backgroundColor: '#E6E6FA',
+                        padding: 5,
+                        textAlign: 'center',
+                      }}
                     >
-                      <CircularProgress
-                        size={100}
-                        strokeWidth={10}
-                        id={id}
-                        numero={progreso[id] || 0} // Obtenemos el progreso correspondiente a la identificación única actual, si no existe aún, lo iniciamos en 0
-                      />
-                      <Text>{variable}</Text>
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <CircularProgress
+                          size={100}
+                          strokeWidth={10}
+                          id={id}
+                          numero={progreso[id] || 0}
+                        />
+                        <Text>{variable}</Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        )}
+                  </TouchableOpacity>
+                );
+              })}
+   
+            </View>
+          );
+        }}
         keyExtractor={(item) => item.id_sensor.toString()}
       />
       <View
