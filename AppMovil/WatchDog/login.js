@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Image } from 'react-native';
-import logo from '/assets/logo.png';
+
+
+
+
+
+import logo from './logo.png';
+
+
+
+
+
 
 import { useNavigation } from '@react-navigation/native';
 

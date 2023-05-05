@@ -318,8 +318,8 @@ $('#tabla_sensores').bootstrapTable({
    
     // Aquí puedes hacer lo que necesites con las variables
   },
-  pagination: false,
-  search: false,
+  pagination: true,
+  search: true,
   pageSize: 4,
   columns: [{
       field: 'id_sensor',

@@ -566,7 +566,7 @@ $('#tabla_sensores').bootstrapTable({
     // Aquí puedes hacer lo que necesites con las variables
   },
   pagination: false,
-  search: false,
+  search: true,
   pageSize: 4,
   columns: [{
       field: 'id_sensor',
@@ -597,7 +597,7 @@ $tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
                 }, 
 
   pagination: false,
-  search: false,
+  search: true,
    pageSize: 4,
   columns: [ {
     field: 'id_nodo',
