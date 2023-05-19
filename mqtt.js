@@ -10,6 +10,8 @@ var horas_filtro = [];
 
 // CONECCIÓN MQTT
 const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+
+
 const options = {
   keepalive: 60,
   clientId: clientId,
@@ -25,13 +27,14 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.19.36:9001' 
+const host = 'ws://192.168.28.36:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
   console.log('Connection error: ', err)
   //client.end()
 })
+
 client.on('reconnect', () => {
   console.log('Reconnecting...')
 })
@@ -46,14 +49,16 @@ client.on('message', (topic, message, packet) => {
   console.log(horaActual);
   let mensaje;
 
-  try {
-    mensaje = JSON.parse(message);
-  } catch (error) {
-    console.error('Error en el parseo del mensaje:', error);
-    // Aquí puedes realizar alguna acción para manejar el error, como enviar una notificación o registrar en un archivo de log.
-    // También puedes definir un valor por defecto para la variable 'mensaje', en caso de que el parseo falle.
-    mensaje = { error: 'No se pudo parsear el mensaje' };
-  }
+ try {
+  mensaje = JSON.parse(message);
+} catch (error) {
+  console.error('Error en el parseo del mensaje:', error);
+  console.log('Objeto JSON dañado:', message); // Impresión del objeto JSON dañado
+  // Aquí puedes realizar alguna acción para manejar el error, como enviar una notificación o registrar en un archivo de log.
+  // También puedes definir un valor por defecto para la variable 'mensaje', en caso de que el parseo falle.
+  mensaje = { error: 'No se pudo parsear el mensaje' };
+  return;
+}
 
   if (gauges.length > 0) {
     var arreglo_variables = localStorage.getItem("variables").split(",");
@@ -96,6 +101,7 @@ client.on('message', (topic, message, packet) => {
     }
   }
 });
+
 var directorios=[];
 
 let isPlaying = false; 
@@ -514,6 +520,9 @@ $.ajax({
   }).done(function(respuesta){
 console.log("Lista de grupos")
 console.log(respuesta)
+//let resJson=JSON.parse(respuesta);
+let restring=JSON.stringify(respuesta)
+console.log(restring)
 //console.log(respuesta[0].nodos_grupo)
 
 
@@ -533,6 +542,7 @@ client.on('connect', () => {
 var $tabla_grupos = $('#tabla_grupos')
 var $tabla_nodos = $('#tabla_nodos')
 var $tabla_sensores = $('#tabla_sensores')
+var $tabla_accionadores = $('#tabla_accionadores')
 
   $('#tabla_grupos').bootstrapTable({ 
 
@@ -592,7 +602,38 @@ var strWithoutSpaces = arreglo.replace(/ /g, "");
   data: directorios
 });
 
+$('#tabla_accionadores').bootstrapTable({
+  onClickRow: function(row, $element) {
+
+     localStorage.setItem('id_sensor', row.id_sensor);
+   //  alert(localStorage.getItem('id_sensor'));
+ localStorage.setItem('modelo_sensor', row.modelo_sensor);
+     //alert(localStorage.getItem('modelo_sensor'));
+
+
+    var variables = Object.keys(row.variables_sensor).join(', ');
+   //alert(variables);
+    localStorage.setItem("variables",variables)
+   creargauges()
+   
+    // Aquí puedes hacer lo que necesites con las variables
+  },
+  pagination: false,
+  search: true,
+  pageSize: 4,
+  columns: [{
+      field: 'id_accionador',
+      title: 'id_accionador'
+    },{
+      field: 'accion_accionador',
+      title: 'accion_accionador'
+    }
+  ],
+  data: directorios
+});
+
 $tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
+$tabla_accionadores.bootstrapTable('load', respuesta[0].nodos_grupo[index].accionadores)
 
                 }, 
 

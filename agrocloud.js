@@ -11,6 +11,8 @@ app.set('views',__dirname+'/');
 // Require library
 var xl = require('excel4node');
 var bodyParser = require('body-parser');
+
+
 var urlencodedParser = bodyParser.urlencoded({extended:true});
 const mysql = require('mysql');
 
@@ -119,7 +121,9 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2  = mqtt.connect('mqtt://192.168.19.36:1884')
+var client2 = mqtt.connect('mqtt://192.168.28.36:1884', {
+  clientId: 'ServerNode'
+});
 client2.on('connect', function () {
   client2.subscribe('grupo_001', function (err) {
     if (!err) {
@@ -127,6 +131,9 @@ client2.on('connect', function () {
     }
   })
 })
+
+
+
 
 function respaldar(nodo)
 {
@@ -296,6 +303,10 @@ centrales[i]=docs[i].id;
 }
 
 
+
+
+ 
+
 // Configurar las rutas
 app.post('/login', (req, res) => {
   console.log(req.body)
@@ -323,6 +334,73 @@ req.session.save((err) => {
     }
   });
 });
+
+app.post('/loginapp', async (req, res) => {
+
+  try {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    console.log(username);
+    console.log(password);
+
+    const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ?';
+
+    const result = await new Promise((resolve, reject) => {
+      connection.query(query, [username, password], (err, result) => {
+        if (err) reject(err);
+        resolve(result);
+      });
+    });
+
+    if (result.length === 1) {
+      const datos = { 
+        status: 'success',
+        nombre: username, 
+      };
+      res.json(datos);
+    } else {
+      const datos = { status: 'fail' };
+      res.json(datos);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+  
+app.post('/grupoapp', (req, res) => {
+  const db = client.db(dbName);
+  const collection = db.collection("grupo");
+  const id_grupo = req.body.id_grupo; // Supongamos que el id_grupo se envía en el cuerpo de la solicitud
+  
+  collection.find({id_grupo: id_grupo}).toArray(function(err, docs) {
+    if (err) throw err;
+    console.log(`Found ${docs.length} record(s)`);
+    console.log(docs);
+    res.json(docs);
+   
+  });
+});
+  
+  app.post('/gruposapp', (req, res) => {
+const db = client.db(dbName);
+
+
+const collection = db.collection("grupo");
+
+collection.find({}).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs)
+res.json(docs)
+
+  });
+console.log("peticion recibida")
+});
+
+
+
 
 
 app.post("/registro",function(req,res)
@@ -434,12 +512,12 @@ app.post("/crear_grupo", function(req, res) {
       ],
       accionadores: [
         {
-          num_accionador: 1,
-          accion: "encender"
+          id_accionador: "accionador_001",
+          accion_accionador: "Alarma"
         },
         {
-          num_accionador: 2,
-          accion: "apagar"
+          id_accionador: "accionador_002",
+          accion_accionador: "Ventilador"
         }
       ]
     },{
@@ -462,12 +540,12 @@ app.post("/crear_grupo", function(req, res) {
       ],
       accionadores: [
         {
-          num_accionador: 1,
-          accion: "encender"
+          id_accionador: "accionador_001",
+          accion_accionador: "encender"
         },
         {
-          num_accionador: 2,
-          accion: "apagar"
+          id_accionador: "accionador_002",
+          accion_accionador: "apagar"
         }
       ]
     }
@@ -509,10 +587,32 @@ console.log("peticion recibida")
 
 
 
+
+
+function performAction() {
+  console.log('Realizando acción...');
+  client2.publish('grupo_001control', 'Reportar');
+}
+
+// Ejecutar performAction() cada 3 segundos
+setInterval(performAction, 2000);
+
+
+let procesando = false; // Bandera de procesamiento
+
 client2.on('message', (topic, message) => {
-  console.log(`Mensaje recibido en el tópico ${topic}: ${message.toString()}`);
+  console.log("mensaje recibido")
+  
+  if (procesando) {
+    console.log('Ignorando mensaje, procesamiento en curso.');
+    return;
+  }
+
+  console.log("Mensaje recibido en el tópico");
   const db = client.db(dbName);
   try {
+    procesando = true; // Activar la bandera de procesamiento
+
     // Convertir el mensaje MQTT a objeto JavaScript
     const lectura = JSON.parse(message.toString());
 
@@ -529,13 +629,19 @@ client2.on('message', (topic, message) => {
       if (err) {
         console.error(`Error al insertar lectura en MongoDB: ${err}`);
       } else {
-        //console.log(`Lectura insertada en MongoDB con éxito: ${result}`);
+        console.log(`Lectura insertada en MongoDB con éxito: ${result}`);
+        //performAction();
       }
+
+      procesando = false; // Desactivar la bandera de procesamiento
     });
   } catch (error) {
     console.error(`Error al analizar el JSON: ${error}`);
+    procesando = false; // Desactivar la bandera de procesamiento
   }
+  
 });
+
 
 
 
@@ -561,100 +667,6 @@ console.log("peticion recibida")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.post("/eventos",function(req,res)
-
-{
-
-const db = client.db(dbName);
-
-
-const collection = db.collection(req.body.central+"eventos");
-
-collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    //console.log(docs)
-res.send(docs)
-  });
-
-console.log("peticion recibida")
-}
-
-  );
-
-app.post("/reportes",function(req,res)
-
-{
-console.log(req.body.central)
-const db = client.db(dbName);
-
-
-const collection = db.collection(req.body.central);
-
-collection.find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    //console.log(docs)
-res.send(docs)
-  });
-
-console.log("peticion recibida")
-}
-
-  );
-
-
-
-
-/*
-app.post("/dataget",function(req,res)
-
-{
-console.log(req.body.central)
-const db = client.db(dbName);
-console.log(req.body.central);
-console.log(req.body.fecha);
-const collection = db.collection(req.body.central);
-fecha=req.body.fecha
-console.log(fecha)
-collection.find({"fecha":fecha}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    console.log("Found the following records");
-    console.log(docs)
-res.send(docs)
-  });
-
-console.log("peticion recibida")
-}
-
-  );
-*/
 
 
 
