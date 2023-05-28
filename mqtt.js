@@ -6,6 +6,7 @@ var myChart
 
 var lecturas_filtro = [];
 var horas_filtro = [];
+var tablaGenerada=false;
 
 
 // CONECCIÓN MQTT
@@ -27,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.28.36:9001' 
+const host = 'ws://192.168.244.36:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
@@ -40,9 +41,28 @@ client.on('reconnect', () => {
 })
 
 
+
+function publicar(topico, mensaje) {
+  // Publicar el mensaje en el tópico especificado
+  client.publish(topico, mensaje, function (error) {
+    if (error) {
+      console.error('Error al publicar mensaje:', error);
+    } else {
+      console.log('Mensaje publicado correctamente');
+    }
+  });
+}
+
+
+
+
+
+
+
 client.on('message', (topic, message, packet) => {
   const now = new Date();
   console.log(now); // muestra la fecha y hora actuales en formato de cadena
+
 
   // Para obtener solo la hora actual en formato de cadena
   const horaActual = now.toLocaleTimeString();
@@ -59,6 +79,41 @@ client.on('message', (topic, message, packet) => {
   mensaje = { error: 'No se pudo parsear el mensaje' };
   return;
 }
+
+
+if (tablaGenerada == true) {
+  if (topic === localStorage.getItem('id_grupo')) {
+    console.log(mensaje);
+    console.log(tablaGenerada);
+    for (let i = 0; i < mensaje.nodos.length; i++) {
+      if (mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
+        console.log("Acciones del nodo:", mensaje.nodos[i].accionadores);
+
+        for (let j = 0; j < mensaje.nodos[i].accionadores.length; j++) {
+          const accionador = mensaje.nodos[i].accionadores[j];
+          console.log("Estado del accionador", accionador.id_accionador, ":", accionador.status);
+
+          // Obtener el índice de la fila correspondiente al accionador
+          var rowIndex = j; // Índice de la fila, puedes ajustarlo según tus necesidades
+
+          // Obtener el nuevo estado del accionador
+          var nuevoStatus = accionador.status;
+
+          // Actualizar la celda "status" de la tabla
+          $('#tabla_accionadores').bootstrapTable('updateCell', {
+            index: rowIndex,
+            field: 'status',
+            value: nuevoStatus
+          });
+        }
+      }
+    }
+  }
+}
+ 
+
+
+
 
   if (gauges.length > 0) {
     var arreglo_variables = localStorage.getItem("variables").split(",");
@@ -100,7 +155,13 @@ client.on('message', (topic, message, packet) => {
       }
     }
   }
+
+
+
 });
+
+
+
 
 var directorios=[];
 
@@ -123,11 +184,14 @@ var conf_object= {
 var lecturasEncontradas = [];
 var horasEncontradas = [];
 
+
+
 $.ajax({ 
   url: '/lecturas_grupo',
   method: 'POST',
   dataType: 'json',
   contentType: 'application/json',
+  data: JSON.stringify({ fecha: "2023-05-28"}),
   beforeSend: function() {
     console.log('Enviando datos al servidor...');
   }
@@ -283,16 +347,15 @@ var config = {
  myChart = new Chart(ctx, config);
 
 horas_filtro.push(horasEncontradas[0]); // agregar la primera lectura filtrada al nuevo array
-
 lecturas_filtro.push(lecturasEncontradas[0]); // agregar la primera lectura filtrada al nuevo array
-let ultimaLectura = horas_filtro[0]; // variable para almacenar la última lectura guardada en el array
+let ultimaLectura = horasEncontradas[0].substring(0, 2); // obtener la primera lectura correctamente
 
 for (let i = 1; i < horasEncontradas.length; i++) { // empezar en i=1 para no comparar la primera lectura
   let lecturaActual = horasEncontradas[i].substring(0, 2);
   if (lecturaActual !== ultimaLectura) { // si la lectura actual es diferente a la última guardada
     if (lecturaActual > ultimaLectura) { // asegurarse de que la lectura actual sea más reciente que la última guardada
       horas_filtro.push(horasEncontradas[i]); // agregar la lectura actual al array filtrado
-      lecturas_filtro.push(lecturasEncontradas[i])
+      lecturas_filtro.push(lecturasEncontradas[i]);
       ultimaLectura = lecturaActual; // actualizar la última lectura guardada
     }
   }
@@ -534,6 +597,7 @@ client.on('connect', () => {
 
   for (let i = 0; i < respuesta.length; i++) {
    client.subscribe(respuesta[i].id_grupo, { qos: 0 })
+  
 }
 
   
@@ -602,21 +666,51 @@ var strWithoutSpaces = arreglo.replace(/ /g, "");
   data: directorios
 });
 
+
+ tablaGenerada = true; // Establecer la bandera como verdadera
 $('#tabla_accionadores').bootstrapTable({
   onClickRow: function(row, $element) {
-
-     localStorage.setItem('id_sensor', row.id_sensor);
-   //  alert(localStorage.getItem('id_sensor'));
- localStorage.setItem('modelo_sensor', row.modelo_sensor);
-     //alert(localStorage.getItem('modelo_sensor'));
-
-
-    var variables = Object.keys(row.variables_sensor).join(', ');
-   //alert(variables);
-    localStorage.setItem("variables",variables)
-   creargauges()
-   
-    // Aquí puedes hacer lo que necesites con las variables
+    // Obtener los datos necesarios del objeto 'row'
+    var idAccionador = row.id_accionador;
+    var accionAccionador = row.accion_accionador;
+    var status = row.status;
+    
+    // Crear el contenido dinámico de la ventana modal
+    var modalContent = '<div class="modal-header">' +
+      '<h5 class="modal-title">Detalles del Accionador</h5>' +
+      '<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>' +
+      '</div>' +
+      '<div class="modal-body">' +
+      '<p>ID: ' + idAccionador + '</p>' +
+      '<p>Acción: ' + accionAccionador + '</p>' +
+      '</div>' +
+      '<div class="modal-footer">' +
+      '<button type="button" class="btn btn-success" id="encenderBtn">Encender</button>' +
+      '<button type="button" class="btn btn-danger" id="apagarBtn">Apagar</button>' +
+      '</div>';
+    
+    // Agregar la ventana modal al DOM
+    $('#myModal').remove(); // Eliminar la modal previa si existe
+    $('body').append('<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+      '<div class="modal-dialog">' +
+      '<div class="modal-content">' +
+      modalContent +
+      '</div>' +
+      '</div>' +
+      '</div>');
+    
+    // Mostrar la ventana modal
+    $('#myModal').modal('show');
+    
+    // Agregar los eventos click a los botones
+    $('#encenderBtn').click(function() {
+     publicar(localStorage.getItem('id_grupo')+"control",localStorage.getItem('id_nodo')+row.id_accionador+"ON")
+    });
+    
+    $('#apagarBtn').click(function() {
+      // Lógica para el botón "Apagar"
+     publicar(localStorage.getItem('id_grupo')+"control",localStorage.getItem('id_nodo')+row.id_accionador+"OFF")
+    });
   },
   pagination: false,
   search: true,
@@ -624,9 +718,12 @@ $('#tabla_accionadores').bootstrapTable({
   columns: [{
       field: 'id_accionador',
       title: 'id_accionador'
-    },{
+    }, {
       field: 'accion_accionador',
       title: 'accion_accionador'
+    }, {
+      field: 'status',
+      title: 'status'
     }
   ],
   data: directorios
@@ -634,6 +731,10 @@ $('#tabla_accionadores').bootstrapTable({
 
 $tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
 $tabla_accionadores.bootstrapTable('load', respuesta[0].nodos_grupo[index].accionadores)
+$(document).on('click', '.btn-close', function() {
+  $('#myModal').modal('hide');
+});
+
 
                 }, 
 

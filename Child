@@ -1,0 +1,45 @@
+#include <LiquidCrystal_I2C.h>
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+#define MQ2pin 0
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+
+// Declaración de los pines CE y CSN
+#define CE_PIN 0
+#define CSN_PIN 1
+
+// Creación del objeto radio (NRF24L01)
+RF24 radio(CE_PIN, CSN_PIN);
+
+const byte addresses[][6] = {"00001", "00002"};
+
+void setup() {
+  // Inicializar el LCD
+  lcd.init();
+  lcd.backlight();
+  radio.begin();                           // Iniciar la comunicación del módulo NRF24L01
+  radio.openWritingPipe(addresses[1]);     // Establecer la dirección a la cual se enviarán los datos
+  radio.openReadingPipe(1, addresses[0]);  // Establecer la dirección a la cual se recibirán los datos
+  radio.setPALevel(RF24_PA_MIN);           
+  pinMode(15, INPUT);
+}
+
+void loop() {
+ int button_stateA = analogRead(MQ2pin);  // Cambiar el valor del entero a 2
+
+radio.stopListening();                           // Configurar el módulo como transmisor
+radio.write(&button_stateA, sizeof(button_stateA));  // Enviar el dato
+
+radio.startListening();                          // Configurar el módulo como receptor
+
+if(radio.available()) {
+  int button_stateB;
+  radio.read(&button_stateB, sizeof(button_stateB));  // Leer el dato recibido
+  lcd.setCursor(0, 0);
+  lcd.print("Dato recibido: ");
+  lcd.setCursor(0, 1);
+  lcd.print(button_stateB);
+}
+delay(100);
+}

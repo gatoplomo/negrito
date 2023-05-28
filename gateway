@@ -1,0 +1,420 @@
+#include <SPI.h>
+#include <Arduino.h>
+#define Threshold 400
+#define MQ2pin 0
+float sensorValue;
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+#include <Adafruit_Sensor.h>
+#include <ArduinoJson.h>
+#include <DHT.h>
+#define DHTPIN D4
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+#include <Wire.h>
+#include <RTClib.h>
+RTC_DS3231 rtc;
+char t2[32];
+char t3[32];
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27,20,4);
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+#define CE_PIN D0
+#define CSN_PIN D3
+#define SCK D5
+const byte addresses [][6] = {"00001", "00002"};  
+RF24 radio(CE_PIN, CSN_PIN);
+//vector con los datos a enviar
+float datos[3];
+String valor="30";
+const char* ssid = "RTM";
+const char* password = "zeke1994";
+const char* mqtt_server = "192.168.76.36";
+const char* clientID = "G1";
+WiFiClient espClient;
+PubSubClient client(espClient);
+#include <Wire.h>
+long lastMsg = 0;
+char msg[50];
+int value = 0;
+void ICACHE_RAM_ATTR IntCallback();
+void ICACHE_RAM_ATTR IntCallback2();
+boolean act1= false;
+boolean act2 = false;
+int sup=21;
+int inf=19;
+#include <EEPROM.h>
+//Constants
+#define EEPROM_SIZE 12
+
+
+
+int button_stateA; 
+
+void setup() {
+  //wifi_set_sleep_type(LIGHT_SLEEP_T);
+  lcd.init();
+  
+pinMode(9, OUTPUT);
+pinMode(10, OUTPUT);
+lcd.backlight();
+lcd.setCursor (0,0) ;
+lcd.print("CONECTANDO");
+lcd.clear();
+Serial.begin(115200);
+Serial.println(F("Initialize System"));
+  //Init EEPROM
+  
+
+  
+  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  Serial.begin(115200);
+  setup_wifi();
+  client.setServer(mqtt_server, 1884);
+  client.setCallback(callback);
+ client.setBufferSize(1024);
+    dht.begin();
+
+
+    
+        pinMode(9,OUTPUT);
+     pinMode(10,OUTPUT);
+   pinMode(D8,INPUT);
+   //pinMode(D7,INPUT);
+  
+     
+     digitalWrite(9,HIGH);
+     digitalWrite(10,HIGH);
+
+
+Wire.begin();
+
+ rtc.begin();
+ //rtc.adjust(DateTime(F(__DATE__),F(__TIME__)));
+  //rtc.adjust(DateTime(2023, 4,4, 15, 37,00 )); 
+
+  radio.begin();                            //Starting the radio communication
+  radio.openWritingPipe(addresses[0]);      //Setting the address at which we will send the data
+  radio.openReadingPipe(1, addresses[1]);   //Setting the address at which we will receive the data
+  radio.setPALevel(RF24_PA_MIN);   
+    
+}
+
+
+
+void setup_wifi() {
+
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+bool flag = true; // Variable de bandera
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+
+  String orden = "";
+  for (int i = 0; i < length; i++) {
+    orden += (char)payload[i];
+  }
+  Serial.println(orden);
+
+  // Verificar si la orden es "DETENER"
+  if (orden == "Reportar") {
+ sensor();
+ radio.startListening();  
+  }
+
+
+if (orden == "nodo_001accionador_001ON") {
+  digitalWrite(9, LOW);
+} else if (orden == "nodo_001accionador_001OFF") {
+  digitalWrite(9, HIGH);
+} else if (orden == "nodo_001accionador_002ON") {
+  digitalWrite(10, LOW);
+} else if (orden == "nodo_001accionador_002OFF") {
+  digitalWrite(10, HIGH);
+} 
+
+else if (orden == "nodo_002accionador_001ON") {
+  button_stateA = 11;
+} 
+else if (orden == "nodo_002accionador_001OFF") {
+ button_stateA = 22;
+} 
+else if (orden == "nodo_002accionador_002OFF") {
+ button_stateA = 33;
+} 
+else if (orden == "nodo_002accionador_002ON") {
+  button_stateA = 44;
+}   
+
+}
+
+
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    client.subscribe("");
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect(clientID)) {
+      Serial.println("connected");
+      // Once connected, publish an announcement...
+      // ... and resubscribe
+      
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(2000);
+    }
+  }
+  client.subscribe("grupo_001control");
+}
+
+
+//int periodo = 3000;
+//unsigned long TiempoAhora = 0;
+
+
+int button_stateB;
+
+void loop() {
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+
+    // Entero constante con valor 1
+
+  radio.startListening();
+  if (radio.available()) {
+    radio.read(&button_stateB, sizeof(button_stateB));
+    
+    // Hacer algo con el dato recibido (opcional)
+    // Por ejemplo, mostrarlo en el monitor serie
+    Serial.print("Dato recibido: ");
+    Serial.println(button_stateB);
+lcd.setCursor (0,2) ;
+lcd.print(button_stateB);
+    delay(500);
+    radio.stopListening();
+    radio.write(&button_stateA, sizeof(button_stateA));  // Enviar el entero constante
+  }
+}
+
+
+
+
+
+void sensor(){
+lcd.setCursor (0,3) ;
+lcd.print("          ");
+  sensorValue = analogRead(MQ2pin); // read analog input pin 0
+  //Serial.print("Sensor Value: ");
+  //Serial.println(sensorValue);
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  float f = dht.readTemperature(true);
+  if (isnan(h) || isnan(t) || isnan(f)) {
+    Serial.println("Error obteniendo los datos del sensor DHT11");
+    return;
+  }
+ 
+  float hif = dht.computeHeatIndex(f, h);
+  float hic = dht.computeHeatIndex(t, h, false);
+  DateTime now = rtc.now();
+  sprintf(t2, "%02d-%02d-%02d",now.year(), now.month(), now.day());  
+    sprintf(t3, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
+    /*
+  Serial.print(F("Date/Time: "));
+  Serial.println(String(t2));
+  
+  Serial.print("Humedad: ");
+  Serial.print(h);
+  Serial.print(" %\t");
+  Serial.print("Temperatura: ");
+  Serial.print(t);
+  Serial.print(" *C ");
+  Serial.print(f);
+  Serial.print(" *F\t");
+  Serial.print("Índice de calor: ");
+  Serial.print(hic);
+  Serial.print(" *C ");
+  Serial.print(hif);
+  Serial.println(" *F");
+  Serial.println(valor);
+*/
+String mensaje="";
+
+
+
+
+ 
+StaticJsonDocument<768> doc;
+
+
+doc["grupo"] = "grupo_001";
+JsonObject rtc_nodo = doc.createNestedObject("rtc_nodo");
+rtc_nodo["fecha"] = "23-04-2023";
+rtc_nodo["hora"] = "13:30";
+
+JsonArray nodos = doc.createNestedArray("nodos");
+
+//gateway
+JsonObject nodos_0 = nodos.createNestedObject();
+nodos_0["id_nodo"] = "nodo_001";
+
+
+// Accionadores del primer nodo (nodo_001)
+JsonArray nodos_0_accionadores = nodos_0.createNestedArray("accionadores");
+
+// Accionador 1 del nodo_001
+JsonObject nodos_0_accionadores_0 = nodos_0_accionadores.createNestedObject();
+nodos_0_accionadores_0["id_accionador"] = "accionador_001";
+nodos_0_accionadores_0["status"] = digitalRead(9);
+
+// Accionador 2 del nodo_001
+JsonObject nodos_0_accionadores_1 = nodos_0_accionadores.createNestedObject();
+nodos_0_accionadores_1["id_accionador"] = "accionador_002";
+nodos_0_accionadores_1["status"] = digitalRead(10);
+
+
+JsonArray nodos_0_sensores = nodos_0.createNestedArray("sensores");
+
+JsonObject nodos_0_sensores_0 = nodos_0_sensores.createNestedObject();
+nodos_0_sensores_0["id_sensor"] = "sensor_001";
+nodos_0_sensores_0["modelo"] = "DTH11";
+
+JsonObject nodos_0_sensores_0_lecturas = nodos_0_sensores_0.createNestedObject("lecturas");
+nodos_0_sensores_0_lecturas["temperatura"] =t;
+nodos_0_sensores_0_lecturas["humedad"] =h;
+
+JsonObject nodos_0_sensores_1 = nodos_0_sensores.createNestedObject();
+nodos_0_sensores_1["id_sensor"] = "sensor_002";
+nodos_0_sensores_1["modelo"] = "MQ2";
+
+JsonObject nodos_0_sensores_1_lecturas = nodos_0_sensores_1.createNestedObject("lecturas");
+nodos_0_sensores_1_lecturas["ppm"] = sensorValue;
+
+JsonObject nodos_1 = nodos.createNestedObject();
+nodos_1["id_nodo"] = "nodo_002";
+
+
+
+
+
+
+// Accionadores del primer nodo (nodo_001)
+JsonArray nodos_1_accionadores = nodos_1.createNestedArray("accionadores");
+
+// Accionador 1 del nodo_001
+JsonObject nodos_1_accionadores_0 = nodos_1_accionadores.createNestedObject();
+nodos_1_accionadores_0["id_accionador"] = "accionador_001";
+nodos_1_accionadores_0["status"] = 2;
+
+// Accionador 2 del nodo_001
+JsonObject nodos_1_accionadores_1 = nodos_1_accionadores.createNestedObject();
+nodos_1_accionadores_1["id_accionador"] = "accionador_002";
+nodos_1_accionadores_1["status"] = 2;
+
+
+
+//RF1
+
+
+
+JsonArray nodos_1_sensores = nodos_1.createNestedArray("sensores");
+
+JsonObject nodos_1_sensores_0 = nodos_1_sensores.createNestedObject();
+nodos_1_sensores_0["id_sensor"] = "sensor_001";
+nodos_1_sensores_0["modelo"] = "DTH11";
+
+JsonObject nodos_1_sensores_0_lecturas = nodos_1_sensores_0.createNestedObject("lecturas");
+nodos_1_sensores_0_lecturas["temperatura"] = datos[2];
+nodos_1_sensores_0_lecturas["humedad"] = datos[1];
+
+JsonObject nodos_1_sensores_1 = nodos_1_sensores.createNestedObject();
+nodos_1_sensores_1["id_sensor"] = "sensor_002";
+nodos_1_sensores_1["modelo"] = "MQ2";
+
+JsonObject nodos_1_sensores_1_lecturas = nodos_1_sensores_1.createNestedObject("lecturas");
+nodos_1_sensores_1_lecturas["ppm"] = button_stateB;;
+
+serializeJson(doc, mensaje);
+Serial.println(mensaje);
+client.publish("grupo_001",mensaje.c_str());
+
+//lcd.clear();
+lcd.setCursor (0,0) ;
+lcd.print(String(t3)+" "+String(t2));
+lcd.setCursor (0,1) ;
+lcd.print("t/h:"+String(t)+"/"+String(h));
+lcd.setCursor (0,3) ;
+lcd.print("Conectado");
+lcd.setCursor (0,2) ;
+lcd.print("                 ");
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+void printDate(DateTime date)
+{
+   Serial.print(date.year(), DEC);
+   Serial.print('/');
+   Serial.print(date.month(), DEC);
+   Serial.print('/');
+   Serial.print(date.day(), DEC);
+   Serial.print(" (");
+   Serial.print(daysOfTheWeek[date.dayOfTheWeek()]);
+   Serial.print(") ");
+   Serial.print(date.hour(), DEC);
+   Serial.print(':');
+   Serial.print(date.minute(), DEC);
+   Serial.print(':');
+   Serial.print(date.second(), DEC);
+   Serial.println();
+}
+
+*/

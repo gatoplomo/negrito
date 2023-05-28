@@ -42,19 +42,118 @@ collection.find({}).toArray(function(err, docs) {
   });
 });
 
-// Configurar la conexión a la base de datos
-const connection = mysql.createConnection({
+
+
+// Crear un pool de conexiones
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: 'localhost',
   user: 'root',
   password: 'plomo1994',
   database: 'WatchDog'
 });
 
+// Función para manejar los errores de conexión y realizar la reconexión
+function handleConnectionError(err) {
+  console.error('Error en la conexión a la base de datos:', err);
+  console.log('Intentando reconectar...');
+
+  // Establecer un tiempo de espera antes de intentar reconectar
+  setTimeout(connectToDatabase, 5000);
+}
+
+// Función para realizar consultas a la base de datos
+function queryDatabase(sql, values, callback) {
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error('Error al obtener la conexión:', err);
+      handleConnectionError(err);
+      return;
+    }
+
+    connection.query(sql, values, (err, results) => {
+      connection.release();
+
+      if (err) {
+        console.error('Error en la consulta:', err);
+        callback(err, null);
+        return;
+      }
+
+      callback(null, results);
+    });
+  });
+}
+
+let connection;
+
+// Función para establecer la conexión inicial a la base de datos
+function connectToDatabase() {
+  pool.getConnection((err, conn) => {
+    if (err) {
+      console.error('Error al conectar a la base de datos:', err);
+      handleConnectionError(err);
+      return;
+    }
+
+    console.log('Conectado a la base de datos MySQL');
+
+    // Configura el manejo de errores en la conexión
+    conn.on('error', handleConnectionError);
+    connection = conn; // Asignar la conexión a la variable externa 'connection'
+    connection.release();
+  });
+}
+
 // Establecer la conexión a la base de datos
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Conectado a la base de datos MySQL');
+connectToDatabase();
+
+// Configurar las rutas
+app.post('/login', (req, res) => {
+  console.log(req.body)
+  const username = req.body.username;
+  const password = req.body.password;
+
+  console.log(username)
+  console.log(password)
+  
+  const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ?';
+
+  connection.query(query, [username, password], (err, result) => {
+    if (err) throw err;
+
+    if (result.length === 1) {
+      res.send('OK');
+      /*
+      req.session.username = username
+      req.session.password = password;
+      req.session.save((err) => {
+        if (err) throw err;
+        console.log('Datos de sesión guardados en la tabla sessions');
+      });*/
+    } else {
+      res.send('Nombre de usuario o contraseña incorrectos');
+    }
+  });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var router = express.Router();
 
@@ -73,7 +172,7 @@ const {spawn} = require('child_process');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 
-
+/*
 const options = {                 // setting connection options
     host: 'localhost',
     user: 'root',
@@ -97,7 +196,7 @@ app.use(
         },
     })
 );
-
+*/
 app.use(express.static('2'));
 
 var path = __dirname + '/';
@@ -121,7 +220,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.28.36:1884', {
+var client2 = mqtt.connect('mqtt://192.168.244.36:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -183,6 +282,10 @@ client.connect(function(err) {
 // Include fs and path module 
 var inicio="";
 var final="";
+
+
+
+
 mongodb.connect(
   url,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -307,42 +410,13 @@ centrales[i]=docs[i].id;
 
  
 
-// Configurar las rutas
-app.post('/login', (req, res) => {
-  console.log(req.body)
-  const username = req.body.username;
-  const password = req.body.password;
 
-  console.log(username)
-  console.log(password)
-  
-  const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ?';
 
-  connection.query(query, [username, password], (err, result) => {
-    if (err) throw err;
-
-    if (result.length === 1) {
-      res.send('OK');
-      req.session.username = username
-        req.session.password = password;
-req.session.save((err) => {
-        if (err) throw err;
-        console.log('Datos de sesión guardados en la tabla sessions');
-      });
-    } else {
-      res.send('Nombre de usuario o contraseña incorrectos');
-    }
-  });
-});
 
 app.post('/loginapp', async (req, res) => {
 
   try {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    console.log(username);
-    console.log(password);
+ 
 
     const query = 'SELECT * FROM usuarios WHERE nombre = ? AND contraseña = ?';
 
@@ -430,33 +504,7 @@ collection.find({}).toArray(function(err, docs) {
 var nodo1;
 var nodo1b;
 
-app.post("/eventosensor",function(req,res)
 
-{
-
-//console.log(req.body.Variable.toString())
-
-const db = client.db(dbName);
-const collection = db.collection('eventosensor');
-
-collection.insertOne({Variable:req.body.Variable.toString(),Condicion:req.body.Condicion.toString(),Valor:req.body.Valor.toString(),Accionador:req.body.Accionador.toString(),Estado:req.body.Estado.toString()});
-
-//const fsPromises = fs.promises;
-  
-/*  
-fsPromises.mkdir('C:/Users/idcla/Documents/GitHub/propal/Datos/'+req.body.id.toString()).then(function() {
-    console.log('Directory created successfully');
-}).catch(function() {
-    console.log('failed to create directory');
-});
-*/
-
-res.send("Evento Registrado")
-
-
-}
-
-  );
 
 app.post("/eliminarcentral",function(req,res)
 
@@ -501,12 +549,6 @@ app.post("/crear_grupo", function(req, res) {
           variables_sensor: {
             temperatura: true,
             humedad: true
-          }
-        }, {
-          id_sensor:"sensor_002",
-          modelo_sensor: "MQ2",
-          variables_sensor: {
-            ppm: true
           }
         }
       ],
@@ -600,8 +642,10 @@ setInterval(performAction, 2000);
 
 let procesando = false; // Bandera de procesamiento
 
+
+
 client2.on('message', (topic, message) => {
-  console.log("mensaje recibido")
+  console.log("mensaje recibido");
   
   if (procesando) {
     console.log('Ignorando mensaje, procesamiento en curso.');
@@ -620,8 +664,11 @@ client2.on('message', (topic, message) => {
     const fechaActual = new Date();
     lectura.rtc_server = {
       fecha: fechaActual.toISOString().slice(0, 10),
-      hora: fechaActual.toTimeString().slice(0, 8)
+      hora: fechaActual.toLocaleTimeString([], { hourCycle: 'h23', hour: '2-digit', minute: '2-digit', second: '2-digit' })
     };
+
+    console.log(lectura.rtc_server.hora);
+    console.log(lectura.rtc_server.fecha);
 
     // Insertar la lectura en MongoDB
     const collection = db.collection('lecturas_grupo_001');
@@ -639,31 +686,28 @@ client2.on('message', (topic, message) => {
     console.error(`Error al analizar el JSON: ${error}`);
     procesando = false; // Desactivar la bandera de procesamiento
   }
-  
 });
 
+app.post("/lecturas_grupo", function(req, res) {
+  const db = client.db(dbName);
+  const collection = db.collection("lecturas_grupo_001");
 
+  const requestBody = req.body;
+  const fechaBuscada = requestBody.fecha;
+  console.log(fechaBuscada);
 
+  // Construye el filtro para buscar la etiqueta "rtc_server" que contiene la etiqueta "fecha" con el valor específico
+  const filter = { "rtc_server.fecha": fechaBuscada };
 
-app.post("/lecturas_grupo",function(req,res)
-
-{
-
-const db = client.db(dbName);
-
-
-const collection = db.collection("lecturas_grupo_001");
-
-collection.find({}).toArray(function(err, docs) {
+  collection.find(filter).toArray(function(err, docs) {
     assert.equal(err, null);
-    console.log("Found the following records");
-    console.log(docs)
-res.send(docs)
+    //console.log("Found the following records");
+    //console.log(docs);
+    res.send(docs);
   });
 
-console.log("peticion recibida")
-}
-  );
+  console.log("Petición recibida");
+});
 
 
 
