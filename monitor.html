@@ -150,12 +150,14 @@
 <hr>
 <table id="tabla_accionadores" >   </table>
 <hr>
+<table id="tabla_sensores_estado" >   </table>
+<hr>
 <table id="tabla_sensores" >   </table>
  <hr>
-<div id="tabla-container"></div>
+<!--<div id="tabla-container"></div>
+-->
 
 
-<table id="tabla_accionadores" >   </table>
 <body id="cuerpo">
 
 <div id="sensores">
@@ -173,14 +175,17 @@
       
         <div class="col-lg-6">
             <div id="monitor2" class="container" style="text-align: left">
-
+               
+            </div>
         </div>
     </div>
 </div>
-</div>
 
 </body>
-
+<hr>
+<table id="tabla_datos">   </table>
+ <hr>
+ <button id="miBoton">¡Haz clic aquí!</button>
         </main>
       </div>
     </div>
@@ -191,6 +196,53 @@
   
 
 </body></html>
+
+
+ <script>
+ $("#miBoton").click(function() {
+    $.ajax({ 
+      url: '/generar',
+      method: 'POST',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify({ id_grupo: "grupo_001" }),
+      beforeSend: function() {
+        console.log('Enviando datos al servidor...');
+      },
+      success: function(response) {
+        // Lógica a ejecutar si la petición es exitosa
+        console.log("Petición exitosa:", response);
+      },
+      error: function(xhr, status, error) {
+        // Lógica a ejecutar si hay un error en la petición
+        console.log("Error en la petición:", error);
+      }
+    }).done(function(respuesta) {
+      // Lógica a ejecutar cuando la petición se haya completado
+      console.log("Petición completada:", respuesta);
+    });
+  });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style type="text/css">
  #monitor.container {

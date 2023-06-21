@@ -11,6 +11,7 @@ app.set('views',__dirname+'/');
 // Require library
 var xl = require('excel4node');
 var bodyParser = require('body-parser');
+const moment = require('moment');
 
 
 var urlencodedParser = bodyParser.urlencoded({extended:true});
@@ -157,7 +158,7 @@ app.post('/login', (req, res) => {
 
 var router = express.Router();
 
-var root="/home/tomas/Documentos/GitHub/negrito/Datos2/"
+var root="/home/tomas/Documentos/GitHub/negrito/Reportes/"
 var root2="/home/tomas/Documentos/GitHub/negrito/"
 
 
@@ -220,7 +221,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.244.36:1884', {
+var client2 = mqtt.connect('mqtt://192.168.239.36:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -234,54 +235,35 @@ client2.on('connect', function () {
 
 
 
-function respaldar(nodo)
+function respaldar(id_grupo)
 {
 
-
 cantidad=1000;
-
-
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 var formatted = dt.format('Y-m-d H:M:S');
 console.log(formatted);
-
-
 const mongodb = require("mongodb").MongoClient;
 const fastcsv = require("fast-csv");
 const fs = require("fs");
-
-
-//const ws = fs.createWriteStream("/home/tom/cloud/Datos2/"+req.body.central+"/"+formatted+".csv");
-const ws = fs.createWriteStream(root+nodo+"/"+formatted.substring(0,10)+".csv");
+const ws = fs.createWriteStream(root+id_grupo+"/"+formatted.substring(0,10)+".csv");
  let url = "mongodb://localhost:27017/";
  
 
-//MONGO DB
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
 const url2 = 'mongodb://localhost:27017';
-
-// Database Name
 const dbName = 'myproject';
 
-// Create a new MongoClient
 const client = new MongoClient(url2);
 
-// Use connect method to connect to the Server
 client.connect(function(err) {
 
  assert.equal(null, err);
   console.log("Connected successfully to server");
 
-//console.log(req.body.central)
-// Node.js program to demonstrate 
-// the fsPromises.mkdir() Method 
-    
-// Include fs and path module 
-var inicio="";
-var final="";
+
 
 
 
@@ -294,9 +276,8 @@ mongodb.connect(
 
     client
       .db("myproject")
-      .collection(nodo)
-      //.find({"fecha":formatted.substring(0,10)})
-      .find({"fecha":formatted.substring(0,10)})
+      .collection("lecturas_grupo_001")
+      .find({"rtc_server.fecha":formatted.substring(0,10)})
       .toArray((err, data) => {
         if (err) throw err;
         //mandar(cantidad,req.body.central)
@@ -318,6 +299,14 @@ mongodb.connect(
 });
 
 }
+
+
+
+
+
+
+
+
 
 app.get("/",function(req,res){
   res.sendFile(path + "login.html");
@@ -407,11 +396,8 @@ centrales[i]=docs[i].id;
 
 
 
-
- 
-
-
-
+var username;
+var password;
 
 app.post('/loginapp', async (req, res) => {
 
@@ -579,6 +565,14 @@ app.post("/crear_grupo", function(req, res) {
             ppm: true
           }
         }
+      ], sensores_estado: [
+        {
+          id_sensor_estado:"sensor_estado_001",
+          modelo_sensor_estado: "CONTACT"
+        }, {
+          id_sensor_estado:"sensor_estado_002",
+          modelo_sensor_estado: "PIR"
+        }
       ],
       accionadores: [
         {
@@ -637,7 +631,7 @@ function performAction() {
 }
 
 // Ejecutar performAction() cada 3 segundos
-setInterval(performAction, 2000);
+setInterval(performAction, 1000);
 
 
 let procesando = false; // Bandera de procesamiento
@@ -660,11 +654,13 @@ client2.on('message', (topic, message) => {
     // Convertir el mensaje MQTT a objeto JavaScript
     const lectura = JSON.parse(message.toString());
 
-    // Agregar la hora en que se crea el registro en MongoDB
-    const fechaActual = new Date();
+    // Obtener la hora y fecha actual
+    const fechaActual = moment().format('YYYY-MM-DD');
+    const horaActual = moment().format('HH:mm:ss');
+
     lectura.rtc_server = {
-      fecha: fechaActual.toISOString().slice(0, 10),
-      hora: fechaActual.toLocaleTimeString([], { hourCycle: 'h23', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      fecha: fechaActual,
+      hora: horaActual
     };
 
     console.log(lectura.rtc_server.hora);
@@ -687,6 +683,8 @@ client2.on('message', (topic, message) => {
     procesando = false; // Desactivar la bandera de procesamiento
   }
 });
+
+
 
 app.post("/lecturas_grupo", function(req, res) {
   const db = client.db(dbName);
@@ -938,10 +936,8 @@ res.send(docs)
 app.post("/generar",function(req,res)
 
 {
-
-respaldar(req.body.central)
-
- 
+console.log(req.body.id_grupo)
+respaldar(req.body.id_grupo) 
 }
 
   );

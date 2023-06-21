@@ -29,6 +29,7 @@
     "jquery": "^3.6.0",
     "jsdom": "^16.6.0",
     "json2csv": "^5.0.6",
+    "moment": "^2.29.4",
     "mongo-export": "^0.3.1",
     "mongodb": "^3.7.3",
     "mqtt": "^4.3.7",

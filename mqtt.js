@@ -28,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.244.36:9001' 
+const host = 'ws://192.168.239.36:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
@@ -83,11 +83,12 @@ client.on('message', (topic, message, packet) => {
 
 if (tablaGenerada == true) {
   if (topic === localStorage.getItem('id_grupo')) {
-    console.log(mensaje);
+    console.log(JSON.stringify(mensaje, null, 2));
     console.log(tablaGenerada);
     for (let i = 0; i < mensaje.nodos.length; i++) {
       if (mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
         console.log("Acciones del nodo:", mensaje.nodos[i].accionadores);
+
 
         for (let j = 0; j < mensaje.nodos[i].accionadores.length; j++) {
           const accionador = mensaje.nodos[i].accionadores[j];
@@ -110,9 +111,44 @@ if (tablaGenerada == true) {
     }
   }
 }
+
+
  
+if (tablaGenerada === true) {
+  if (topic === localStorage.getItem('id_grupo')) {
+    console.log(JSON.stringify(mensaje, null, 2));
+    console.log(tablaGenerada);
+    for (let i = 0; i < mensaje.nodos.length; i++) {
+      if (mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
+        console.log("Nodo:", mensaje.nodos[i].id_nodo);
 
+        if (mensaje.nodos[i].sensores_estado) {
+          console.log("El nodo tiene sensores_estado:", mensaje.nodos[i].sensores_estado);
 
+          for (let j = 0; j < mensaje.nodos[i].sensores_estado.length; j++) {
+            const sensorEstado = mensaje.nodos[i].sensores_estado[j];
+            console.log("Estado del sensor", sensorEstado.id_sensor_estado, ":", sensorEstado.estado);
+
+            // Obtener el índice de la fila correspondiente al sensor_estado
+            var rowIndex = j; // Índice de la fila, puedes ajustarlo según tus necesidades
+
+            // Obtener el nuevo estado del sensor_estado
+            var nuevoStatus = sensorEstado.estado;
+
+            // Actualizar la celda "status" de la tabla
+            $('#tabla_sensores_estado').bootstrapTable('updateCell', {
+              index: rowIndex,
+              field: 'status',
+              value: nuevoStatus
+            });
+          }
+        } else {
+          console.log("El nodo no tiene sensores_estado.");
+        }
+      }
+    }
+  }
+}
 
 
   if (gauges.length > 0) {
@@ -123,7 +159,7 @@ if (tablaGenerada == true) {
     });
 
     if (topic == localStorage.getItem('id_grupo')) {
-      console.log(mensaje);
+     // console.log(mensaje);
 
       for (let i = 0; i < mensaje.nodos.length; i++) {
         if (mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
@@ -173,13 +209,29 @@ function crear_chart(conf){
 lecturas_filtro = [];
 horas_filtro = [];
  
+// Obtener la fecha actual
+var fechaActual = new Date();
+
+// Obtener los componentes de la fecha
+var dia = ("0" + fechaActual.getDate()).slice(-2); // Agrega un cero inicial si es necesario
+var mes = ("0" + (fechaActual.getMonth() + 1)).slice(-2); // Agrega un cero inicial si es necesario
+var año = fechaActual.getFullYear();
+
+// Formatear la fecha como texto
+var fechaFormateada = año+ '-' + mes + '-' + dia;
+
+// Mostrar la fecha actual
+console.log('La fecha actual es: ' + fechaFormateada);
+
+
 var arr = conf.split("/");
 
 var conf_object= {
   id_nodo: arr[0],
   modelo_sensor: arr[1],
   tipo_sensor: arr[2],
-  variable: arr[3]
+  variable: arr[3],
+  fecha:fechaFormateada
 };
 var lecturasEncontradas = [];
 var horasEncontradas = [];
@@ -191,7 +243,7 @@ $.ajax({
   method: 'POST',
   dataType: 'json',
   contentType: 'application/json',
-  data: JSON.stringify({ fecha: "2023-05-28"}),
+  data: JSON.stringify({ fecha: fechaFormateada}),
   beforeSend: function() {
     console.log('Enviando datos al servidor...');
   }
@@ -275,6 +327,28 @@ chartconteiner.onclick = function(event) {
 
 select.appendChild(chartconteiner);
 
+$('#tabla_datos').bootstrapTable({
+  pagination: false,
+  search: false,
+  pageSize: 4,
+  columns: [
+    {
+      field: 'fecha_reporte',
+      title: 'fecha_reporte'
+    },
+    {
+      field: 'cantidad_datos',
+      title: 'cantidad_datos'
+    },{
+      field: 'archivo_reporte',
+      title: 'archivo_reporte'
+    }
+  ],
+  data: directorios
+});
+
+
+//$tabla_sensores_estado.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores_estado)
 
 
 var ctx = document.getElementById('myChart');
@@ -319,7 +393,7 @@ var config = {
     responsive: true,
     title:{
       display:true,
-      text:conf
+      text:conf_object.fecha
     },
    hover: {
       mode: 'nearest',
@@ -352,17 +426,17 @@ let ultimaLectura = horasEncontradas[0].substring(0, 2); // obtener la primera l
 
 for (let i = 1; i < horasEncontradas.length; i++) { // empezar en i=1 para no comparar la primera lectura
   let lecturaActual = horasEncontradas[i].substring(0, 2);
-  if (lecturaActual !== ultimaLectura) { // si la lectura actual es diferente a la última guardada
-    if (lecturaActual > ultimaLectura) { // asegurarse de que la lectura actual sea más reciente que la última guardada
+  if (lecturaActual !== ultimaLectura) { // si la lectura actual es diferente a la última filtrada
+    if (lecturaActual > ultimaLectura) { // asegurarse de que la lectura actual sea más reciente que la última filtrada
       horas_filtro.push(horasEncontradas[i]); // agregar la lectura actual al array filtrado
       lecturas_filtro.push(lecturasEncontradas[i]);
-      ultimaLectura = lecturaActual; // actualizar la última lectura guardada
+      ultimaLectura = lecturaActual; // actualizar la última lectura filtrada
     }
   }
 }
 
-console.log(horas_filtro)
-console.log(lecturas_filtro)
+//console.log(horas_filtro);
+//console.log(lecturas_filtro);
   myChart.update()
 
   // Aquí puedes hacer algo con la respuesta del servidor, como actualizar la página
@@ -534,6 +608,8 @@ tabla.appendChild(tblBody);
 body.appendChild(tabla);
 tabla.setAttribute("border", "2");
 division.appendChild(tabla)
+// Crear el elemento button
+
 }
 
 
@@ -607,6 +683,8 @@ var $tabla_grupos = $('#tabla_grupos')
 var $tabla_nodos = $('#tabla_nodos')
 var $tabla_sensores = $('#tabla_sensores')
 var $tabla_accionadores = $('#tabla_accionadores')
+var $tabla_sensores_estado = $('#tabla_sensores_estado')
+var $tabla_sensores_estado = $('#tabla_datos')
 
   $('#tabla_grupos').bootstrapTable({ 
 
@@ -640,7 +718,7 @@ $('#tabla_sensores').bootstrapTable({
     // Aquí puedes hacer lo que necesites con las variables
   },
   pagination: false,
-  search: true,
+  search: false,
   pageSize: 4,
   columns: [{
       field: 'id_sensor',
@@ -713,7 +791,7 @@ $('#tabla_accionadores').bootstrapTable({
     });
   },
   pagination: false,
-  search: true,
+  search: false,
   pageSize: 4,
   columns: [{
       field: 'id_accionador',
@@ -729,17 +807,41 @@ $('#tabla_accionadores').bootstrapTable({
   data: directorios
 });
 
+
+
+
+$('#tabla_sensores_estado').bootstrapTable({
+  pagination: false,
+  search: false,
+  pageSize: 4,
+  columns: [
+    {
+      field: 'id_sensor_estado',
+      title: 'id_sensor_estado'
+    },
+    {
+      field: 'modelo_sensor_estado',
+      title: 'modelo_sensor_estado'
+    },
+    {
+      field: 'status',
+      title: 'status'
+    }
+  ],
+  data: directorios
+});
+
+
 $tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
 $tabla_accionadores.bootstrapTable('load', respuesta[0].nodos_grupo[index].accionadores)
-$(document).on('click', '.btn-close', function() {
-  $('#myModal').modal('hide');
-});
+$tabla_sensores_estado.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores_estado)
+;
 
 
                 }, 
 
   pagination: false,
-  search: true,
+  search: false,
    pageSize: 4,
   columns: [ {
     field: 'id_nodo',
@@ -807,3 +909,7 @@ $tabla_grupos.bootstrapTable('load', respuesta)
 
 });
 
+
+$(document).on('click', '.btn-close', function() {
+  $('#myModal').modal('hide');
+})

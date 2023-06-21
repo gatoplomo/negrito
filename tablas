@@ -66,3 +66,78 @@ Objeto grupo para grupos /grupos
 http://drazzy.com/package_drazzy.com_index.json
 ATTinyCore
 attiny88 micronucleous
+
+{
+  "grupo": "grupo_001",
+  "rtc_nodo": {
+    "fecha": "23-04-2023",
+    "hora": "13:30"
+  },
+  "nodos": [
+    {
+      "id_nodo": "nodo_001",
+      "accionadores": [
+        {
+          "id_accionador": "accionador_001",
+          "status": 1
+        },
+        {
+          "id_accionador": "accionador_002",
+          "status": 1
+        }
+      ],
+      "sensores": [
+        {
+          "id_sensor": "sensor_001",
+          "modelo": "DTH11",
+          "lecturas": {
+            "temperatura": 20.29999924,
+            "humedad": 41
+          }
+        }
+      ]
+    },
+    {
+      "id_nodo": "nodo_002",
+      "accionadores": [
+        {
+          "id_accionador": "accionador_001",
+          "status": 0
+        },
+        {
+          "id_accionador": "accionador_002",
+          "status": 1
+        }
+      ],
+      "sensores": [
+        {
+          "id_sensor": "sensor_001",
+          "modelo": "DTH11",
+          "lecturas": {
+            "temperatura": 0,
+            "humedad": 0
+          }
+        },
+        {
+          "id_sensor": "sensor_002",
+          "modelo": "MQ2",
+          "lecturas": {
+            "ppm": 0
+          }
+        }
+      ],
+      "sensores_estado": [
+        {
+          "id_sensor_estado": "sensor_estado_001",
+          "modelo_sensor_estado": "DRCONT",
+          "estado": 0
+        },
+        {
+          "id_sensor_estado": "sensor_estado_002",
+          "modelo_sensor_estado": "PIR",
+          "estado": 0
+        }
+      ]
+    }
+  ]
+}
