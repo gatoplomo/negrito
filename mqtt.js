@@ -28,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.239.36:9001' 
+const host = 'ws://192.168.157.36:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
@@ -125,6 +125,7 @@ if (tablaGenerada === true) {
         if (mensaje.nodos[i].sensores_estado) {
           console.log("El nodo tiene sensores_estado:", mensaje.nodos[i].sensores_estado);
 
+
           for (let j = 0; j < mensaje.nodos[i].sensores_estado.length; j++) {
             const sensorEstado = mensaje.nodos[i].sensores_estado[j];
             console.log("Estado del sensor", sensorEstado.id_sensor_estado, ":", sensorEstado.estado);
@@ -142,6 +143,7 @@ if (tablaGenerada === true) {
               value: nuevoStatus
             });
           }
+
         } else {
           console.log("El nodo no tiene sensores_estado.");
         }
@@ -684,7 +686,6 @@ var $tabla_nodos = $('#tabla_nodos')
 var $tabla_sensores = $('#tabla_sensores')
 var $tabla_accionadores = $('#tabla_accionadores')
 var $tabla_sensores_estado = $('#tabla_sensores_estado')
-var $tabla_sensores_estado = $('#tabla_datos')
 
   $('#tabla_grupos').bootstrapTable({ 
 
@@ -835,7 +836,6 @@ $('#tabla_sensores_estado').bootstrapTable({
 $tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
 $tabla_accionadores.bootstrapTable('load', respuesta[0].nodos_grupo[index].accionadores)
 $tabla_sensores_estado.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores_estado)
-;
 
 
                 }, 

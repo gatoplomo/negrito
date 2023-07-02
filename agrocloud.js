@@ -221,7 +221,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.239.36:1884', {
+var client2 = mqtt.connect('mqtt://192.168.157.36:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -309,7 +309,7 @@ mongodb.connect(
 
 
 app.get("/",function(req,res){
-  res.sendFile(path + "login.html");
+  res.sendFile(path + "cover.html");
 });
 
 //ESCUCHA PUERTO
