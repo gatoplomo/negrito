@@ -71,18 +71,20 @@
 
     <div class="container-fluid">
       <div class="row">
-      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
+
               <li class="nav-item">
                 <a class="nav-link" href="/buscador.html">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                   Monitor
                 </a>
               </li>
+              
                <li class="nav-item">
                 <a class="nav-link" href="/monitor.html">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                   Grupos
                 </a>
               </li>
@@ -155,44 +157,11 @@
 
 
 
-<table id="tabla_grupos" >   </table>
+<table id="tabla_collections" >   </table>
+<table id="tabla_resultado" >   </table>
 <hr>
-<table id="tabla_nodos" >   </table>
-<hr>
-<table id="tabla_accionadores" >   </table>
-<hr>
-<table id="tabla_sensores_estado" >   </table>
-<hr>
-<table id="tabla_sensores" >   </table>
- <hr>
-<!--<div id="tabla-container"></div>F
--->
 
 
-<body id="cuerpo">
-
-<div id="sensores">
-</div>
-
-
-<div class="container-fluid">
-    <div class="row">
-
-        <div class="col-lg-6" >
-
-             <div id="monitor" class="container">
-        </div>
-        </div>
-      
-        <div class="col-lg-6">
-            <div id="monitor2" class="container" style="text-align: left">
-               
-            </div>
-        </div>
-    </div>
-</div>
-
-</body>
 <hr>
  <hr>
         </main>
@@ -203,234 +172,6 @@
  <hr>
  <br>
   
-
+ <script src="data.js"></script>
 </body></html>
-
-
- <script>
- $("#miBoton").click(function() {
-    $.ajax({ 
-      url: '/generar',
-      method: 'POST',
-      dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify({ id_grupo: "grupo_001" }),
-      beforeSend: function() {
-        console.log('Enviando datos al servidor...');
-      },
-      success: function(response) {
-        // Lógica a ejecutar si la petición es exitosa
-        console.log("Petición exitosa:", response);
-      },
-      error: function(xhr, status, error) {
-        // Lógica a ejecutar si hay un error en la petición
-        console.log("Error en la petición:", error);
-      }
-    }).done(function(respuesta) {
-      // Lógica a ejecutar cuando la petición se haya completado
-      console.log("Petición completada:", respuesta);
-    });
-  });
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<style type="text/css">
- #monitor.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-
-
-}
-
-</style>
-
-<style type="text/css">
-  #top-message {
-  z-index: 10;
-  position: fixed;
-  width: 100%;
-  height:50px;
-  left:50%;
-  transform:translateX(-50%);
-  top:10px;
-}
-</style>
-
-
-
-
-</head>
-
-
-</body>
-
-</html>
-
-
-
-<script src="/mainpro.js"></script>
-
-<script src="/mqtt.js"></script>
-
-
-
-<!--
-<style>
-
-
-.container {
-   
-width: 100%;
-border: 1px solid #73AD21;
-text-align: center;
-margin-top: 2px;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 5px;
-  text-align: left;
-}
-
-body, html {
- 
-}
-
-
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 5px;
-  text-align: left;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-
-
-</style>
-
--->
-
-
-<style>
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #ddd;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-</style>
-
-
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <!-- Contenido de la ventana modal -->
-      <div class="modal-header">
-        <h5 class="modal-title">Detalles del Producto</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Aquí puedes mostrar los detalles del producto seleccionado.</p>
-      </div>
-      <div class="modal-footer">
-
-      </div>
-    </div>
-  </div>
-</div>
 

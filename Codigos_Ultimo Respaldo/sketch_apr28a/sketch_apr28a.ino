@@ -48,7 +48,8 @@ void setup() {
  pinMode(15,INPUT);
 
 }
-
+  byte temperature = 0;
+  byte humidity = 0;
 
 void loop() {
 
@@ -57,16 +58,15 @@ void loop() {
  // lcd.setCursor(0, 1);
   //lcd.print(digitalRead(15));
 
-  byte temperature = 0;
-  byte humidity = 0;
+
   int result = dht11.read(&temperature, &humidity, NULL);
 
   if (result == SimpleDHTErrSuccess) {
-    datos.dato1 = temperature;
-    datos.dato2 = humidity;
+    datos.dato0 = temperature;
+    datos.dato1 = humidity;
   }
 
-  datos.dato0 = analogRead(MQ2pin);
+  datos.dato0 = 0;
   
   byte pin6State = digitalRead(15);
 

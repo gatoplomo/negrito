@@ -75,7 +75,7 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="/buscador.html">
+                <a class="nav-link" href="/monitor.html">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                   Monitor
                 </a>
@@ -155,88 +155,41 @@
 
 
 
-<table id="tabla_grupos" >   </table>
-<hr>
-<table id="tabla_nodos" >   </table>
-<hr>
-<table id="tabla_accionadores" >   </table>
-<hr>
-<table id="tabla_sensores_estado" >   </table>
-<hr>
-<table id="tabla_sensores" >   </table>
- <hr>
-<!--<div id="tabla-container"></div>F
--->
-
 
 <body id="cuerpo">
-
-<div id="sensores">
+  <form id="form-busqueda">
+    <input type="text" id="input-busqueda" placeholder="Ingrese su búsqueda">
+    <button type="submit">Buscar</button>
+  </form>
+<div id="cantidad_grupos" class="inline-block">
+  <strong>Cantidad de Grupos:</strong> <span id="cantidad_grupos_valor"></span>
 </div>
-
-
-<div class="container-fluid">
-    <div class="row">
-
-        <div class="col-lg-6" >
-
-             <div id="monitor" class="container">
-        </div>
-        </div>
-      
-        <div class="col-lg-6">
-            <div id="monitor2" class="container" style="text-align: left">
-               
-            </div>
-        </div>
-    </div>
+<div id="cantidad_nodos" class="inline-block">
+  <strong>Cantidad de Nodos:</strong> <span id="cantidad_nodos_valor"></span>
 </div>
-
+<div id="cantidad_sensores" class="inline-block">
+  <strong>Cantidad de Sensores:</strong> <span id="cantidad_sensores_valor"></span>
+</div>
+<div id="cantidad_variables" class="inline-block">
+  <strong>Cantidad de Variables:</strong> <span id="cantidad_variables_valor"></span>
+</div>
+  <div id="main_monitor">
+  <!-- Aquí se mostrarán los resultados de la búsqueda -->
+</div>
+  <script src="buscador.js"></script>
 </body>
-<hr>
- <hr>
-        </main>
-      </div>
-    </div>
+</html>
 
- <hr>
- <hr>
- <br>
+
+
+<style type="text/css">
   
+  .inline-block {
+  display: inline-block;
+  margin-right: 10px; /* Ajusta el margen derecho según tus necesidades */
+}
 
-</body></html>
-
-
- <script>
- $("#miBoton").click(function() {
-    $.ajax({ 
-      url: '/generar',
-      method: 'POST',
-      dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify({ id_grupo: "grupo_001" }),
-      beforeSend: function() {
-        console.log('Enviando datos al servidor...');
-      },
-      success: function(response) {
-        // Lógica a ejecutar si la petición es exitosa
-        console.log("Petición exitosa:", response);
-      },
-      error: function(xhr, status, error) {
-        // Lógica a ejecutar si hay un error en la petición
-        console.log("Error en la petición:", error);
-      }
-    }).done(function(respuesta) {
-      // Lógica a ejecutar cuando la petición se haya completado
-      console.log("Petición completada:", respuesta);
-    });
-  });
-  </script>
-
-
-
-
-
+</style>
 
 
 
@@ -290,113 +243,6 @@
 
 
 
-<script src="/mainpro.js"></script>
-
-<script src="/mqtt.js"></script>
-
-
-
-<!--
-<style>
-
-
-.container {
-   
-width: 100%;
-border: 1px solid #73AD21;
-text-align: center;
-margin-top: 2px;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 5px;
-  text-align: left;
-}
-
-body, html {
- 
-}
-
-
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 5px;
-  text-align: left;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-
-
-</style>
-
--->
 
 
 <style>
@@ -415,22 +261,4 @@ th, td {
 tr:nth-child(even){background-color: #f2f2f2}
 </style>
 
-
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <!-- Contenido de la ventana modal -->
-      <div class="modal-header">
-        <h5 class="modal-title">Detalles del Producto</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Aquí puedes mostrar los detalles del producto seleccionado.</p>
-      </div>
-      <div class="modal-footer">
-
-      </div>
-    </div>
-  </div>
-</div>
 

@@ -141,21 +141,6 @@ app.post('/login', (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var router = express.Router();
 
 var root="/home/tomas/Documentos/GitHub/negrito/Reportes/"
@@ -443,7 +428,7 @@ app.post('/grupoapp', (req, res) => {
   });
 });
   
-  app.post('/gruposapp', (req, res) => {
+app.post('/gruposapp', (req, res) => {
 const db = client.db(dbName);
 
 
@@ -458,6 +443,68 @@ res.json(docs)
   });
 console.log("peticion recibida")
 });
+
+
+app.post('/collections', (req, res) => {
+  const db = client.db(dbName);
+
+  db.listCollections().toArray(function(err, collections) {
+    if (err) {
+      console.error("Error al obtener las colecciones:", err);
+      res.status(500).json({ error: "Error al obtener las colecciones" });
+    } else {
+      const collectionNames = collections.map(collection => collection.name);
+      console.log("Colecciones encontradas:", collectionNames);
+      res.json(collectionNames);
+    }
+  });
+
+  console.log("Petición recibida");
+});
+
+app.post('/abrir_collection', (req, res) => {
+  const collectionName = req.body.collection;
+  const db = client.db(dbName);
+
+  db.collection(collectionName).find().toArray(function(err, documents) {
+    if (err) {
+      console.error("Error al obtener los documentos de la colección:", err);
+      res.status(500).json({ error: "Error al obtener los documentos de la colección" });
+    } else {
+      console.log("Documentos encontrados:", documents);
+      res.json(documents);
+    }
+  });
+
+  console.log("Petición recibida");
+});
+
+app.post('/main_monitor', (req, res) => {
+  const collectionName = 'grupo'; // Nombre de la colección a buscar
+  const db = client.db(dbName);
+
+  db.collection(collectionName).find().toArray(function(err, documents) {
+    if (err) {
+      console.error("Error al obtener los documentos de la colección:", err);
+      res.status(500).json({ error: "Error al obtener los documentos de la colección" });
+    } else {
+      console.log("Documentos encontrados:", documents);
+      res.json(documents);
+    }
+  });
+
+  console.log("Petición recibida");
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -557,12 +604,6 @@ app.post("/crear_grupo", function(req, res) {
           variables_sensor: {
             temperatura: true,
             humedad: true
-          }
-        }, {
-          id_sensor:"sensor_002",
-          modelo_sensor: "MQ2",
-          variables_sensor: {
-            ppm: true
           }
         }
       ], sensores_estado: [
@@ -754,10 +795,6 @@ collection.find({}).toArray(function(err, docs) {
 
   );
 
-
-
-
-
 app.post("/limpiar",function(req,res)
 
 {
@@ -778,16 +815,7 @@ console.log("peticion recibida")
 
 
 
-app.post("/single",function(req,res)
 
-{
-console.log("hola");
-
-res.download(req.body.id);
-console.log(req.body.id)
-}
-
-  );
 
 app.post('/filtrar', (req, res) => {
  var cantidad=300;
@@ -941,6 +969,11 @@ respaldar(req.body.id_grupo)
 }
 
   );
+
+
+
+
+
 
 
 
