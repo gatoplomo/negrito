@@ -11,7 +11,6 @@ SimpleDHT11 dht11(DHTPIN);
 int fahrenheit;
 int temperatureC;
 
-#define MQ2pin 0
 
 //LiquidCrystal_I2C lcd(0x27, 20, 4);
 
@@ -22,19 +21,14 @@ int temperatureC;
 // Creación del objeto radio (NRF24L01)
 RF24 radio(CE_PIN, CSN_PIN);
 
-const byte addresses[][6] = {"00001", "00002"};
+const byte addresses[][6] = {"11111", "22222"};
 
-struct Datos {
-  float dato0;
-  float dato1;
-  float dato2;
-  float dato3;
-  float dato4;
-};
+float datos[5];
 
-Datos datos;
+float datos2[2];
 
 int button_stateB;
+
 
 void setup() {
  //lcd.init();
@@ -53,25 +47,19 @@ void setup() {
 
 void loop() {
 
- //lcd.setCursor(0, 0);
- // lcd.print("Dato recibido: ");
- // lcd.setCursor(0, 1);
-  //lcd.print(digitalRead(15));
-
-
   int result = dht11.read(&temperature, &humidity, NULL);
 
   if (result == SimpleDHTErrSuccess) {
-    datos.dato0 = temperature;
-    datos.dato1 = humidity;
+    datos[0] = temperature;
+    datos[1] = humidity;
   }
 
-  datos.dato0 = 0;
+  datos[2] = 2;
   
   byte pin6State = digitalRead(15);
 
-  datos.dato3 = button_stateB;
-  datos.dato4 = pin6State;
+  datos[3] = datos2[0];
+  datos[4] = pin6State;
 
   radio.stopListening();
   
@@ -79,22 +67,23 @@ void loop() {
   radio.startListening();
 
   if (radio.available()) {
-    radio.read(&button_stateB, sizeof(button_stateB));
- 
-    if (button_stateB == 10) {
+    radio.read(datos2, sizeof(datos2));
+    if(datos2[1]==2)
+    {
+    if (datos2[0] == 10) {
       digitalWrite(5, HIGH);
       digitalWrite(6, HIGH);
-    } else if (button_stateB == 20) {
+    } else if (datos2[0] == 20) {
       digitalWrite(5, LOW);
       digitalWrite(6, HIGH);
-    } else if (button_stateB == 30) {
+    } else if (datos2[0] == 30) {
       digitalWrite(5, HIGH);
       digitalWrite(6, LOW);
-    } else if (button_stateB == 40) {
+    } else if (datos2[0] == 40) {
       digitalWrite(5, LOW);
       digitalWrite(6, LOW);
     }
+    }
   }
-
   delay(1000);
 }

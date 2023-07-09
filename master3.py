@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime
+import json
 
 # Establecer la conexión con MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -96,8 +97,9 @@ for variable in variables_array:
         'id_variable': id_variable,
         'lecturas': [{'hora': hora_granularidad, 'dato': lectura} for hora_granularidad, lectura in lecturas_filtradas.items()]
     }
-    
     processed_array.append(processed_obj)
-    print(processed_array)
+    json_data = json.dumps(processed_array)
+    
+print(json_data)
 # Cerrar la conexión con MongoDB
 client.close()

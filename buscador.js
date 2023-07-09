@@ -1,3 +1,6 @@
+
+
+
 $(document).ready(function() {
   // Datos a enviar en la solicitud POST
   var postData = {
@@ -227,10 +230,10 @@ tabla.style.border = "2px solid black"; // Agrega borde a la tabla
 division.appendChild(tabla);
 
 var chartData = {
-  labels: ['Enero', 'Febrero', 'Marzo', 'Abril','Enero', 'Febrero', 'Marzo', 'Abril','Enero', 'Febrero', 'Marzo', 'Abril','Enero', 'Febrero', 'Marzo', 'Abril'], // Etiquetas para el eje x
+  labels: [], // Etiquetas para el eje x
   datasets: [{
     label: 'Ventas', // Etiqueta para la leyenda
-    data: [120, 250, 180, 300,120, 250, 180, 300,120, 250, 180, 300,120, 250, 180, 300], // Datos para el eje y
+    data: [], // Datos para el eje y
     backgroundColor: 'rgba(75, 192, 192, 0.5)', // Color de fondo de las barras
     borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
     borderWidth: 1 // Ancho del borde de las barras
@@ -273,10 +276,64 @@ for ( var item = 0; item < gauges.length ; item++) {
 
 }
 
-
-
-
-
+$.ajax({
+  url: '/filtrar',
+  method: 'POST',
+  dataType: 'json',
+  contentType: 'application/json',
+  beforeSend: function() {
+    console.log('Enviando solicitud al servidor...');
+  },
+  success: function(response) {
+    console.log('Respuesta del servidor:', response);
+    
+    // Actualizar los gráficos utilizando los datos recibidos
+    response.forEach(function(item) {
+      var id = item.id_variable; // Obtener el ID del gráfico
+      var lecturas = item.lecturas; // Obtener las lecturas del gráfico
+      
+      // Obtener el contexto del gráfico utilizando el ID
+      var ctx = document.getElementById(id+"graf").getContext('2d');
+      
+      // Crear un array para almacenar las etiquetas (horas) y los datos
+      var labels = [];
+      var data = [];
+      
+      // Recorrer las lecturas y añadir las etiquetas y los datos al array
+      lecturas.forEach(function(lectura) {
+        labels.push(lectura.hora);
+        data.push(lectura.dato);
+      });
+      
+      // Crear una instancia del gráfico utilizando Chart.js
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Datos',
+            data: data,
+            borderColor: 'blue',
+            borderWidth: 1,
+             backgroundColor: 'rgba(0, 191, 255, 0.5)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+  },
+  error: function(xhr, status, error) {
+    console.log('Error en la solicitud:', error);
+    // Realizar acciones en caso de error
+  }
+});
 
 });
 

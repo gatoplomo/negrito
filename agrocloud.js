@@ -206,7 +206,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.157.36:1884', {
+var client2 = mqtt.connect('mqtt://192.168.7.36:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -625,6 +625,28 @@ app.post("/crear_grupo", function(req, res) {
           accion_accionador: "apagar"
         }
       ]
+    },  {
+      id_nodo: "nodo_003",
+      sensores: [
+        {
+          id_sensor:"sensor_001",
+          modelo_sensor: "DTH11",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }
+      ],
+      accionadores: [
+        {
+          id_accionador: "accionador_001",
+          accion_accionador: "Alarma"
+        },
+        {
+          id_accionador: "accionador_002",
+          accion_accionador: "Ventilador"
+        }
+      ]
     }
   ]
 };
@@ -816,7 +838,7 @@ console.log("peticion recibida")
 
 
 
-
+/*
 app.post('/filtrar', (req, res) => {
  var cantidad=300;
  var sensor="lectura1"
@@ -846,7 +868,28 @@ dataToSend=x
  });
  
 })
+*/
 
+app.post('/filtrar', (req, res) => {
+  var dataToSend;
+
+  // spawn new child process to call the python script
+  var python = spawn('python3', ["/home/tomas/Documentos/GitHub/negrito/master3.py"]);
+
+  python.stdout.on('data', function(data) {
+    console.log('Pipe data from python script ...');
+    // Almacenar los datos recibidos en la variable dataToSend
+    dataToSend = data.toString();
+    console.log('JSON recibido:', dataToSend);
+  });
+
+  // En el evento 'close' estamos seguros de que el flujo del proceso hijo está cerrado
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    res.send(dataToSend);
+  });
+});
 
 
 app.post("/basededatos",function(req,res)
