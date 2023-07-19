@@ -206,7 +206,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.7.36:1884', {
+var client2 = mqtt.connect('mqtt://192.168.97.36:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -694,7 +694,7 @@ function performAction() {
 }
 
 // Ejecutar performAction() cada 3 segundos
-setInterval(performAction, 1000);
+setInterval(performAction, 3000);
 
 
 let procesando = false; // Bandera de procesamiento

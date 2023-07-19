@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Ruta al archivo de Excel
-ruta_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/lecturas_nodo_002.xlsx"
+ruta_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/lecturas_nodo_003.xlsx"
 
 # Leer el archivo de Excel y seleccionar la hoja de trabajo
 df = pd.read_excel(ruta_excel)
@@ -40,7 +40,7 @@ df_accionadores.insert(2, "Fecha RTC Server", fecha_rtc_server)
 df_accionadores.insert(3, "Hora RTC Server", hora_rtc_server)
 
 # Guardar el DataFrame en un archivo Excel
-nombre_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/accionadores_nodo_002.xlsx"
+nombre_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/accionadores_nodo_003.xlsx"
 df_accionadores.to_excel(nombre_excel, index=False)
 print(f"Archivo Excel '{nombre_excel}' generado exitosamente.")
 
@@ -98,7 +98,7 @@ for modelo in modelos_unicos:
     df_vacio.insert(3, "Hora RTC Server", df["Hora RTC Server"])
 
     # Crear un nombre único para el archivo Excel
-    nombre_excel = f"/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/modelo_{modelo}.xlsx"
+    nombre_excel = f"/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/modelo_{modelo}.xlsx"
     
     # Guardar el DataFrame con los valores en el archivo Excel
     df_vacio.to_excel(nombre_excel, index=False)
@@ -109,39 +109,39 @@ for modelo in modelos_unicos:
 
 
 # Crear un DataFrame vacío para los sensores de estado
-df_sensores_estado = pd.DataFrame()
+#df_sensores_estado = pd.DataFrame()
 
 # Obtener los datos de la columna "Sensores Estado"
-sensores_estado_data = df["Sensores Estado"].apply(lambda x: eval(x.replace("'", "\"")))
+#sensores_estado_data = df["Sensores Estado"].apply(lambda x: eval(x.replace("'", "\"")))
 
 # Crear una lista para almacenar los encabezados
-headers = []
+#headers = []
 
 # Iterar sobre los datos de los sensores de estado y agregarlos al DataFrame
-for sensores_estado_lista in sensores_estado_data:
-    estados_fila = {}  # Diccionario para almacenar los estados de cada fila
-    for sensor_estado in sensores_estado_lista:
-        estado = sensor_estado["estado"]
-        modelo_sensor_estado = sensor_estado["modelo_sensor_estado"]
-        sensor_estado_id = sensor_estado["id_sensor_estado"]
-        header = f"estado_{sensor_estado_id}_{modelo_sensor_estado}"
-        headers.append(header)  # Agregar el encabezado a la lista de encabezados
-        estados_fila[header] = estado
+#for sensores_estado_lista in sensores_estado_data:
+#    estados_fila = {}  # Diccionario para almacenar los estados de cada fila
+#    for sensor_estado in sensores_estado_lista:
+#        estado = sensor_estado["estado"]
+#        modelo_sensor_estado = sensor_estado["modelo_sensor_estado"]
+#        sensor_estado_id = sensor_estado["id_sensor_estado"]
+#        header = f"estado_{sensor_estado_id}_{modelo_sensor_estado}"
+#        headers.append(header)  # Agregar el encabezado a la lista de encabezados
+#        estados_fila[header] = estado
     
     # Agregar el diccionario de estados como una nueva fila al DataFrame de sensores de estado
-    df_sensores_estado = df_sensores_estado.append(estados_fila, ignore_index=True)
+ #   df_sensores_estado = df_sensores_estado.append(estados_fila, ignore_index=True)
 
 # Agregar las columnas de fecha y hora al DataFrame de los sensores de estado
-df_sensores_estado.insert(0, "Fecha RTC Nodo", df["Fecha RTC Nodo"])
-df_sensores_estado.insert(1, "Hora RTC Nodo", df["Hora RTC Nodo"])
-df_sensores_estado.insert(2, "Fecha RTC Server", df["Fecha RTC Server"])
-df_sensores_estado.insert(3, "Hora RTC Server", df["Hora RTC Server"])
+#df_sensores_estado.insert(0, "Fecha RTC Nodo", df["Fecha RTC Nodo"])
+#df_sensores_estado.insert(1, "Hora RTC Nodo", df["Hora RTC Nodo"])
+#df_sensores_estado.insert(2, "Fecha RTC Server", df["Fecha RTC Server"])
+#df_sensores_estado.insert(3, "Hora RTC Server", df["Hora RTC Server"])
 
 # Crear un nombre único para el archivo Excel
-nombre_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/sensores_estado.xlsx"
+#nombre_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/sensores_estado.xlsx"
 
 # Guardar el DataFrame con los valores en el archivo Excel
-df_sensores_estado.to_excel(nombre_excel, index=False)
+#df_sensores_estado.to_excel(nombre_excel, index=False)
 
 # Imprimir mensaje de confirmación
-print(f"Archivo Excel '{nombre_excel}' para los sensores de estado generado y llenado exitosamente.")
+#print(f"Archivo Excel '{nombre_excel}' para los sensores de estado generado y llenado exitosamente.")

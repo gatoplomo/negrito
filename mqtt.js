@@ -28,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.7.36:9001' 
+const host = 'ws://192.168.97.36:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
@@ -129,7 +129,7 @@ if (tablaGenerada === true) {
           for (let j = 0; j < mensaje.nodos[i].sensores_estado.length; j++) {
             const sensorEstado = mensaje.nodos[i].sensores_estado[j];
             console.log("Estado del sensor", sensorEstado.id_sensor_estado, ":", sensorEstado.estado);
-
+/*
             // Obtener el índice de la fila correspondiente al sensor_estado
             var rowIndex = j; // Índice de la fila, puedes ajustarlo según tus necesidades
 
@@ -142,6 +142,8 @@ if (tablaGenerada === true) {
               field: 'status',
               value: nuevoStatus
             });
+*/
+
           }
 
         } else {
@@ -685,7 +687,7 @@ var $tabla_grupos = $('#tabla_grupos')
 var $tabla_nodos = $('#tabla_nodos')
 var $tabla_sensores = $('#tabla_sensores')
 var $tabla_accionadores = $('#tabla_accionadores')
-var $tabla_sensores_estado = $('#tabla_sensores_estado')
+//var $tabla_sensores_estado = $('#tabla_sensores_estado')
 
   $('#tabla_grupos').bootstrapTable({ 
 
@@ -810,7 +812,7 @@ $('#tabla_accionadores').bootstrapTable({
 
 
 
-
+/*
 $('#tabla_sensores_estado').bootstrapTable({
   pagination: false,
   search: false,
@@ -831,11 +833,11 @@ $('#tabla_sensores_estado').bootstrapTable({
   ],
   data: directorios
 });
-
+*/
 
 $tabla_sensores.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores)
 $tabla_accionadores.bootstrapTable('load', respuesta[0].nodos_grupo[index].accionadores)
-$tabla_sensores_estado.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores_estado)
+//$tabla_sensores_estado.bootstrapTable('load', respuesta[0].nodos_grupo[index].sensores_estado)
 
 
                 }, 

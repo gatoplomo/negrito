@@ -4,7 +4,7 @@
 #include <RF24.h>
 #include <SimpleDHT.h>
 
-#define DHTPIN 25     // Pin del Attiny88 conectado al DHT11
+#define DHTPIN 9     // Pin del Attiny88 conectado al DHT11
 #define DHTTYPE DHT11 // Tipo de sensor DHT11
 
 SimpleDHT11 dht11(DHTPIN);
@@ -29,61 +29,97 @@ float datos2[2];
 
 int button_stateB;
 
+unsigned long previousMillis = 0; // Almacena el valor de millis() en la iteración anterior
+const unsigned long interval = 2000;
 
 void setup() {
- //lcd.init();
- //lcd.backlight();
+  //lcd.init();
+  //lcd.backlight();
   radio.begin();
   radio.openWritingPipe(addresses[1]);
   radio.openReadingPipe(1, addresses[0]);
-  radio.setPALevel(RF24_PA_MIN);
-  pinMode(5,OUTPUT);
-  pinMode(6,OUTPUT);
- pinMode(15,INPUT);
-
+  radio.setPALevel(RF24_PA_HIGH);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(15, INPUT);
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
 }
-  byte temperature = 0;
-  byte humidity = 0;
+
+byte temperature = 0;
+byte humidity = 0;
+
+void resetDHT11() {
+  pinMode(DHTPIN, OUTPUT);
+  digitalWrite(DHTPIN, LOW);
+  delay(500);
+  digitalWrite(DHTPIN, HIGH);
+  pinMode(DHTPIN, INPUT);
+  delay(500); // Esperar un tiempo antes de volver a leer los datos del sensor
+}
 
 void loop() {
 
-  int result = dht11.read(&temperature, &humidity, NULL);
+  long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    int result = dht11.read(&temperature, &humidity, NULL);
 
-  if (result == SimpleDHTErrSuccess) {
-    datos[0] = temperature;
-    datos[1] = humidity;
+    if (result == SimpleDHTErrSuccess) {
+      datos[0] = temperature;
+      datos[1] = humidity;
+    } else {
+      // Si hay un error en la lectura, reiniciar el sensor DHT11
+      //resetDHT11();
+    }
+
+    previousMillis = currentMillis;
   }
 
   datos[2] = 2;
-  
+
   byte pin6State = digitalRead(15);
 
-  datos[3] = datos2[0];
+  // Órdenes
+  int pin5_state = digitalRead(5);
+  int pin6_state = digitalRead(6);
+  int estado;
+
+  if (pin5_state == HIGH && pin6_state == HIGH) {
+    estado = 10;
+  } else if (pin5_state == HIGH && pin6_state == LOW) {
+    estado = 20;
+  } else if (pin5_state == LOW && pin6_state == HIGH) {
+    estado = 30;
+  } else if (pin5_state == LOW && pin6_state == LOW) {
+    estado = 40;
+  }
+
+  datos[3] = estado;
   datos[4] = pin6State;
 
   radio.stopListening();
-  
+
   radio.write(&datos, sizeof(datos));
   radio.startListening();
 
   if (radio.available()) {
     radio.read(datos2, sizeof(datos2));
-    if(datos2[1]==2)
-    {
-    if (datos2[0] == 10) {
-      digitalWrite(5, HIGH);
-      digitalWrite(6, HIGH);
-    } else if (datos2[0] == 20) {
-      digitalWrite(5, LOW);
-      digitalWrite(6, HIGH);
-    } else if (datos2[0] == 30) {
-      digitalWrite(5, HIGH);
-      digitalWrite(6, LOW);
-    } else if (datos2[0] == 40) {
-      digitalWrite(5, LOW);
-      digitalWrite(6, LOW);
-    }
+    if (datos2[1] == 2) {
+      if (datos2[0] == 10) {
+        digitalWrite(5, HIGH);
+        digitalWrite(6, HIGH);
+      } else if (datos2[0] == 20) {
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
+      } else if (datos2[0] == 30) {
+        digitalWrite(5, HIGH);
+        digitalWrite(6, LOW);
+      } else if (datos2[0] == 40) {
+        digitalWrite(5, LOW);
+        digitalWrite(6, LOW);
+      }
     }
   }
-  delay(1000);
+
+  delay(200);
 }

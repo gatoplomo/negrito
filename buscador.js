@@ -7,6 +7,51 @@ $(document).ready(function() {
     // Agrega aquí los datos que deseas enviar
   };
 
+
+// CONECCIÓN MQTT
+const clientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+
+
+const options = {
+  keepalive: 60,
+  clientId: clientId,
+  protocolId: 'MQTT',
+  protocolVersion: 4,
+  clean: true,
+  reconnectPeriod: 1000,
+  connectTimeout: 30 * 1000,
+  will: {
+    topic: 'WillMsg',
+    payload: 'Connection Closed abnormally..!',
+    qos: 0,
+    retain: false
+  },
+}
+const host = 'ws://192.168.97.36:9001' 
+console.log('Connecting mqtt client')
+const client = mqtt.connect(host, options)
+client.on('error', (err) => {
+  console.log('Connection error: ', err)
+  //client.end()
+})
+
+client.on('reconnect', () => {
+  console.log('Reconnecting...')
+})
+
+
+// SUBCRIBCIÖN CANALES POR GRUPO_ID
+client.on('connect', () => {
+  console.log('Client connected:' + clientId)
+client.subscribe("grupo_001", { qos: 0 })
+
+  
+})
+
+
+
+
+
   $.ajax({
   url: '/main_monitor',
   method: 'POST',
@@ -67,6 +112,73 @@ $(document).ready(function() {
     console.log(variableIDs)
 
     creargauges(variableIDs);
+client.on('message', (topic, message, packet) => {
+  const now = new Date();
+  console.log(now); // muestra la fecha y hora actuales en formato de cadena
+
+  // Para obtener solo la hora actual en formato de cadena
+  const horaActual = now.toLocaleTimeString();
+  console.log(horaActual);
+
+  let mensaje;
+
+  try {
+    mensaje = JSON.parse(message);
+    console.log(mensaje);
+
+    // Generar las IDs buscadas
+    const data = JSON.parse(message);
+    const grupo = data.grupo;
+    const nodos = data.nodos;
+    const ids_generadas = [];
+
+    for (const nodo of nodos) {
+      const id_nodo = nodo.id_nodo;
+      const sensores = nodo.sensores;
+
+      for (const sensor of sensores) {
+        const id_sensor = sensor.id_sensor;
+        const modelo = sensor.modelo;
+        const lecturas = sensor.lecturas;
+
+        for (const variable in lecturas) {
+          const id_variable = `${grupo}/${id_nodo}/${id_sensor}/${modelo}/${variable}`;
+          const objeto_id_valor = {
+            id_lectura: id_variable,
+            lectura: lecturas[variable]
+          };
+
+          ids_generadas.push(objeto_id_valor);
+        }
+      }
+    }
+
+    console.log(ids_generadas);
+
+     for (let l = 0; l < variableIDs.length; l++) {
+                    if (gauges[l].id === ids_generadas[l].id_lectura) {
+                      gauges[l].value = ids_generadas[l].lectura;
+                    console.log("MATCH")
+                    }
+                    else
+                    {
+console.log("NOMATCH")
+console.log(gauges[l].id)
+                    }
+                  }
+
+  } catch (error) {
+    console.error('Error en el parseo del mensaje:', error);
+    console.log('Objeto JSON dañado:', message); // Impresión del objeto JSON dañado
+
+    // Aquí puedes realizar alguna acción para manejar el error, como enviar una notificación o registrar en un archivo de log.
+    // También puedes definir un valor por defecto para la variable 'mensaje', en caso de que el parseo falle.
+    mensaje = { error: 'No se pudo parsear el mensaje' };
+  }
+});
+
+
+
 
     // Realizar acciones con la respuesta del servidor
   },
@@ -257,20 +369,12 @@ gauges[item] = new RadialGauge({
 }).draw();
 
 //plomo
-gauges[item].id = "gauge"+localStorage.getItem("id_sensor")+localStorage.getItem("modelo_sensor")+arreglo_variables[item]; // Establecer el ID después de crear el objeto
+gauges[item].id = variableIDs[item]; // Establecer el ID después de crear el objeto
 
         }
 for ( var item = 0; item < gauges.length ; item++) {
 //alert("identificador "+ gauges[item].id)
 }
-
-
-
-
-
-
-
-
 
 
 
