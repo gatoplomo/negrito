@@ -27,8 +27,14 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.97.36:9001' 
+
+
+const host = 'ws://192.168.13.36:9001'
 console.log('Connecting mqtt client')
+
+
+
+
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
   console.log('Connection error: ', err)
@@ -48,6 +54,13 @@ client.subscribe("grupo_001", { qos: 0 })
   
 })
 
+var variableIDs = []; // Arreglo para almacenar los IDs de las variables
+
+let buttonStatusArray = [];
+
+let array_lecturas_graf= [];
+
+const chartInstances = {};
 
 
 
@@ -75,8 +88,7 @@ client.subscribe("grupo_001", { qos: 0 })
     var cantidadNodos = 0;
     var cantidadSensores = 0;
     var cantidadVariables = 0;
-    var variableIDs = []; // Arreglo para almacenar los IDs de las variables
-
+    
     for (var i = 0; i < response.length; i++) {
       var nodosGrupo = response[i].nodos_grupo;
       cantidadNodos += nodosGrupo.length;
@@ -112,15 +124,20 @@ client.subscribe("grupo_001", { qos: 0 })
     console.log(variableIDs)
 
     creargauges(variableIDs);
+
+
+
+// Supongo que tienes la variable 'chartInstances' que contiene todas las instancias de gráficos
+
 client.on('message', (topic, message, packet) => {
   const now = new Date();
-  console.log(now); // muestra la fecha y hora actuales en formato de cadena
+  console.log(now); // Muestra la fecha y hora actuales en formato de cadena
 
   // Para obtener solo la hora actual en formato de cadena
   const horaActual = now.toLocaleTimeString();
   console.log(horaActual);
-
   let mensaje;
+  console.log(array_lecturas_graf[0]);
 
   try {
     mensaje = JSON.parse(message);
@@ -152,20 +169,64 @@ client.on('message', (topic, message, packet) => {
         }
       }
     }
-
+    console.log("AAAAAAAAAAAAAAAAAAAAA");
     console.log(ids_generadas);
 
-     for (let l = 0; l < variableIDs.length; l++) {
-                    if (gauges[l].id === ids_generadas[l].id_lectura) {
-                      gauges[l].value = ids_generadas[l].lectura;
-                    console.log("MATCH")
-                    }
-                    else
-                    {
-console.log("NOMATCH")
-console.log(gauges[l].id)
-                    }
-                  }
+    for (let l = 0; l < variableIDs.length; l++) {
+      const graficoID = gauges[l].id;
+      // Actualizar el valor del gauge
+            gauges[l].value = ids_generadas[l].lectura;
+
+      // Buscar el objeto que corresponde a este gráfico en el arreglo buttonStatusArray
+      const botonStatus = buttonStatusArray.find(obj => obj.id_btn === graficoID);
+
+      if (botonStatus) {
+        // El gráfico tiene un estado definido en el arreglo buttonStatusArray
+        const estado = botonStatus.status;
+
+        switch (estado) {
+          case "playing":
+            // Tu nuevo dato
+            const nuevoDato = {
+              "hora": "01:13",
+              "dato": ids_generadas[l].lectura
+            };
+
+            // Supongo que chartInstances contiene todas las instancias de gráficos
+            const rutaGrafico = ids_generadas[l].id_lectura + "graf";
+            const instanciaGrafico = chartInstances[rutaGrafico];
+
+            if (instanciaGrafico) {
+              // Agregar el nuevo dato solo a la colección de lecturas del gráfico que hace match
+              array_lecturas_graf[l].lecturas.push(nuevoDato);
+
+              // Actualizar los datos y etiquetas solo para la instancia de gráfico correspondiente
+              instanciaGrafico.data.datasets[0].data.push(nuevoDato.dato);
+              instanciaGrafico.data.labels.push(nuevoDato.hora);
+
+              // Actualizar el gráfico
+              instanciaGrafico.update();
+
+              console.log("MATCH");
+            } else {
+              console.log("No se encontró la instancia del gráfico en la ruta especificada:", rutaGrafico);
+            }
+
+      
+            break;
+
+          case "stopped":
+            console.log("El gráfico está en estado stopped, no se actualizará:", graficoID);
+            break;
+
+          default:
+            console.log("Estado inválido:", estado);
+            break;
+        }
+      } else {
+        console.log("El gráfico no tiene un estado definido en el arreglo buttonStatusArray:", graficoID);
+      }
+    }
 
   } catch (error) {
     console.error('Error en el parseo del mensaje:', error);
@@ -179,7 +240,6 @@ console.log(gauges[l].id)
 
 
 
-
     // Realizar acciones con la respuesta del servidor
   },
   error: function(xhr, status, error) {
@@ -189,6 +249,7 @@ console.log(gauges[l].id)
 });
 
 function createChart(canvasId, data) {
+
   // Obtener el canvas con el ID especificado
   var canvas = document.getElementById(canvasId);
 
@@ -196,7 +257,7 @@ function createChart(canvasId, data) {
   var ctx = canvas.getContext('2d');
 
   // Crear el gráfico utilizando Chart.js
-  new Chart(ctx, {
+  const myChart = new Chart(ctx, {
     type: 'line', // Tipo de gráfico (puede ser 'bar', 'line', 'pie', etc.)
     data: data, // Datos del gráfico
     options: {
@@ -204,6 +265,10 @@ function createChart(canvasId, data) {
     }
   });
 }
+
+
+
+
 
 //FUNCION CREAR TABLAS+CANVAS+GAUGES
 function creargauges(variableIDs)
@@ -260,20 +325,13 @@ for ( var item = 0; item < numero; item++) {
   canv2.setAttribute('width', 360);
   canv2.setAttribute('height', 200);
   canales.push("nodo1")
-
+  buttonStatusArray.push({ id_btn: variableIDs[item], status: "stopped" });
   var body = document.getElementsByTagName("body")[0];
 
   var tabla = document.createElement("table");
-  tabla.setAttribute("id", localStorage.getItem("id_nodo") + "/" + localStorage.getItem("id_sensor") + "/" + localStorage.getItem("modelo_sensor") + "/" + arreglo_variables[item])
-
   tabla.addEventListener("click", function (event) {
     console.log("Tabla clickeada: " + event.currentTarget.id);
 
-    var select = document.getElementById('monitor2');
-
-    while (select.firstChild) {
-      select.removeChild(select.firstChild);
-    }
   });
 
   var tblBody = document.createElement("tbody");
@@ -327,6 +385,98 @@ for ( var item = 0; item < numero; item++) {
 var celdaDerecha2 = document.createElement("td");
 celdaDerecha2.style.border = "1px solid black"; // Agrega borde a la celda derecha
 celdaDerecha2.appendChild(canv2)
+
+
+let isPlaying = false;
+
+
+let trash = document.createElement("i");
+trash.classList.add("fa", "fa-trash");
+trash.setAttribute("aria-hidden", "true");
+trash.onclick = function() {
+  alert("Haz hecho clic en el icono de trash!");
+};
+
+let stop = document.createElement("i");
+stop.classList.add("fa", "fa-stop");
+stop.setAttribute("aria-hidden", "true");
+stop.setAttribute("id", variableIDs[item] + "/btnstop");
+stop.style.display = "none"; 
+
+let play = document.createElement("i");
+play.classList.add("fa", "fa-play");
+play.setAttribute("aria-hidden", "true");
+play.setAttribute("id", variableIDs[item] + "/btnplay");
+
+play.onclick = function(event) {
+  togglePlayStop(event);
+};
+
+stop.onclick = function(event) {
+  togglePlayStop(event);
+};
+
+
+function togglePlayStop(event) {
+  // Obtener el ID del elemento clicado (play o stop)
+  const clickedElement = event.target;
+  const elementID = clickedElement.id;
+
+  // Extraer la información desde el inicio hasta el último "/"
+  const lastSlashIndex = elementID.lastIndexOf("/");
+  const extractedID = elementID.substring(0, lastSlashIndex);
+
+  // Verificar si el objeto con la ID ya existe en el array
+  let existingItemIndex = -1;
+  buttonStatusArray.forEach((item, index) => {
+    if (item.id_btn === extractedID) {
+      existingItemIndex = index;
+    }
+  });
+
+  // Cambiar el estado de reproducción
+  isPlaying = !isPlaying;
+  if (isPlaying) {
+    play.style.display = "none";
+    stop.style.display = "inline";
+    if (existingItemIndex === -1) {
+      // Si el ID no existe en el array, agregar un nuevo objeto
+      buttonStatusArray.push({ id_btn: extractedID, status: "playing" });
+    } else {
+      // Si el ID ya existe en el array, actualizar solo el estado
+      buttonStatusArray[existingItemIndex].status = "playing";
+    }
+  } else {
+    stop.style.display = "none";
+    play.style.display = "inline";
+    if (existingItemIndex === -1) {
+      // Si el ID no existe en el array, agregar un nuevo objeto
+      buttonStatusArray.push({ id_btn: extractedID, status: "stopped" });
+    } else {
+      // Si el ID ya existe en el array, actualizar solo el estado
+      buttonStatusArray[existingItemIndex].status = "stopped";
+    }
+  }
+
+  // Mostrar el contenido del array buttonStatusArray en un alert
+  alert(JSON.stringify(buttonStatusArray));
+}
+
+
+
+// Asignar el evento onclick a los botones play y stop
+play.onclick = togglePlayStop;
+stop.onclick = togglePlayStop;
+
+celdaDerecha2.appendChild(trash);
+celdaDerecha2.appendChild(document.createTextNode('\u00A0'));
+celdaDerecha2.appendChild(play);
+celdaDerecha2.appendChild(stop);
+
+
+
+
+
 hilera2.appendChild(celdaDerecha2);
 
 var celdaDerecha3 = document.createElement("td");
@@ -380,6 +530,7 @@ for ( var item = 0; item < gauges.length ; item++) {
 
 }
 
+
 $.ajax({
   url: '/filtrar',
   method: 'POST',
@@ -390,9 +541,10 @@ $.ajax({
   },
   success: function(response) {
     console.log('Respuesta del servidor:', response);
-    
+    array_lecturas_graf=response;
+
     // Actualizar los gráficos utilizando los datos recibidos
-    response.forEach(function(item) {
+    array_lecturas_graf.forEach(function(item) {
       var id = item.id_variable; // Obtener el ID del gráfico
       var lecturas = item.lecturas; // Obtener las lecturas del gráfico
       
@@ -431,6 +583,10 @@ $.ajax({
           }
         }
       });
+
+chartInstances[id+"graf"] = chart;
+
+
     });
   },
   error: function(xhr, status, error) {

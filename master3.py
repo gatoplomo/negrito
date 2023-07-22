@@ -60,7 +60,7 @@ for variable_objeto in keys_lecturas:
 #print(variables_array)
 
 
-granularity = 'minuto'  # Cambiar a 'hora' para filtrar por hora
+granularity = 'hora'  # Cambiar a 'hora' para filtrar por hora
 
 processed_array = []
 
