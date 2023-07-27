@@ -29,7 +29,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.13.36:9001'
+const host = 'ws://192.168.14.36:9001'
 console.log('Connecting mqtt client')
 
 
@@ -397,6 +397,21 @@ trash.onclick = function() {
   alert("Haz hecho clic en el icono de trash!");
 };
 
+let eye = document.createElement("i");
+eye.classList.add("fa", "fa-eye");
+eye.setAttribute("aria-hidden", "true");
+eye.onclick = function() {
+  alert("Haz hecho clic en el icono de trash!");
+};
+
+let download = document.createElement("i");
+download.classList.add("fa", "fa-download");
+download.setAttribute("aria-hidden", "true");
+download.onclick = function() {
+  alert("Haz hecho clic en el icono de trash!");
+};
+
+
 let stop = document.createElement("i");
 stop.classList.add("fa", "fa-stop");
 stop.setAttribute("aria-hidden", "true");
@@ -472,6 +487,9 @@ celdaDerecha2.appendChild(trash);
 celdaDerecha2.appendChild(document.createTextNode('\u00A0'));
 celdaDerecha2.appendChild(play);
 celdaDerecha2.appendChild(stop);
+celdaDerecha2.appendChild(eye);
+celdaDerecha2.appendChild(download);
+
 
 
 

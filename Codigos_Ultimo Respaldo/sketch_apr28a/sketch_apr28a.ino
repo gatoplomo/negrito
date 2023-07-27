@@ -97,10 +97,6 @@ void loop() {
   datos[3] = estado;
   datos[4] = pin6State;
 
-  radio.stopListening();
-
-  radio.write(&datos, sizeof(datos));
-  radio.startListening();
 
   if (radio.available()) {
     radio.read(datos2, sizeof(datos2));
@@ -120,6 +116,10 @@ void loop() {
       }
     }
   }
+  radio.stopListening();
+
+  radio.write(&datos, sizeof(datos));
+  radio.startListening();
 
   delay(200);
 }
