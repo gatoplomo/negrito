@@ -206,7 +206,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.14.36:1884', {
+var client2 = mqtt.connect('mqtt://192.168.14.35:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
