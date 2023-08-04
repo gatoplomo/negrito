@@ -1,5 +1,5 @@
 //#include <LiquidCrystal_I2C.h>
-#include <SPI.h>
+#include <SPI.h>//aolaksjdlkajlsdkjsalkdj
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <SimpleDHT.h>
