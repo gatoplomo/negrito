@@ -206,7 +206,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.14.35:1884', {
+var client2 = mqtt.connect('mqtt://192.168.235.160:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -874,7 +874,7 @@ app.post('/filtrar', (req, res) => {
   var dataToSend;
 
   // spawn new child process to call the python script
-  var python = spawn('python3', ["/home/tomas/Documentos/GitHub/negrito/master3.py"]);
+  var python = spawn('python3', ["/home/watchdog/Documentos/GitHub/negrito/master3.py"]);
 
   python.stdout.on('data', function(data) {
     console.log('Pipe data from python script ...');

@@ -29,7 +29,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.14.36:9001'
+const host = 'ws://192.168.235.160:9001'
 console.log('Connecting mqtt client')
 
 
@@ -392,10 +392,38 @@ let isPlaying = false;
 
 let trash = document.createElement("i");
 trash.classList.add("fa", "fa-trash");
-trash.setAttribute("aria-hidden", "true");
+trash.setAttribute("aria-hidden", "true")
+trash.style.float = "right";
+trash.setAttribute("id", variableIDs[item] + "/trashbtn");
+
+;
 trash.onclick = function() {
-  alert("Haz hecho clic en el icono de trash!");
+    alert("Haz hecho clic en el icono de trash!");
+    //alert(this.id);
+
+    let cadena = this.id; // Asumiendo que 'cadena' contiene el valor del id del elemento que contiene el ícono de papelera
+    let resultado = cadena.substring(0, cadena.lastIndexOf('/'))+"graf";
+    alert(resultado);
+
+    // Supongamos que tienes la ID del gráfico que deseas limpiar
+    // Supongo que chartInstances contiene todas las instancias de gráficos
+    const rutaGrafico = resultado;
+    const instanciaGrafico = chartInstances[rutaGrafico];
+
+    if (instanciaGrafico) {
+        alert("grafico encontrado");
+
+        // Borrar los datos y etiquetas del gráfico
+        instanciaGrafico.data.datasets[0].data = [];
+        instanciaGrafico.data.labels = [];
+
+        // Actualizar el gráfico
+        instanciaGrafico.update();
+    } else {
+        console.log("No se encontró la instancia del gráfico en la ruta especificada:", rutaGrafico);
+    }
 };
+
 
 let eye = document.createElement("i");
 eye.classList.add("fa", "fa-eye");
@@ -483,13 +511,20 @@ function togglePlayStop(event) {
 play.onclick = togglePlayStop;
 stop.onclick = togglePlayStop;
 
-celdaDerecha2.appendChild(trash);
-celdaDerecha2.appendChild(document.createTextNode('\u00A0'));
+
 celdaDerecha2.appendChild(play);
 celdaDerecha2.appendChild(stop);
+celdaDerecha2.appendChild(document.createTextNode('\u00A0')); // Agregar espacio en blanco
+celdaDerecha2.appendChild(document.createTextNode('\u00A0')); // Agregar espacio en blanco
+celdaDerecha2.appendChild(document.createTextNode('\u00A0')); // Agregar espacio en blanco
 celdaDerecha2.appendChild(eye);
+celdaDerecha2.appendChild(document.createTextNode('\u00A0')); // Agregar espacio en blanco
+celdaDerecha2.appendChild(document.createTextNode('\u00A0')); // Agregar espacio en blanco
+celdaDerecha2.appendChild(document.createTextNode('\u00A0')); // Agregar espacio en blanco
+
 celdaDerecha2.appendChild(download);
 
+celdaDerecha2.appendChild(trash);
 
 
 
