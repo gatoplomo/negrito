@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Ruta al archivo de Excel
-ruta_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/lecturas_nodo_003.xlsx"
+ruta_excel = "/home/watchdog/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/lecturas_nodo_003.xlsx"
 
 # Leer el archivo de Excel y seleccionar la hoja de trabajo
 df = pd.read_excel(ruta_excel)
@@ -40,7 +40,7 @@ df_accionadores.insert(2, "Fecha RTC Server", fecha_rtc_server)
 df_accionadores.insert(3, "Hora RTC Server", hora_rtc_server)
 
 # Guardar el DataFrame en un archivo Excel
-nombre_excel = "/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/accionadores_nodo_003.xlsx"
+nombre_excel = "/home/watchdog/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/accionadores_nodo_003.xlsx"
 df_accionadores.to_excel(nombre_excel, index=False)
 print(f"Archivo Excel '{nombre_excel}' generado exitosamente.")
 
@@ -98,7 +98,7 @@ for modelo in modelos_unicos:
     df_vacio.insert(3, "Hora RTC Server", df["Hora RTC Server"])
 
     # Crear un nombre único para el archivo Excel
-    nombre_excel = f"/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/modelo_{modelo}.xlsx"
+    nombre_excel = f"/home/watchdog/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/modelo_{modelo}.xlsx"
     
     # Guardar el DataFrame con los valores en el archivo Excel
     df_vacio.to_excel(nombre_excel, index=False)

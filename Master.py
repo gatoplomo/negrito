@@ -80,9 +80,9 @@ df_nodo2 = pd.DataFrame(datos_nodo2)
 df_nodo3 = pd.DataFrame(datos_nodo3)
 
 # Generar los archivos de Excel para nodo1 y nodo2
-df_nodo1.to_excel('/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_001/lecturas_nodo_001.xlsx', index=False)
-df_nodo2.to_excel('/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/lecturas_nodo_002.xlsx', index=False)
-df_nodo3.to_excel('/home/tomas/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/lecturas_nodo_003.xlsx', index=False)
+df_nodo1.to_excel('/home/watchdog/Documentos/GitHub/negrito/Data/grupo_001/nodo_001/lecturas_nodo_001.xlsx', index=False)
+df_nodo2.to_excel('/home/watchdog/Documentos/GitHub/negrito/Data/grupo_001/nodo_002/lecturas_nodo_002.xlsx', index=False)
+df_nodo3.to_excel('/home/watchdog/Documentos/GitHub/negrito/Data/grupo_001/nodo_003/lecturas_nodo_003.xlsx', index=False)
 
 # Cerrar la conexión
 cliente.close()

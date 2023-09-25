@@ -29,7 +29,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.235.160:9001'
+const host = 'ws://192.168.90.160:9001'
 console.log('Connecting mqtt client')
 
 
@@ -84,43 +84,52 @@ const chartInstances = {};
     // Mostrar la cantidad de grupos en el front
     $("#cantidad_grupos_valor").text(cantidadGrupos);
 
-    // Contar la cantidad de nodos y sensores
-    var cantidadNodos = 0;
-    var cantidadSensores = 0;
-    var cantidadVariables = 0;
-    
-    for (var i = 0; i < response.length; i++) {
-      var nodosGrupo = response[i].nodos_grupo;
-      cantidadNodos += nodosGrupo.length;
+   // Contar la cantidad de nodos, sensores y accionadores
+var cantidadNodos = 0;
+var cantidadSensores = 0;
+var cantidadAccionadores = 0;
+var cantidadVariables = 0;
 
-      for (var j = 0; j < nodosGrupo.length; j++) {
-        var sensoresNodo = nodosGrupo[j].sensores;
-        cantidadSensores += sensoresNodo.length;
+for (var i = 0; i < response.length; i++) {
+  var nodosGrupo = response[i].nodos_grupo;
+  cantidadNodos += nodosGrupo.length;
 
-        for (var k = 0; k < sensoresNodo.length; k++) {
-          var variablesSensor = sensoresNodo[k].variables_sensor;
-          cantidadVariables += Object.keys(variablesSensor).length; // Obtener la cantidad de variables del sensor
+  for (var j = 0; j < nodosGrupo.length; j++) {
+    var sensoresNodo = nodosGrupo[j].sensores;
+    cantidadSensores += sensoresNodo.length;
 
-          // Generar el ID para cada variable y almacenarlo en el arreglo
-          Object.keys(variablesSensor).forEach(function(variable) {
-            var id = response[i].id_grupo + '/' + nodosGrupo[j].id_nodo + '/' + sensoresNodo[k].id_sensor + '/' + sensoresNodo[k].modelo_sensor + '/' + variable;
-            variableIDs.push(id);
-          });
+    for (var k = 0; k < sensoresNodo.length; k++) {
+      var variablesSensor = sensoresNodo[k].variables_sensor;
+      cantidadVariables += Object.keys(variablesSensor).length; // Obtener la cantidad de variables del sensor
 
-          // También puedes mostrar las variables encontradas para cada sensor
-          console.log('Variables del sensor:', Object.keys(variablesSensor));
-        }
-      }
+      // Generar el ID para cada variable y almacenarlo en el arreglo
+      Object.keys(variablesSensor).forEach(function(variable) {
+        var id = response[i].id_grupo + '/' + nodosGrupo[j].id_nodo + '/' + sensoresNodo[k].id_sensor + '/' + sensoresNodo[k].modelo_sensor + '/' + variable;
+        variableIDs.push(id);
+      });
+
+      // También puedes mostrar las variables encontradas para cada sensor
+      console.log('Variables del sensor:', Object.keys(variablesSensor));
     }
 
-    console.log('Cantidad de nodos encontrados:', cantidadNodos);
-    console.log('Cantidad de sensores encontrados:', cantidadSensores);
-    console.log('Cantidad de variables encontradas:', cantidadVariables);
+    var accionadoresNodo = nodosGrupo[j].accionadores;
+    cantidadAccionadores += accionadoresNodo.length;
+  }
+}
 
-    // Mostrar la cantidad de nodos, sensores y variables en el front
-    $("#cantidad_nodos_valor").text(cantidadNodos);
-    $("#cantidad_sensores_valor").text(cantidadSensores);
-    $("#cantidad_variables_valor").text(cantidadVariables);
+console.log('Cantidad de nodos encontrados:', cantidadNodos);
+console.log('Cantidad de sensores encontrados:', cantidadSensores);
+console.log('Cantidad de accionadores encontrados:', cantidadAccionadores);
+console.log('Cantidad de variables encontradas:', cantidadVariables);
+
+// Mostrar la cantidad de nodos, sensores, accionadores y variables en el front
+$("#cantidad_nodos_valor").text(cantidadNodos);
+$("#cantidad_sensores_valor").text(cantidadSensores);
+$("#cantidad_accionadores_valor").text(cantidadAccionadores);
+$("#cantidad_variables_valor").text(cantidadVariables);
+
+
+    
     console.log(variableIDs)
 
     creargauges(variableIDs);
@@ -429,9 +438,41 @@ let eye = document.createElement("i");
 eye.classList.add("fa", "fa-eye");
 eye.setAttribute("aria-hidden", "true");
 eye.onclick = function() {
-  alert("Haz hecho clic en el icono de trash!");
+  // Obtener los datos necesarios del objeto 'row'
+    var idAccionador = "asdad";
+    var accionAccionador = "asdad";
+    var status = "asdad";
+    
+    // Crear el contenido dinámico de la ventana modal
+    var modalContent = '<div class="modal-header">' +
+      '<h5 class="modal-title">Detalles</h5>' +
+      '<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>' +
+      '</div>' +
+      '<div class="modal-body">' +
+      '<p>ID: ' + idAccionador + '</p>' +
+      '<p>Acción: ' + accionAccionador + '</p>' +
+      '</div>' +
+      '<div class="modal-footer">' +
+      '</div>';
+    
+    // Agregar la ventana modal al DOM
+    $('#myModal').remove(); // Eliminar la modal previa si existe
+    $('body').append('<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+      '<div class="modal-dialog">' +
+      '<div class="modal-content">' +
+      modalContent +
+      '</div>' +
+      '</div>' +
+      '</div>');
+    
+    // Mostrar la ventana modal
+    $('#myModal').modal('show');
+    
 };
 
+$(document).on('click', '.btn-close', function() {
+  $('#myModal').modal('hide');
+})
 let download = document.createElement("i");
 download.classList.add("fa", "fa-download");
 download.setAttribute("aria-hidden", "true");
@@ -582,6 +623,16 @@ for ( var item = 0; item < gauges.length ; item++) {
 
 
 }
+
+
+
+
+
+
+
+
+
+
 
 
 $.ajax({

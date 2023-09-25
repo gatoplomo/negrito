@@ -206,7 +206,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.235.160:1884', {
+var client2 = mqtt.connect('mqtt://192.168.90.160:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -635,6 +635,12 @@ app.post("/crear_grupo", function(req, res) {
             temperatura: true,
             humedad: true
           }
+        }, {
+          id_sensor:"sensor_002",
+          modelo_sensor: "HUMSOND",
+          variables_sensor: {
+            humedad: true
+          }
         }
       ],
       accionadores: [
@@ -694,7 +700,7 @@ function performAction() {
 }
 
 // Ejecutar performAction() cada 3 segundos
-setInterval(performAction, 3000);
+setInterval(performAction, 2000);
 
 
 let procesando = false; // Bandera de procesamiento

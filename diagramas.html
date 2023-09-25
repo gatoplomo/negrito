@@ -75,7 +75,7 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="/buscador.html">
+                <a class="nav-link" href="/monitor.html">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                   Monitor
                 </a>
@@ -83,10 +83,10 @@
                <li class="nav-item">
                 <a class="nav-link" href="/monitor.html">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                  Configuración
+                  Grupos
                 </a>
               </li>
-              <!--
+              
               <li class="nav-item">
                 <a class="nav-link active" href="/data.html">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -106,10 +106,15 @@
                 </a>
               </li>
 
-               -->
+                 <li class="nav-item">
+                <a class="nav-link active" href="/Registro_Centrales.html">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                  Crear Grupo<span class="sr-only">(current)</span>
+                </a>
+              </li>
         
             </ul>
-<!--
+
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Saved reports</span>
               <a class="d-flex align-items-center text-muted" href="https://getbootstrap.com/docs/4.0/examples/dashboard/#">
@@ -143,8 +148,6 @@
               </li>
             </ul>
           </div>
-
-        -->
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
@@ -153,35 +156,150 @@
 
 
 
-<body id="cuerpo">
-  <form id="form-busqueda">
-    <input type="text" id="input-busqueda" placeholder="Ingrese su búsqueda">
-    <button type="submit">Buscar</button>
-  </form>
-  <div id="cantidad_grupos" class="inline-block">
-    <strong>Grupos:</strong> <span id="cantidad_grupos_valor"></span>
-  </div>
-  <div id="cantidad_nodos" class="inline-block">
-    <strong>Nodos:</strong> <span id="cantidad_nodos_valor"></span>
-  </div>
-  <div id="cantidad_sensores" class="inline-block">
-    <a href="/buscador.html" id="sensores-link"><strong>Sensores:</strong></a> <span id="cantidad_sensores_valor"></span>
-  </div>
-  <div id="cantidad_variables" class="inline-block">
-    <strong>Variables:</strong> <span id="cantidad_variables_valor"></span>
-  </div>
-  <div id="cantidad_accionadores" class="inline-block">
-    <a href="#" id="accionadores-link"><strong>Accionadores:</strong></a> <span id="cantidad_accionadores_valor"></span>
-  </div>
-  <div id="main_monitor">
-    <!-- Aquí se mostrarán los resultados de la búsqueda -->
-  </div>
-  <script src="buscador.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mover Círculo en Canvas</title>
+     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #canvasContainer {
+            width: 100%;
+            height: 100vh;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #myCanvas {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvasContainer">
+        <canvas id="myCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvasContainer = document.getElementById('canvasContainer');
+        const canvas = document.getElementById('myCanvas');
+        const context = canvas.getContext('2d');
+
+        let circle1 = {
+            x: canvas.width / 3,
+            y: canvas.height / 2,
+            radius: 30,
+            isDragging: false,
+        };
+
+        let circle2 = {
+            x: (canvas.width / 3) * 2,
+            y: canvas.height / 2,
+            radius: 20,
+            isDragging: false,
+        };
+
+        function resizeCanvas() {
+            canvas.width = canvasContainer.clientWidth;
+            canvas.height = canvasContainer.clientHeight;
+            circle1.x = canvas.width / 3;
+            circle1.y = canvas.height / 2;
+            circle2.x = (canvas.width / 3) * 2;
+            circle2.y = canvas.height / 2;
+            drawCirclesAndLine();
+        }
+
+        function drawCirclesAndLine() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar línea
+            context.beginPath();
+            context.moveTo(circle1.x, circle1.y);
+            context.lineTo(circle2.x, circle2.y);
+            context.strokeStyle = 'black';
+            context.stroke();
+            context.closePath();
+
+            // Dibujar círculos
+            context.beginPath();
+            context.arc(circle1.x, circle1.y, circle1.radius, 0, Math.PI * 2);
+            context.fillStyle = 'blue';
+            context.fill();
+            context.closePath();
+
+            context.beginPath();
+            context.arc(circle2.x, circle2.y, circle2.radius, 0, Math.PI * 2);
+            context.fillStyle = 'red';
+            context.fill();
+            context.closePath();
+
+            // Dibujar texto sobre el círculo grande
+            context.font = '12px Arial';
+            context.fillStyle = 'black';
+            context.textAlign = 'center';
+            context.fillText('grupo_001', circle1.x, circle1.y - circle1.radius - 5);
+
+            // Dibujar texto dentro del círculo grande
+            context.font = '10px Arial';
+            context.fillStyle = 'white';
+            context.textAlign = 'center';
+            context.fillText('n1_gateway', circle1.x, circle1.y);
+
+            // Dibujar texto dentro del círculo pequeño rojo
+            context.font = '10px Arial';
+            context.fillStyle = 'white';
+            context.textAlign = 'center';
+            context.fillText('n2_RF', circle2.x, circle2.y);
+        }
+
+        function handleMouseDown(event) {
+            const canvasRect = canvas.getBoundingClientRect();
+            const mouseX = event.clientX - canvasRect.left;
+            const mouseY = event.clientY - canvasRect.top;
+
+            if (Math.sqrt((mouseX - circle1.x) ** 2 + (mouseY - circle1.y) ** 2) <= circle1.radius) {
+                circle1.isDragging = true;
+            } else if (Math.sqrt((mouseX - circle2.x) ** 2 + (mouseY - circle2.y) ** 2) <= circle2.radius) {
+                circle2.isDragging = true;
+            }
+        }
+
+        function handleMouseMove(event) {
+            if (circle1.isDragging) {
+                const canvasRect = canvas.getBoundingClientRect();
+                circle1.x = event.clientX - canvasRect.left;
+                circle1.y = event.clientY - canvasRect.top;
+                drawCirclesAndLine();
+            } else if (circle2.isDragging) {
+                const canvasRect = canvas.getBoundingClientRect();
+                circle2.x = event.clientX - canvasRect.left;
+                circle2.y = event.clientY - canvasRect.top;
+                drawCirclesAndLine();
+            }
+        }
+
+        function handleMouseUp() {
+            circle1.isDragging = false;
+            circle2.isDragging = false;
+        }
+
+        canvas.addEventListener('mousedown', handleMouseDown);
+        canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseup', handleMouseUp);
+
+        window.addEventListener('resize', resizeCanvas);
+
+        resizeCanvas();
+    </script>
 </body>
-
-</html>
-
-
 
 <style type="text/css">
   
