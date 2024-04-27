@@ -701,7 +701,7 @@ function performAction() {
 }
 
 // Ejecutar performAction() cada 3 segundos
-setInterval(performAction, 2000);
+//setInterval(performAction, 2000);
 
 
 let procesando = false; // Bandera de procesamiento
