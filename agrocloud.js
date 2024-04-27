@@ -696,7 +696,7 @@ console.log("peticion recibida")
 
 
 function performAction() {
-  console.log('Realizando acción...');
+  //console.log('Realizando acción...');
   client2.publish('grupo_001control', 'Reportar');
 }
 
