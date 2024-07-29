@@ -108,7 +108,7 @@ function connectToDatabase() {
 }
 
 // Establecer la conexión a la base de datos
-connectToDatabase();
+//connectToDatabase();
 
 // Configurar las rutas
 app.post('/login', (req, res) => {
@@ -144,8 +144,8 @@ app.post('/login', (req, res) => {
 
 var router = express.Router();
 
-var root="/home/tomas/Documentos/GitHub/negrito/Reportes/"
-var root2="/home/tomas/Documentos/GitHub/negrito/"
+var root="/home/tom-s-lazo/Documentos/GitHub/negrito/Reportes/"
+var root2="/home/tom-s-lazo/Documentos/GitHub/negrito/"
 
 
 //ruta y Json , funcion que media entre las peticiones y el servidor 
@@ -207,7 +207,7 @@ respaldar(centrales[step])
 });
 */
 var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.90.160:1884', {
+var client2 = mqtt.connect('mqtt://192.168.30.4:1884', {
   clientId: 'ServerNode'
 });
 client2.on('connect', function () {
@@ -465,6 +465,7 @@ app.post('/collections', (req, res) => {
 
 app.post('/abrir_collection', (req, res) => {
   const collectionName = req.body.collection;
+  console.log("PICHULAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+req.body.collection)
   const db = client.db(dbName);
 
   db.collection(collectionName).find().toArray(function(err, documents) {
@@ -495,6 +496,7 @@ app.post('/main_monitor', (req, res) => {
   });
 
   console.log("Petición recibida");
+  console.log("PASO 1")
 });
 
 
@@ -700,8 +702,8 @@ function performAction() {
   client2.publish('grupo_001control', 'Reportar');
 }
 
-// Ejecutar performAction() cada 3 segundos
-//setInterval(performAction, 2000);
+//Ejecutar performAction() cada 3 segundos
+setInterval(performAction, 2000);
 
 
 let procesando = false; // Bandera de procesamiento
@@ -881,7 +883,7 @@ app.post('/filtrar', (req, res) => {
   var dataToSend;
 
   // spawn new child process to call the python script
-  var python = spawn('python3', ["/home/watchdog/Documentos/GitHub/negrito/master3.py"]);
+  var python = spawn('python3', ["/home/tom-s-lazo/Documentos/GitHub/negrito/master3.py"]);
 
   python.stdout.on('data', function(data) {
     console.log('Pipe data from python script ...');

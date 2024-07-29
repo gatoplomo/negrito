@@ -30,10 +30,10 @@ RF24 radio(CE_PIN, CSN_PIN);
 float datos[5];
 float datos2[5];
 String valor="30";
-const char* ssid = "RTM";
+const char* ssid = "watchdog";
 const char* password = "zeke1994";
-const char* mqtt_server = "192.168.239.36";
-const char* clientID = "G1";
+const char* mqtt_server = "192.168.220.225";
+const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);
 #include <Wire.h>

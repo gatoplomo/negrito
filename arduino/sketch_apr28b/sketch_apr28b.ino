@@ -38,10 +38,10 @@ float nodo3h=0;
 
 
 String valor="30";
-const char* ssid = "RTM";
+const char* ssid = "watchdog";
 const char* password = "zeke1994";
-const char* mqtt_server = "192.168.14.36";
-const char* clientID = "G1";
+const char* mqtt_server = "192.168.30.4";
+const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);
 #include <Wire.h>
@@ -435,10 +435,10 @@ Serial.println(mensaje);
 client.publish("grupo_001", mensaje.c_str());
 
 //lcd.clear();
-lcd.setCursor (0,0) ;
-lcd.print(String(t3)+" "+String(t2));
-lcd.setCursor (0,1) ;
-lcd.print("t/h:"+String(t)+"/"+String(h));
+//lcd.setCursor (0,0) ;
+////lcd.print(String(t3)+" "+String(t2));
+//lcd.setCursor (0,1) ;
+//lcd.print("t/h:"+String(t)+"/"+String(h));
 //lcd.setCursor (0,3) ;
 //lcd.print("Conectado");
 //lcd.setCursor (0,2) ;

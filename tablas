@@ -24,6 +24,8 @@ CREATE TABLE sesiones (
 
 https://arduino.esp8266.com/stable/package_esp8266com_index.json
 
+sudo apt install -y mosquitto 
+
 curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 https://tecadmin.net/how-to-install-mongodb-on-ubuntu-22-04/
 
@@ -141,3 +143,12 @@ attiny88 micronucleous
     }
   ]
 }
+
+
+sudo systemctl start mongod.service
+
+
+
+sudo apt-get update
+sudo apt-get install python3-bson python3-pymongo
+

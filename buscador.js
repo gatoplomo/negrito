@@ -29,7 +29,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.90.160:9001'
+const host = 'ws://192.168.30.4:9001'
 console.log('Connecting mqtt client')
 
 
@@ -150,6 +150,7 @@ client.on('message', (topic, message, packet) => {
 
   try {
     mensaje = JSON.parse(message);
+    console.log("SUCESS")
     console.log(mensaje);
 
     // Generar las IDs buscadas
@@ -171,7 +172,7 @@ client.on('message', (topic, message, packet) => {
           const id_variable = `${grupo}/${id_nodo}/${id_sensor}/${modelo}/${variable}`;
           const objeto_id_valor = {
             id_lectura: id_variable,
-            lectura: lecturas[variable]
+            lecturas: lecturas[variable]
           };
 
           ids_generadas.push(objeto_id_valor);
@@ -184,7 +185,7 @@ client.on('message', (topic, message, packet) => {
     for (let l = 0; l < variableIDs.length; l++) {
       const graficoID = gauges[l].id;
       // Actualizar el valor del gauge
-            gauges[l].value = ids_generadas[l].lectura;
+            gauges[l].value = ids_generadas[l].lecturas;
 
       // Buscar el objeto que corresponde a este gráfico en el arreglo buttonStatusArray
       const botonStatus = buttonStatusArray.find(obj => obj.id_btn === graficoID);
@@ -198,7 +199,7 @@ client.on('message', (topic, message, packet) => {
             // Tu nuevo dato
             const nuevoDato = {
               "hora": "01:13",
-              "dato": ids_generadas[l].lectura
+              "dato": ids_generadas[l].lecturas
             };
 
             // Supongo que chartInstances contiene todas las instancias de gráficos
@@ -623,17 +624,6 @@ for ( var item = 0; item < gauges.length ; item++) {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 $.ajax({
   url: '/filtrar',
