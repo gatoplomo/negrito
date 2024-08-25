@@ -28,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.30.4:9001' 
+const host = 'ws://192.168.51.90:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {

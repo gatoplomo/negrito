@@ -32,7 +32,7 @@ float datos2[5];
 String valor="30";
 const char* ssid = "watchdog";
 const char* password = "zeke1994";
-const char* mqtt_server = "192.168.220.225";
+const char* mqtt_server = "192.168.51.90";
 const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);

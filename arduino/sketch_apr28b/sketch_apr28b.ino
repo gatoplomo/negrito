@@ -40,7 +40,7 @@ float nodo3h=0;
 String valor="30";
 const char* ssid = "watchdog";
 const char* password = "zeke1994";
-const char* mqtt_server = "192.168.30.4";
+const char* mqtt_server = "192.168.51.90";
 const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);

@@ -206,19 +206,22 @@ respaldar(centrales[step])
 
 });
 */
-var mqtt = require('mqtt')
-var client2 = mqtt.connect('mqtt://192.168.30.4:1884', {
+// script.js
+var mqtt = require('mqtt');
+var config = require('./conf');  // Importa la configuración
+
+var client2 = mqtt.connect(`mqtt://${config.mqttHost}:${config.mqttPort}`, {
   clientId: 'ServerNode'
 });
+
 client2.on('connect', function () {
   client2.subscribe('grupo_001', function (err) {
     if (!err) {
-     // client2.publish('nodo1', 'Hello mqtt')
+      // Puedes publicar un mensaje si lo necesitas
+      // client2.publish('nodo1', 'Hello mqtt');
     }
-  })
-})
-
-
+  });
+});
 
 
 function respaldar(id_grupo)
