@@ -3,6 +3,8 @@
 #define Threshold 400
 #define MQ2pin 0
 float sensorValue;
+#include <math.h> // Asegúrate de incluir la biblioteca de matemáticas para usar la función sin()
+
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <Adafruit_Sensor.h>
@@ -146,7 +148,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   // Verificar si la orden es "DETENER"
   if (orden == "Reportar") {
- sensor();
+// sensor();
  radio.startListening();  
   }
 
@@ -219,8 +221,9 @@ void reconnect() {
 
 
 
-
-
+// Variables globales
+unsigned long previousMillis = 0; // Guardar el tiempo anterior
+const long interval = 50; // Intervalo de 1 segundo (1000 milisegundos)
 
 void loop() {
   if (!client.connected()) {
@@ -228,7 +231,18 @@ void loop() {
   }
   client.loop();
 
-  
+    // Obtener el tiempo actual
+  unsigned long currentMillis = millis();
+
+  // Verificar si ha pasado el intervalo de 1 segundo
+  if (currentMillis - previousMillis >= interval) {
+    // Guardar el tiempo actual
+    previousMillis = currentMillis;
+
+    // Llamar a la función que deseas ejecutar cada segundo
+    ejecutarCadaSegundo();
+  }
+
   radio.openWritingPipe(addresses[0]);      //Setting the address at which we will send the data
   radio.openReadingPipe(1, addresses[1]);   //Setting the address at which we will receive the data
   radio.setPALevel(RF24_PA_MIN); 
@@ -259,219 +273,104 @@ lcd.print(lcdText);
   
  } 
  
+void ejecutarCadaSegundo() {
+ sensor();
+}
 
 
+// Definición de variables para la señal sinusoidal
+const float frecuencia = 0.1; // Frecuencia de la señal sinusoidal (puedes ajustarla)
+float tiempo = 0; // Variable para almacenar el tiempo
+const float offset = 50; // Offset de la señal sinusoidal
+const float amplitud = 10; // Amplitud de la señal sinusoidal (varía de -10 a +10)
 
-
-
-
-
-void sensor(){
-  sensorValue = analogRead(MQ2pin); // read analog input pin 0
-  //Serial.print("Sensor Value: ");
-  //Serial.println(sensorValue);
+void sensor() {
+  sensorValue = analogRead(MQ2pin); // leer el pin de entrada analógica 0
   float h = dht.readHumidity();
-  float t = dht.readTemperature();
   float f = dht.readTemperature(true);
-  if (isnan(h) || isnan(t) || isnan(f)) {
+  
+  if (isnan(h) || isnan(f)) {
     Serial.println("Error obteniendo los datos del sensor DHT11");
     return;
   }
- 
+
+  // Generar el valor de temperatura como una señal sinusoidal
+  float t = amplitud * sin(frecuencia * tiempo); // Generar la temperatura sinusoidal
+
+  // Actualizar el tiempo para la próxima llamada
+  tiempo += 1; // Incrementar el tiempo (puedes ajustar el incremento según sea necesario)
+
   float hif = dht.computeHeatIndex(f, h);
   float hic = dht.computeHeatIndex(t, h, false);
   DateTime now = rtc.now();
-  sprintf(t2, "%02d-%02d-%02d",now.year(), now.month(), now.day());  
-    sprintf(t3, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
-    /*
-  Serial.print(F("Date/Time: "));
-  Serial.println(String(t2));
-  
-  Serial.print("Humedad: ");
-  Serial.print(h);
-  Serial.print(" %\t");
-  Serial.print("Temperatura: ");
-  Serial.print(t);
-  Serial.print(" *C ");
-  Serial.print(f);
-  Serial.print(" *F\t");
-  Serial.print("Índice de calor: ");
-  Serial.print(hic);
-  Serial.print(" *C ");
-  Serial.print(hif);
-  Serial.println(" *F");
-  Serial.println(valor);
-*/
-String mensaje="";
-int actA;
-int actB;
+  sprintf(t2, "%02d-%02d-%02d", now.year(), now.month(), now.day());  
+  sprintf(t3, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
 
-if(datos[3]==10)
-{
-actA=1;
-actB=1;
-  }
-else if(datos[3]==20)
-{
-  actA=1;
-actB=0;
-  }
-else if(datos[3]==30)
-{
-  
-  actA=0;
-actB=1;
-  
-  }
-else if(datos[3]==40)
-{
-  actA=0;
-actB=0;
+  String mensaje = "";
+  int actA;
+  int actB;
+
+  if (datos[3] == 10) {
+    actA = 1;
+    actB = 1;
+  } else if (datos[3] == 20) {
+    actA = 1;
+    actB = 0;
+  } else if (datos[3] == 30) {
+    actA = 0;
+    actB = 1;
+  } else if (datos[3] == 40) {
+    actA = 0;
+    actB = 0;
   }
 
- 
-StaticJsonDocument<1024> doc;
+  StaticJsonDocument<1024> doc;
 
+  doc["grupo"] = "grupo_001";
+  JsonObject rtc_nodo = doc.createNestedObject("rtc_nodo");
+  rtc_nodo["fecha"] = String(t2);
+  rtc_nodo["hora"] = String(t3);
 
-doc["grupo"] = "grupo_001";
-JsonObject rtc_nodo = doc.createNestedObject("rtc_nodo");
-rtc_nodo["fecha"] = "23-04-2023";
-rtc_nodo["hora"] = "13:30";
+  JsonArray nodos = doc.createNestedArray("nodos");
 
-JsonArray nodos = doc.createNestedArray("nodos");
+  // nodo_001
+  JsonObject nodos_0 = nodos.createNestedObject();
+  nodos_0["id_nodo"] = "nodo_001";
 
-//gateway
-JsonObject nodos_0 = nodos.createNestedObject();
-nodos_0["id_nodo"] = "nodo_001";
+  // Accionadores del primer nodo (nodo_001)
+  JsonArray nodos_0_accionadores = nodos_0.createNestedArray("accionadores");
 
+  // Accionador 1 del nodo_001
+  JsonObject nodos_0_accionadores_0 = nodos_0_accionadores.createNestedObject();
+  nodos_0_accionadores_0["id_accionador"] = "accionador_001";
+  nodos_0_accionadores_0["status"] = digitalRead(9);
 
-// Accionadores del primer nodo (nodo_001)
-JsonArray nodos_0_accionadores = nodos_0.createNestedArray("accionadores");
+  // Accionador 2 del nodo_001
+  JsonObject nodos_0_accionadores_1 = nodos_0_accionadores.createNestedObject();
+  nodos_0_accionadores_1["id_accionador"] = "accionador_002";
+  nodos_0_accionadores_1["status"] = digitalRead(10);
 
-// Accionador 1 del nodo_001
-JsonObject nodos_0_accionadores_0 = nodos_0_accionadores.createNestedObject();
-nodos_0_accionadores_0["id_accionador"] = "accionador_001";
-nodos_0_accionadores_0["status"] = digitalRead(9);
+  JsonArray nodos_0_sensores = nodos_0.createNestedArray("sensores");
 
-// Accionador 2 del nodo_001
-JsonObject nodos_0_accionadores_1 = nodos_0_accionadores.createNestedObject();
-nodos_0_accionadores_1["id_accionador"] = "accionador_002";
-nodos_0_accionadores_1["status"] = digitalRead(10);
+  JsonObject nodos_0_sensores_0 = nodos_0_sensores.createNestedObject();
+  nodos_0_sensores_0["id_sensor"] = "sensor_001";
+  nodos_0_sensores_0["modelo"] = "DTH11";
 
+  JsonObject nodos_0_sensores_0_lecturas = nodos_0_sensores_0.createNestedObject("lecturas");
+  nodos_0_sensores_0_lecturas["temperatura"] = t; // Usar el valor sinusoidal
+  nodos_0_sensores_0_lecturas["humedad"] = h;
 
-JsonArray nodos_0_sensores = nodos_0.createNestedArray("sensores");
+  // Obtener el array "sensores_estado" del nodo_001
+  JsonArray nodos_0_sensores_estado = nodos_0.createNestedArray("sensores_estado");
 
-JsonObject nodos_0_sensores_0 = nodos_0_sensores.createNestedObject();
-nodos_0_sensores_0["id_sensor"] = "sensor_001";
-nodos_0_sensores_0["modelo"] = "DTH11";
+  // Agregar objetos al array "sensores_estado"
+  JsonObject sensor_estado_1 = nodos_0_sensores_estado.createNestedObject();
+  sensor_estado_1["id_sensor_estado"] = "sensor_estado_001";
+  sensor_estado_1["modelo_sensor_estado"] = "CONTACT";
+  sensor_estado_1["estado"] = 0;
 
-JsonObject nodos_0_sensores_0_lecturas = nodos_0_sensores_0.createNestedObject("lecturas");
-nodos_0_sensores_0_lecturas["temperatura"] =t;
-nodos_0_sensores_0_lecturas["humedad"] =h;
+  serializeJson(doc, mensaje);
+  Serial.println(mensaje);
+  client.publish("grupo_001", mensaje.c_str());
 
-
-
-
-
-JsonObject nodos_1 = nodos.createNestedObject();
-nodos_1["id_nodo"] = "nodo_002";
-
-JsonArray nodos_1_accionadores = nodos_1.createNestedArray("accionadores");
-
-JsonObject nodos_1_accionadores_0 = nodos_1_accionadores.createNestedObject();
-nodos_1_accionadores_0["id_accionador"] = "accionador_001";
-nodos_1_accionadores_0["status"] = actA;
-
-JsonObject nodos_1_accionadores_1 = nodos_1_accionadores.createNestedObject();
-nodos_1_accionadores_1["id_accionador"] = "accionador_002";
-nodos_1_accionadores_1["status"] = actB;
-
-// RF1
-
-JsonArray nodos_1_sensores = nodos_1.createNestedArray("sensores");
-
-JsonObject nodos_1_sensores_0 = nodos_1_sensores.createNestedObject();
-nodos_1_sensores_0["id_sensor"] = "sensor_001";
-nodos_1_sensores_0["modelo"] = "DTH11";
-
-JsonObject nodos_1_sensores_0_lecturas = nodos_1_sensores_0.createNestedObject("lecturas");
-nodos_1_sensores_0_lecturas["temperatura"] = datos[1];
-nodos_1_sensores_0_lecturas["humedad"] = datos[2];
-
-JsonObject nodos_1_sensores_1 = nodos_1_sensores.createNestedObject();
-nodos_1_sensores_1["id_sensor"] = "sensor_002";
-nodos_1_sensores_1["modelo"] = "MQ2";
-
-JsonObject nodos_1_sensores_1_lecturas = nodos_1_sensores_1.createNestedObject("lecturas");
-nodos_1_sensores_1_lecturas["ppm"] = datos[0];
-
-// Obtener el array "sensores_estado" del nodo_002
-JsonArray nodos_1_sensores_estado = nodos_1.createNestedArray("sensores_estado");
-
-// Agregar objetos al array "sensores_estado"
-JsonObject sensor_estado_1 = nodos_1_sensores_estado.createNestedObject();
-sensor_estado_1["id_sensor_estado"] = "sensor_estado_001";
-sensor_estado_1["modelo_sensor_estado"] = "CONTACT";
-sensor_estado_1["estado"] = 0;
-
-JsonObject sensor_estado_2 = nodos_1_sensores_estado.createNestedObject();
-sensor_estado_2["id_sensor_estado"] = "sensor_estado_002";
-sensor_estado_2["modelo_sensor_estado"] = "PIR";
-sensor_estado_2["estado"] = datos[4];
-
-serializeJson(doc, mensaje);
-Serial.println(mensaje);
-client.publish("grupo_001", mensaje.c_str());
-
-//lcd.clear();
-lcd.setCursor (0,0) ;
-lcd.print(String(t3)+" "+String(t2));
-lcd.setCursor (0,1) ;
-lcd.print("t/h:"+String(t)+"/"+String(h));
-//lcd.setCursor (0,3) ;
-//lcd.print("Conectado");
-//lcd.setCursor (0,2) ;
-//lcd.print("                 ");
-
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-void printDate(DateTime date)
-{
-   Serial.print(date.year(), DEC);
-   Serial.print('/');
-   Serial.print(date.month(), DEC);
-   Serial.print('/');
-   Serial.print(date.day(), DEC);
-   Serial.print(" (");
-   Serial.print(daysOfTheWeek[date.dayOfTheWeek()]);
-   Serial.print(") ");
-   Serial.print(date.hour(), DEC);
-   Serial.print(':');
-   Serial.print(date.minute(), DEC);
-   Serial.print(':');
-   Serial.print(date.second(), DEC);
-   Serial.println();
 }
-
-*/
