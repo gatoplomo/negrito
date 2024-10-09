@@ -181,35 +181,6 @@
 
 <div id="sensores">
 </div>
-<script>
-    // Función para redirigir (puedes cambiar esta función según tu necesidad)
-    function redireccionar() {
-        alert('Agregar Nodo');
-        // Aquí puedes colocar la lógica de redirección
-    }
-
-    // Función para añadir el botón en una fila de la tabla
-    function agregarBotonFila() {
-        // Obtiene la tabla de nodos
-        let tabla = document.getElementById('tabla_nodos');
-
-        // Crea una nueva fila
-        let nuevaFila = tabla.insertRow();
-
-        // Crea una nueva celda
-        let nuevaCelda = nuevaFila.insertCell(0);
-
-        // Asigna el botón con estilo fantasma (ghost button)
-        nuevaCelda.innerHTML = `<button class="btn btn-outline-success" onclick="redireccionar()">Agregar Nodo</button>`;
-
-        // Estilo para centrar el botón en la fila
-        nuevaCelda.setAttribute('colspan', 100); // Asegura que ocupe toda la fila
-        nuevaCelda.style.textAlign = 'center';  // Centra el botón
-    }
-
-    // Llama a la función para agregar el botón en una fila al cargar la página
-    window.onload = agregarBotonFila;
-</script>
 
 
 <div class="container-fluid">
