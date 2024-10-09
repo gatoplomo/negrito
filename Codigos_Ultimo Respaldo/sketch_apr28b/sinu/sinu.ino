@@ -34,7 +34,7 @@ float datos2[5];
 String valor="30";
 const char* ssid = "Redmi Note 12 Pro 5G";
 const char* password = "Plomo1994!";
-const char* mqtt_server = "192.168.81.249";
+const char* mqtt_server = "192.168.13.249";
 const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);
