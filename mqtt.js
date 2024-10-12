@@ -119,6 +119,7 @@ if (tablaGenerada === true) {
   if (topic === localStorage.getItem('id_grupo')) {
     console.log(JSON.stringify(mensaje, null, 2));
     console.log(tablaGenerada);
+    alert("PICHULAEPERRO")
     for (let i = 0; i < mensaje.nodos.length; i++) {
       if (mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
         console.log("Nodo:", mensaje.nodos[i].id_nodo);
@@ -689,22 +690,36 @@ var $tabla_nodos = $('#tabla_nodos')
 var $tabla_sensores = $('#tabla_sensores')
 var $tabla_accionadores = $('#tabla_accionadores')
 //var $tabla_sensores_estado = $('#tabla_sensores_estado')
+ const boton = document.getElementById('addnodo');
+        boton.style.display = 'none'; // Oculta el botón
+
+         const boton2 = document.getElementById('addact');
+        boton2.style.display = 'none'; // Oculta el botón
+
+  const boton3 = document.getElementById('addsensor');
+        boton3.style.display = 'none'; // Oculta el botón
+
 
   $('#tabla_grupos').bootstrapTable({ 
 
   onClickRow:function (row,$element) {
- 
+ const boton = document.getElementById('addnodo');
+        boton.style.display = 'block'; // Oculta el botón
 localStorage.setItem('id_grupo', row.id_grupo);
 //alert(localStorage.getItem('id_grupo'))
 localStorage.setItem('variables_sensor', row.variables_sensor);
 //alert("holaa"+localStorage.getItem('variables_sensor'));
+alert("alskjdlk")
  $('#tabla_nodos').bootstrapTable({ 
 
   onClickRow:function (row,$element) {
 localStorage.setItem('id_nodo', row.id_nodo);
 //alert(localStorage.getItem('id_nodo'))
+        boton2.style.display = 'block'; // Oculta el botón
+            boton3.style.display = 'block'; // Oculta el botón
 var index = $element.data('index');
     alert(index)
+    alert("pichulaperro")
 $('#tabla_sensores').bootstrapTable({
   onClickRow: function(row, $element) {
 
@@ -904,7 +919,6 @@ $tabla_nodos.bootstrapTable('load', respuesta[0].nodos_grupo)
 })
 
 $tabla_grupos.bootstrapTable('load', respuesta)
-
 //$table2.bootstrapTable('load', respuesta.reverse())
 //$table3.bootstrapTable('load', respuesta.reverse())
 }).fail(function(err){

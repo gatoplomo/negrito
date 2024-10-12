@@ -152,11 +152,14 @@
       
 
 
-<hr>
-<table id="tabla_grupos" >   </table>
-<hr>
-<button class="btn btn-success" onclick="redireccionar()">Agregar Gateway</button>
 
+    <hr>
+    <table id="tabla_grupos">
+        <!-- Aquí puedes agregar filas y columnas a la tabla -->
+    </table>
+    <button id="addgateway" class="btn btn-success btn-block" onclick="redireccionar()">Add Gateway</button>
+
+  <hr>
     <script>
         function redireccionar() {
             // Cambia la URL a la que deseas redirigir
@@ -165,13 +168,19 @@
     </script>
 
 <table id="tabla_nodos" >   </table>
+<button id="addnodo" class="btn btn-success btn-block" onclick="redireccionar()">Add Nodo</button>
 <hr>
-<button class="btn btn-success" onclick="redireccionar()">Agregar Nodo</button>
+<!--<button class="btn btn-success" onclick="redireccionar()">Agregar Nodo</button>-->
 <table id="tabla_accionadores" >   </table>
+<button id="addact" class="btn btn-success btn-block" onclick="redireccionar()">Add Act</button>
 <hr>
+<!--
 <table id="tabla_sensores_estado" >   </table>
+ <button class="btn btn-success btn-block" onclick="redireccionar()">Agregar Gateway</button>
 <hr>
+-->
 <table id="tabla_sensores" >   </table>
+ <button id="addsensor" class="btn btn-success btn-block" onclick="redireccionar()">Add Sensor</button>
  <hr>
 <!--<div id="tabla-container"></div>F
 -->
