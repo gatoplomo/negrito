@@ -716,7 +716,7 @@ alert("alskjdlk")
 localStorage.setItem('id_nodo', row.id_nodo);
 //alert(localStorage.getItem('id_nodo'))
         boton2.style.display = 'block'; // Oculta el botón
-            boton3.style.display = 'block'; // Oculta el botón
+           boton3.style.display = 'block'; // Oculta el botón
 var index = $element.data('index');
     alert(index)
     alert("pichulaperro")
