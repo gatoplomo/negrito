@@ -689,15 +689,17 @@ var $tabla_grupos = $('#tabla_grupos')
 var $tabla_nodos = $('#tabla_nodos')
 var $tabla_sensores = $('#tabla_sensores')
 var $tabla_accionadores = $('#tabla_accionadores')
-//var $tabla_sensores_estado = $('#tabla_sensores_estado')
- const boton = document.getElementById('addnodo');
-        boton.style.display = 'none'; // Oculta el botón
 
-         const boton2 = document.getElementById('addact');
-        boton2.style.display = 'none'; // Oculta el botón
 
-  const boton3 = document.getElementById('addsensor');
-        boton3.style.display = 'none'; // Oculta el botón
+// Obtener las referencias a los botones
+const boton = document.getElementById('addnodo');
+const boton2 = document.getElementById('addact');
+const boton3 = document.getElementById('addsensor');
+
+// Ocultar los botones
+boton.style.display = 'none';
+boton2.style.display = 'none';
+boton3.style.display = 'none';
 
 
   $('#tabla_grupos').bootstrapTable({ 

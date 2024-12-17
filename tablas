@@ -251,3 +251,19 @@ app.post("/crear_grupo", function(req, res) {
     console.log('El objeto "Grupo" ha sido insertado exitosamente en la colección "grupo"');
   });
 });
+
+
+
+1.- Instalar Ubuntu Server 
+2.- Sudo  Apt Install Npm
+3.-fallo instalacion npm
+4.-cambio del adaptador nat a puente
+5.- sudo apt install net-tools
+6.-ifconfig
+7.- sudo apt update
+8.- sudo apt install npm
+9.-npm install node
+10.- sudo apt update
+11.- sudo npm install git 
+12.- git clone 
+13.-
