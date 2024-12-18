@@ -266,4 +266,9 @@ app.post("/crear_grupo", function(req, res) {
 10.- sudo apt update
 11.- sudo npm install git 
 12.- git clone 
-13.-
+13.-sudo npm install mosquitto xxxxx
+14.-
+
+
+
+https://www.fosstechnix.com/how-to-install-mongodb-server-on-ubuntu-24-04/

@@ -586,10 +586,14 @@ body.appendChild(tabla);
 tabla.style.border = "2px solid black"; // Agrega borde a la tabla
 division.appendChild(tabla);
 
+
+const resultado = variableIDs[item].split('/').pop();
+
+
 var chartData = {
   labels: [], // Etiquetas para el eje x
   datasets: [{
-    label: 'Ventas', // Etiqueta para la leyenda
+    label:resultado, // Etiqueta para la leyenda
     data: [], // Datos para el eje y
     backgroundColor: 'rgba(75, 192, 192, 0.5)', // Color de fondo de las barras
     borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
