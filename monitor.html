@@ -80,6 +80,15 @@
                   Monitor
                 </a>
               </li>
+
+             <li class="nav-item">
+                <a class="nav-link" href="/monitor.html">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  Plotter
+                </a>
+              </li>
+
+
                <li class="nav-item">
                 <a class="nav-link" href="/monitor.html">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -154,6 +163,62 @@
 
 
     <hr>
+<table id="tabla_conf" border="1">
+    <tr>
+        <td>IP Server</td>
+        <td>
+            <span id="ip_server_text">192.168.0.1</span>
+            <input id="ip_server_input" type="text" value="192.168.0.1" style="display:none;">
+        </td>
+        <td style="background-color:transparent; text-align:center;">
+            <button onclick="editarCampo('ip_server')" style="font-size:12px; border:none; background:none; cursor:pointer;">✏️</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Directorio Root</td>
+        <td>
+            <span id="directorio_root_text">/var/www/html</span>
+            <input id="directorio_root_input" type="text" value="/var/www/html" style="display:none;">
+        </td>
+        <td style="background-color:transparent; text-align:center;">
+            <button onclick="editarCampo('directorio_root')" style="font-size:12px; border:none; background:none; cursor:pointer;">✏️</button>
+        </td>
+    </tr>
+    <tr>
+        <td>IP Base de Datos</td>
+        <td>
+            <span id="ip_bd_text">192.168.0.2</span>
+            <input id="ip_bd_input" type="text" value="192.168.0.2" style="display:none;">
+        </td>
+        <td style="background-color:transparent; text-align:center;">
+            <button onclick="editarCampo('ip_bd')" style="font-size:12px; border:none; background:none; cursor:pointer;">✏️</button>
+        </td>
+    </tr>
+</table>
+
+<script>
+    function editarCampo(idBase) {
+        const textElement = document.getElementById(`${idBase}_text`);
+        const inputElement = document.getElementById(`${idBase}_input`);
+        
+        // Si el campo está en modo texto, lo cambia a modo edición
+        if (textElement.style.display !== "none") {
+            textElement.style.display = "none";
+            inputElement.style.display = "inline";
+            inputElement.focus();
+        } else {
+            // Guarda el valor y regresa a modo texto
+            textElement.innerText = inputElement.value;
+            textElement.style.display = "inline";
+            inputElement.style.display = "none";
+        }
+    }
+</script>
+
+
+
+    <hr>
+
     <table id="tabla_grupos">
         <!-- Aquí puedes agregar filas y columnas a la tabla -->
     </table>

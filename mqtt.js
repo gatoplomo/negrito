@@ -28,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.81.249:9001' 
+const host = 'ws://192.168.126.193:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
@@ -119,7 +119,7 @@ if (tablaGenerada === true) {
   if (topic === localStorage.getItem('id_grupo')) {
     console.log(JSON.stringify(mensaje, null, 2));
     console.log(tablaGenerada);
-    alert("PICHULAEPERRO")
+   // alert("PICHULAEPERRO")
     for (let i = 0; i < mensaje.nodos.length; i++) {
       if (mensaje.nodos[i].id_nodo === localStorage.getItem('id_nodo')) {
         console.log("Nodo:", mensaje.nodos[i].id_nodo);

@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "ajax": "0.0.4",
+    "axios": "^1.7.9",
     "body-parser": "^1.19.0",
     "bootstrap-icons": "^1.10.3",
     "bootstrap-input-spinner": "^2.2.0",
@@ -29,6 +30,7 @@
     "jquery": "^3.6.0",
     "jsdom": "^16.6.0",
     "json2csv": "^5.0.6",
+    "matplotlib": "^1.0.0",
     "moment": "^2.29.4",
     "mongo-export": "^0.3.1",
     "mongodb": "^3.7.3",

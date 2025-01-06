@@ -13,6 +13,7 @@ app.set('views',__dirname+'/');
 var xl = require('excel4node');
 var bodyParser = require('body-parser');
 const moment = require('moment');
+const http = require('http');
 
 
 var urlencodedParser = bodyParser.urlencoded({extended:true});
@@ -215,13 +216,30 @@ var client2 = mqtt.connect(`mqtt://${config.mqttHost}:${config.mqttPort}`, {
 });
 
 client2.on('connect', function () {
-  client2.subscribe('grupo_001', function (err) {
+  client2.subscribe('', function (err) {
     if (!err) {
       // Puedes publicar un mensaje si lo necesitas
       // client2.publish('nodo1', 'Hello mqtt');
     }
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function respaldar(id_grupo)
@@ -418,6 +436,47 @@ app.post('/loginapp', async (req, res) => {
   }
 });
   
+// Ruta que interactúa con Flask y devuelve el PNG
+app.post('/plot', (req, res) => {
+  console.log("Iniciando solicitud hacia Flask...");
+
+  const options = {
+    hostname: 'localhost',
+    port: 5000,
+    path: '/plot.png',
+    method: 'GET',
+  };
+
+  const flaskReq = http.request(options, (flaskRes) => {
+    console.log(`Respuesta de Flask recibida con código de estado: ${flaskRes.statusCode}`);
+
+    if (flaskRes.statusCode === 200) {
+      console.log("Gráfico obtenido correctamente desde Flask. Enviando al cliente...");
+      res.setHeader('Content-Type', 'image/png');
+      flaskRes.pipe(res); // Pasa el contenido directamente al cliente
+    } else {
+      console.error(`Error al obtener el gráfico desde Flask. Código de estado: ${flaskRes.statusCode}`);
+      res.status(500).json({ error: 'Error al obtener el gráfico desde Flask' });
+    }
+  });
+
+  flaskReq.on('error', (error) => {
+    console.error(`Error al comunicarse con Flask: ${error.message}`);
+    res.status(500).json({ error: 'Error interno al comunicarse con Flask' });
+  });
+
+  flaskReq.on('close', () => {
+    console.log("Conexión con Flask cerrada.");
+  });
+
+  flaskReq.end(() => {
+    console.log("Solicitud a Flask completada.");
+  });
+});
+
+
+
+
 app.post('/grupoapp', (req, res) => {
   const db = client.db(dbName);
   const collection = db.collection("grupo");
@@ -432,6 +491,67 @@ app.post('/grupoapp', (req, res) => {
   });
 });
   
+
+app.post('/get-data', (req, res) => {
+    console.log('Solicitud recibida desde el cliente.');
+
+    // Configuración para la solicitud al servidor Flask
+    const options = {
+        hostname: 'localhost',
+        port: 5000,
+        path: '/api/trifasico', // Cambiar a la ruta correcta
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    // Realizar la solicitud a Flask
+    const flaskReq = http.request(options, (flaskRes) => {
+        let data = '';
+
+        flaskRes.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        flaskRes.on('end', () => {
+            console.log('Datos crudos recibidos de Flask:', data);
+
+            if (flaskRes.statusCode === 200) {
+                try {
+                    const parsedData = JSON.parse(data);
+
+                    // Verificar el formato de los datos
+                    const formattedData = {
+                        labels: parsedData.labels,
+                        faseA: parsedData.faseA,
+                        faseB: parsedData.faseB,
+                        faseC: parsedData.faseC,
+                    };
+
+                    console.log('Datos enviados al cliente:', formattedData);
+                    res.json(formattedData);
+                } catch (error) {
+                    console.error('Error al analizar la respuesta de Flask:', error.message);
+                    res.status(500).json({ error: 'Error al procesar datos desde Flask' });
+                }
+            } else {
+                console.error(`Error al obtener datos desde Flask: ${flaskRes.statusCode}`);
+                res.status(500).json({ error: 'Error al obtener datos desde Flask' });
+            }
+        });
+    });
+
+    flaskReq.on('error', (error) => {
+        console.error('Error en la solicitud hacia Flask:', error.message);
+        res.status(500).json({ error: 'Error interno al comunicarse con Flask' });
+    });
+
+    flaskReq.end();
+});
+
+
+
 app.post('/gruposapp', (req, res) => {
 const db = client.db(dbName);
 
