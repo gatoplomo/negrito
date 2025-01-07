@@ -29,7 +29,7 @@ const options = {
 }
 
 
-const host = 'ws://192.168.51.90:9001'
+const host = 'ws://192.168.207.193:9001'
 console.log('Connecting mqtt client')
 
 
@@ -128,7 +128,7 @@ $("#cantidad_sensores_valor").text(cantidadSensores);
 $("#cantidad_accionadores_valor").text(cantidadAccionadores);
 $("#cantidad_variables_valor").text(cantidadVariables);
 
-
+    console.log("VARIABLES IDS")
     
     console.log(variableIDs)
 
@@ -136,117 +136,142 @@ $("#cantidad_variables_valor").text(cantidadVariables);
 
 
 
-// Supongo que tienes la variable 'chartInstances' que contiene todas las instancias de gráficos
+// Objeto global para almacenar las lecturas
+let lecturasGlobales = {};
 
 client.on('message', (topic, message, packet) => {
   const now = new Date();
-  console.log(now); // Muestra la fecha y hora actuales en formato de cadena
+  console.log(now); // Muestra la fecha y hora actuales
 
-  // Para obtener solo la hora actual en formato de cadena
   const horaActual = now.toLocaleTimeString();
   console.log(horaActual);
+
   let mensaje;
   console.log(array_lecturas_graf[0]);
 
   try {
     mensaje = JSON.parse(message);
-    console.log("SUCESS")
+    console.log("SUCCESS");
     console.log(mensaje);
 
     // Generar las IDs buscadas
-    const data = JSON.parse(message);
-    const grupo = data.grupo;
-    const nodos = data.nodos;
+    const { grupo, nodos } = mensaje; // Desestructuración para obtener grupo y nodos
     const ids_generadas = [];
 
-    for (const nodo of nodos) {
-      const id_nodo = nodo.id_nodo;
-      const sensores = nodo.sensores;
-
-      for (const sensor of sensores) {
-        const id_sensor = sensor.id_sensor;
-        const modelo = sensor.modelo;
-        const lecturas = sensor.lecturas;
+    nodos.forEach(({ id_nodo, sensores }) => {
+      sensores.forEach(({ id_sensor, modelo, lecturas }) => {
+        console.log("DEPURACION");
+        console.log(lecturas);
 
         for (const variable in lecturas) {
           const id_variable = `${grupo}/${id_nodo}/${id_sensor}/${modelo}/${variable}`;
-          const objeto_id_valor = {
+          ids_generadas.push({
             id_lectura: id_variable,
             lecturas: lecturas[variable]
-          };
+          });
 
-          ids_generadas.push(objeto_id_valor);
+          // Guardar la lectura en el objeto global con la clave `id_variable`
+          lecturasGlobales[id_variable] = lecturas[variable];
         }
-      }
-    }
-    console.log("AAAAAAAAAAAAAAAAAAAAA");
-    console.log(ids_generadas);
+      });
+    });
 
-    for (let l = 0; l < variableIDs.length; l++) {
+    console.log("IDS GENERADAS");
+    console.log(ids_generadas);
+    console.log("LECTURAS GLOBALIZADAS:");
+    console.log(lecturasGlobales); // Verifica las lecturas almacenadas globalmente
+
+    // Continuar con el resto de la lógica
+    ids_generadas.forEach((lectura, l) => {
       const graficoID = gauges[l].id;
       // Actualizar el valor del gauge
-            gauges[l].value = ids_generadas[l].lecturas;
+      gauges[l].value = lectura.lecturas;
 
       // Buscar el objeto que corresponde a este gráfico en el arreglo buttonStatusArray
       const botonStatus = buttonStatusArray.find(obj => obj.id_btn === graficoID);
 
       if (botonStatus) {
-        // El gráfico tiene un estado definido en el arreglo buttonStatusArray
-        const estado = botonStatus.status;
+        const { status } = botonStatus; // Desestructuración de status
 
-        switch (estado) {
-          case "playing":
-            // Tu nuevo dato
-            const nuevoDato = {
-              "hora": "01:13",
-              "dato": ids_generadas[l].lecturas
-            };
-
-            // Supongo que chartInstances contiene todas las instancias de gráficos
-            const rutaGrafico = ids_generadas[l].id_lectura + "graf";
+        switch (status) {
+          case "playing": {
+            // Definir la ruta del gráfico
+            const rutaGrafico = `${lectura.id_lectura}graf`;
             const instanciaGrafico = chartInstances[rutaGrafico];
 
             if (instanciaGrafico) {
-              // Agregar el nuevo dato solo a la colección de lecturas del gráfico que hace match
-              array_lecturas_graf[l].lecturas.push(nuevoDato);
+              console.log(`Instancia encontrada para el gráfico: ${rutaGrafico}`);
 
-              // Actualizar los datos y etiquetas solo para la instancia de gráfico correspondiente
-              instanciaGrafico.data.datasets[0].data.push(nuevoDato.dato);
-              instanciaGrafico.data.labels.push(nuevoDato.hora);
+              // Verificar si la instancia del gráfico existe
+              const ctx = document.getElementById(rutaGrafico).getContext('2d');
 
-              // Actualizar el gráfico
-              instanciaGrafico.update();
+              if (instanciaGrafico) {
+                // Cortar el ID por la barra "/"
+                const partes = rutaGrafico.split('/');
+                const variable = partes[partes.length - 1].slice(0, -4); // Obtener variable (sin "graf")
 
-              console.log("MATCH");
+                console.log(variable);  // Ejemplo: "temperatura"
+                console.log("AQUI ESTAMOS");
+
+                // Obtener el valor de la variable desde lecturasGlobales
+                const datoVariable = lecturasGlobales[lectura.id_lectura];
+
+                console.log("Dato a actualizar en el gráfico:", datoVariable);
+
+                // Ahora podemos agregar un nuevo dato al gráfico si es necesario
+                const nuevoDato = {
+                  "hora": "12:00",   // Ejemplo de hora
+                  "dato": datoVariable // Aquí usamos el dato basado en la variable
+                };
+
+                // Actualizar el gráfico con el nuevo dato
+                instanciaGrafico.data.labels.push(nuevoDato.hora);
+                instanciaGrafico.data.datasets[0].data.push(nuevoDato.dato);
+
+                // Actualizar visualmente el gráfico
+                instanciaGrafico.update();
+              }
+
             } else {
-              console.log("No se encontró la instancia del gráfico en la ruta especificada:", rutaGrafico);
+              console.error(`No se encontró la instancia del gráfico en la ruta especificada: ${rutaGrafico}`);
+              console.log("Claves en chartInstances:", Object.keys(chartInstances));
+              console.log("ID esperada para el gráfico:", rutaGrafico);
             }
-
-      
             break;
+          }
 
           case "stopped":
-            console.log("El gráfico está en estado stopped, no se actualizará:", graficoID);
+            console.log("El gráfico está en estado 'stopped', no se actualizará.");
             break;
 
           default:
-            console.log("Estado inválido:", estado);
+            console.error(`Estado inválido recibido: ${status}`);
             break;
         }
       } else {
-        console.log("El gráfico no tiene un estado definido en el arreglo buttonStatusArray:", graficoID);
+        console.error("El gráfico no tiene un estado definido en el arreglo buttonStatusArray.");
       }
-    }
+    });
 
   } catch (error) {
     console.error('Error en el parseo del mensaje:', error);
-    console.log('Objeto JSON dañado:', message); // Impresión del objeto JSON dañado
-
-    // Aquí puedes realizar alguna acción para manejar el error, como enviar una notificación o registrar en un archivo de log.
-    // También puedes definir un valor por defecto para la variable 'mensaje', en caso de que el parseo falle.
+    console.log('Objeto JSON dañado:', message);
     mensaje = { error: 'No se pudo parsear el mensaje' };
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -258,22 +283,51 @@ client.on('message', (topic, message, packet) => {
   }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function createChart(canvasId, data) {
+  // Verificar si la instancia del gráfico ya existe
+  if (!chartInstances[canvasId]) {
+    // Obtener el canvas con el ID especificado
+    var canvas = document.getElementById(canvasId);
 
-  // Obtener el canvas con el ID especificado
-  var canvas = document.getElementById(canvasId);
+    // Crear el contexto 2D del canvas
+    var ctx = canvas.getContext('2d');
 
-  // Crear el contexto 2D del canvas
-  var ctx = canvas.getContext('2d');
+    // Crear el gráfico utilizando Chart.js
+    const instanciaGrafico = new Chart(ctx, {
+      type: 'line', // Tipo de gráfico (puede ser 'bar', 'line', 'pie', etc.)
+      data: data,   // Datos iniciales del gráfico
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        }
+      }
+    });
 
-  // Crear el gráfico utilizando Chart.js
-  const myChart = new Chart(ctx, {
-    type: 'line', // Tipo de gráfico (puede ser 'bar', 'line', 'pie', etc.)
-    data: data, // Datos del gráfico
-    options: {
-      // Opciones del gráfico (puedes personalizar el estilo, las etiquetas, etc.)
-    }
-  });
+    // Guardar la instancia para poder acceder a ella después
+    chartInstances[canvasId] = instanciaGrafico;
+  }
 }
 
 
@@ -601,6 +655,7 @@ var chartData = {
   }]
 };
 
+console.log("CREARCION GRAFICOS")
 createChart(variableIDs[item]+"graf", chartData);
 
 }
@@ -683,7 +738,7 @@ $.ajax({
       });
 
 chartInstances[id+"graf"] = chart;
-
+console.log("CREACION")
 
     });
   },

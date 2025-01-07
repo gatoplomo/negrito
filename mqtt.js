@@ -28,7 +28,7 @@ const options = {
     retain: false
   },
 }
-const host = 'ws://192.168.126.193:9001' 
+const host = 'ws://192.168.207.193:9001' 
 console.log('Connecting mqtt client')
 const client = mqtt.connect(host, options)
 client.on('error', (err) => {
@@ -721,7 +721,7 @@ localStorage.setItem('id_nodo', row.id_nodo);
            boton3.style.display = 'block'; // Oculta el botón
 var index = $element.data('index');
     alert(index)
-    alert("pichulaperro")
+   // alert("pichulaperro")
 $('#tabla_sensores').bootstrapTable({
   onClickRow: function(row, $element) {
 

@@ -277,6 +277,8 @@ app.post("/crear_grupo", function(req, res) {
 https://www.fosstechnix.com/how-to-install-mongodb-server-on-ubuntu-24-04/
 sudo apt update
 sudo apt-get install gnupg curl
+
+
 curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
 
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
@@ -307,3 +309,105 @@ pip install <ruta-al-archivo>.whl
 python app.py
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 deactivate
+
+""  shift dos puntitos al lado de la ce francesa 
+
+corchetes sin apretar nada dos teclas al lado de la P
+
+= dos teclas despues del 0 sin apretar nada
+
+dos puntos shift enie
+
+pipe , shitf C franesa
+
+gui bajo shift alado de cero
+
+sigo mayor menor shift dos puntos
+
+
+const grupo = {
+  id_grupo: "grupo_001",
+  nodos_grupo: [
+    {
+      id_nodo: "nodo_001",
+      sensores: [
+        {
+          id_sensor:"sensor_001",
+          modelo_sensor: "DTH11",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }
+      ],
+      accionadores: [
+        {
+          id_accionador: "accionador_001",
+          accion_accionador: "Alarma"
+        },
+        {
+          id_accionador: "accionador_002",
+          accion_accionador: "Ventilador"
+        }
+      ]
+    },{
+      id_nodo: "nodo_002",
+      sensores: [
+        {
+          id_sensor:"sensor_001",
+          modelo_sensor: "DTH11",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }
+      ], sensores_estado: [
+        {
+          id_sensor_estado:"sensor_estado_001",
+          modelo_sensor_estado: "CONTACT"
+        }, {
+          id_sensor_estado:"sensor_estado_002",
+          modelo_sensor_estado: "PIR"
+        }
+      ],
+      accionadores: [
+        {
+          id_accionador: "accionador_001",
+          accion_accionador: "encender"
+        },
+        {
+          id_accionador: "accionador_002",
+          accion_accionador: "apagar"
+        }
+      ]
+    },  {
+      id_nodo: "nodo_003",
+      sensores: [
+        {
+          id_sensor:"sensor_001",
+          modelo_sensor: "DTH11",
+          variables_sensor: {
+            temperatura: true,
+            humedad: true
+          }
+        }, {
+          id_sensor:"sensor_002",
+          modelo_sensor: "HUMSOND",
+          variables_sensor: {
+            humedad: true
+          }
+        }
+      ],
+      accionadores: [
+        {
+          id_accionador: "accionador_001",
+          accion_accionador: "Alarma"
+        },
+        {
+          id_accionador: "accionador_002",
+          accion_accionador: "Ventilador"
+        }
+      ]
+    }
+  ]
+};

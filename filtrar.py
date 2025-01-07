@@ -43,7 +43,7 @@ fecha=sys.argv[1]
 b=sys.argv[2]
 #c=sys.argv[3]
 
-csv = pd.read_csv(r'/home/tom-s-lazo/Documentos/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+fecha+'.csv')
+csv = pd.read_csv(r'C:/Users/DataDog/Documents/GitHub/negrito/Datos2/'+sys.argv[2]+'/'+fecha+'.csv')
 
 df = pd.DataFrame(csv)
 df.head()

@@ -216,7 +216,7 @@ var client2 = mqtt.connect(`mqtt://${config.mqttHost}:${config.mqttPort}`, {
 });
 
 client2.on('connect', function () {
-  client2.subscribe('', function (err) {
+  client2.subscribe('grupo_001', function (err) {
     if (!err) {
       // Puedes publicar un mensaje si lo necesitas
       // client2.publish('nodo1', 'Hello mqtt');
@@ -333,7 +333,7 @@ const assert = require('assert');
 
 
 
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://192.168.207.193:27017';
 
 // Database Name
 const dbName = 'myproject';
@@ -696,75 +696,17 @@ app.post("/crear_grupo", function(req, res) {
   const db = client.db(dbName);
   const collection = db.collection("grupo");
 
- const grupo = {
+const grupo = {
   id_grupo: "grupo_001",
   nodos_grupo: [
     {
       id_nodo: "nodo_001",
       sensores: [
         {
-          id_sensor:"sensor_001",
+          id_sensor: "sensor_001",
           modelo_sensor: "DTH11",
           variables_sensor: {
             temperatura: true,
-            humedad: true
-          }
-        }
-      ],
-      accionadores: [
-        {
-          id_accionador: "accionador_001",
-          accion_accionador: "Alarma"
-        },
-        {
-          id_accionador: "accionador_002",
-          accion_accionador: "Ventilador"
-        }
-      ]
-    },{
-      id_nodo: "nodo_002",
-      sensores: [
-        {
-          id_sensor:"sensor_001",
-          modelo_sensor: "DTH11",
-          variables_sensor: {
-            temperatura: true,
-            humedad: true
-          }
-        }
-      ], sensores_estado: [
-        {
-          id_sensor_estado:"sensor_estado_001",
-          modelo_sensor_estado: "CONTACT"
-        }, {
-          id_sensor_estado:"sensor_estado_002",
-          modelo_sensor_estado: "PIR"
-        }
-      ],
-      accionadores: [
-        {
-          id_accionador: "accionador_001",
-          accion_accionador: "encender"
-        },
-        {
-          id_accionador: "accionador_002",
-          accion_accionador: "apagar"
-        }
-      ]
-    },  {
-      id_nodo: "nodo_003",
-      sensores: [
-        {
-          id_sensor:"sensor_001",
-          modelo_sensor: "DTH11",
-          variables_sensor: {
-            temperatura: true,
-            humedad: true
-          }
-        }, {
-          id_sensor:"sensor_002",
-          modelo_sensor: "HUMSOND",
-          variables_sensor: {
             humedad: true
           }
         }
@@ -782,6 +724,7 @@ app.post("/crear_grupo", function(req, res) {
     }
   ]
 };
+
 
 
   collection.insertOne(grupo, (err, result) => {
@@ -1006,7 +949,7 @@ app.post('/filtrar', (req, res) => {
   var dataToSend;
 
   // spawn new child process to call the python script
-  var python = spawn('python3', ["/home/tom-s-lazo/Documentos/GitHub/negrito/master3.py"]);
+  var python = spawn('python3', ["C:/Users/DataDog/Documents/GitHub/negrito/master3.py"]);
 
   python.stdout.on('data', function(data) {
     console.log('Pipe data from python script ...');

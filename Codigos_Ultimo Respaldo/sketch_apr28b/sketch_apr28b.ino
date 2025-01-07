@@ -30,9 +30,9 @@ RF24 radio(CE_PIN, CSN_PIN);
 float datos[5];
 float datos2[5];
 String valor="30";
-const char* ssid = "Redmi Note 12 Pro 5G";
-const char* password = "Plomo1994!";
-const char* mqtt_server = "192.168.81.249";
+const char* ssid = "datadog";
+const char* password = "12345678";
+const char* mqtt_server = "192.168.207.193";
 const char* clientID = "grupo_001";
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -64,8 +64,10 @@ void setup() {
   //wifi_set_sleep_type(LIGHT_SLEEP_T);
   lcd.init();
   
-pinMode(9, OUTPUT);
-pinMode(10, OUTPUT);
+pinMode(D5, OUTPUT);
+pinMode(D6, OUTPUT);
+
+
 lcd.backlight();
 lcd.setCursor (0,0) ;
 lcd.print("CONECTANDO");
@@ -86,8 +88,8 @@ Serial.println(F("Initialize System"));
 
 
     
-        pinMode(9,OUTPUT);
-     pinMode(10,OUTPUT);
+        pinMode(D5,OUTPUT);
+     pinMode(D6,OUTPUT);
    pinMode(D8,INPUT);
    //pinMode(D7,INPUT);
   
@@ -152,13 +154,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 
 if (orden == "nodo_001accionador_001ON") {
-  digitalWrite(9, LOW);
+  digitalWrite(D5, LOW);
 } else if (orden == "nodo_001accionador_001OFF") {
-  digitalWrite(9, HIGH);
+  digitalWrite(D6, HIGH);
 } else if (orden == "nodo_001accionador_002ON") {
-  digitalWrite(10, LOW);
+  digitalWrite(D5, LOW);
 } else if (orden == "nodo_001accionador_002OFF") {
-  digitalWrite(10, HIGH);
+  digitalWrite(D6, HIGH);
 } 
 
 else if (orden == "nodo_002accionador_001ON") {
@@ -233,29 +235,31 @@ void loop() {
   radio.openReadingPipe(1, addresses[1]);   //Setting the address at which we will receive the data
   radio.setPALevel(RF24_PA_MIN); 
   radio.startListening();
-  if (radio.available()) {
-    radio.read(datos,sizeof(datos));
+
+  
+  //if (radio.available()) {
+   // radio.read(datos,sizeof(datos));
      //reportamos por el puerto serial los datos recibidos
-      Serial.print("NODO_002" );
-     Serial.print("Dato0= " );
-     Serial.print(datos[0]);
-     Serial.print("Dato1= " );
-     Serial.print(datos[1]);
-      Serial.print("Dato2= " );
-     Serial.print(datos[2]);
-     Serial.print("Dato3= " );
-     Serial.print(datos[3]);
-       Serial.print("Dato4= " );
-     Serial.println(datos[4]);
-   char lcdText[20];
-sprintf(lcdText, "1A: %.1f 1B: %.1f", datos[0], datos[1]);
-lcd.setCursor(0, 2);
-lcd.print(lcdText);
-   delay(100); 
-   radio.stopListening();
-    radio.write(&button_stateA, sizeof(button_stateA));  // Enviar el entero button_stateA de vuelta
-      delay(100); 
- }
+     // Serial.print("NODO_002" );
+     //Serial.print("Dato0= " );
+     //Serial.print(datos[0]);
+     //Serial.print("Dato1= " );
+     //Serial.print(datos[1]);
+      //Serial.print("Dato2= " );
+     //Serial.print(datos[2]);
+     //Serial.print("Dato3= " );
+     //Serial.print(datos[3]);
+       //Serial.print("Dato4= " );
+     //Serial.println(datos[4]);
+   //char lcdText[20];
+//sprintf(lcdText, "1A: %.1f 1B: %.1f", datos[0], datos[1]);
+//lcd.setCursor(0, 2);
+//lcd.print(lcdText);
+   //delay(100); 
+  // radio.stopListening();
+   // radio.write(&button_stateA, sizeof(button_stateA));  // Enviar el entero button_stateA de vuelta
+     // delay(100); 
+// }
   
  } 
  
@@ -351,12 +355,12 @@ JsonArray nodos_0_accionadores = nodos_0.createNestedArray("accionadores");
 // Accionador 1 del nodo_001
 JsonObject nodos_0_accionadores_0 = nodos_0_accionadores.createNestedObject();
 nodos_0_accionadores_0["id_accionador"] = "accionador_001";
-nodos_0_accionadores_0["status"] = digitalRead(9);
+nodos_0_accionadores_0["status"] = digitalRead(D5);
 
 // Accionador 2 del nodo_001
 JsonObject nodos_0_accionadores_1 = nodos_0_accionadores.createNestedObject();
 nodos_0_accionadores_1["id_accionador"] = "accionador_002";
-nodos_0_accionadores_1["status"] = digitalRead(10);
+nodos_0_accionadores_1["status"] = digitalRead(D6);
 
 
 JsonArray nodos_0_sensores = nodos_0.createNestedArray("sensores");
@@ -424,10 +428,10 @@ Serial.println(mensaje);
 client.publish("grupo_001", mensaje.c_str());
 
 //lcd.clear();
-lcd.setCursor (0,0) ;
-lcd.print(String(t3)+" "+String(t2));
-lcd.setCursor (0,1) ;
-lcd.print("t/h:"+String(t)+"/"+String(h));
+//lcd.setCursor (0,0) ;
+//lcd.print(String(t3)+" "+String(t2));
+//lcd.setCursor (0,1) ;
+//lcd.print("t/h:"+String(t)+"/"+String(h));
 //lcd.setCursor (0,3) ;
 //lcd.print("Conectado");
 //lcd.setCursor (0,2) ;

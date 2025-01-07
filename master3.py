@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 
 # Establecer la conexión con MongoDB
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://192.168.207.193:27017/')
 
 # Obtener la fecha actual en formato "año-mes-dia"
 fecha_actual = datetime.now().strftime('%Y-%m-%d')
