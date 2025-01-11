@@ -434,11 +434,32 @@ for ( var item = 0; item < numero; item++) {
 
   celda.appendChild(container);
 
-  var hilera2 = document.createElement("tr");
-  var celda2 = document.createElement("td");
-  var textoCelda2 = document.createTextNode("");
-  celda2.appendChild(textoCelda2);
-  celda2.appendChild(canv);
+  
+var hilera2 = document.createElement("tr");
+var celda2 = document.createElement("td");
+var textoCelda2 = document.createTextNode("");
+celda2.appendChild(textoCelda2);
+
+// Crear el contenedor para el canvas
+var contenedor = document.createElement("div");
+contenedor.style.position = "relative"; // Para posicionar el canvas si es necesario
+
+// El canvas ya está creado, solo se agrega al contenedor
+contenedor.appendChild(canv); // Agregar el canvas existente al contenedor
+
+// Agregar el contenedor (solo el canvas) a la celda
+celda2.appendChild(contenedor);
+
+hilera2.appendChild(celda2);
+
+
+
+
+
+
+
+
+
   celda2.appendChild(textoCelda2);
   hilera2.appendChild(celda2);
 
@@ -528,6 +549,9 @@ eye.onclick = function() {
 $(document).on('click', '.btn-close', function() {
   $('#myModal').modal('hide');
 })
+
+
+
 let download = document.createElement("i");
 download.classList.add("fa", "fa-download");
 download.setAttribute("aria-hidden", "true");
