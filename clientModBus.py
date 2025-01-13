@@ -1,5 +1,6 @@
 from pymodbus.client import ModbusTcpClient
 
+
 class ModbusClient:
     def __init__(self, host, port):
         """
@@ -12,7 +13,7 @@ class ModbusClient:
     def connect(self):
         """Conecta al servidor Modbus."""
         if not self.client.connect():
-            raise ConnectionError("No se pudo conectar al servidor Modbus.")
+            raise ConnectionError(f"No se pudo conectar al servidor Modbus en {self.client.host}:{self.client.port}.")
 
     def read_registers(self, address, count, unit=1):
         """
@@ -22,6 +23,9 @@ class ModbusClient:
         :param unit: Unidad Modbus (ID del esclavo).
         :return: Lista de registros leídos.
         """
+        if not self.client.is_socket_open():
+            raise ConnectionError("La conexión al servidor Modbus no está activa.")
+        
         try:
             result = self.client.read_holding_registers(address, count, unit=unit)
             if result.isError():
@@ -29,12 +33,15 @@ class ModbusClient:
             return result.registers
         except Exception as e:
             raise e
-        finally:
-            self.client.close()
 
     def close(self):
         """Cierra la conexión al servidor Modbus."""
-        self.client.close()
+        if self.client.is_socket_open():
+            self.client.close()
+
+    def __del__(self):
+        """Destructor: Asegura que la conexión se cierre al eliminar el objeto."""
+        self.close()
 
 
 if __name__ == "__main__":
@@ -48,17 +55,21 @@ if __name__ == "__main__":
     client = ModbusClient(MODBUS_HOST, MODBUS_PORT)
 
     try:
-        # Conectar al servidor Modbus
+        print("Conectando al servidor Modbus...")
         client.connect()
-        print("Conectado al servidor Modbus.")
+        print("Conexión exitosa.")
 
-        # Leer registros
+        print(f"Leyendo {NUM_REGISTERS} registros desde la dirección {START_ADDRESS}...")
         registers = client.read_registers(START_ADDRESS, NUM_REGISTERS)
         print("Registros leídos:")
         for i, value in enumerate(registers):
             print(f"Registro {START_ADDRESS + i}: {value}")
+    except ConnectionError as ce:
+        print(f"Error de conexión: {ce}")
+    except ValueError as ve:
+        print(f"Error en los registros: {ve}")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error inesperado: {e}")
     finally:
         # Cerrar la conexión
         client.close()
