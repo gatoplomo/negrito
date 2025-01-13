@@ -3,9 +3,9 @@ from pymodbus.client import ModbusTcpClient  # Cambio en la importación
 
 app = Flask(__name__)
 
-# Configuración del servidor Modbus TCPa
-MODBUS_HOST = '192.168.138.193'  # Dirección IP del dispositivo Modbus esclavo
-MODBUS_PORT = 502                # Puerto por defecto para Modbus TCP
+# Configuración del servidor Modbus TCP
+MODBUS_HOST = '192.168.1.100'  # Dirección IP del dispositivo Modbus esclavo
+MODBUS_PORT = 502              # Puerto por defecto para Modbus TCP
 
 # Configurar cliente Modbus
 modbus_client = ModbusTcpClient(MODBUS_HOST, port=MODBUS_PORT)
@@ -23,7 +23,7 @@ def read_modbus():
         modbus_client.connect()
 
         # Leer 10 registros (dirección 0, cantidad de registros 10)
-        result = modbus_client.read_holding_registers(0, 10, unit=1)
+        result = modbus_client.read_holding_registers(0, 10)
 
         if result.isError():
             return jsonify({"error": "Error al leer los registros Modbus"}), 500
