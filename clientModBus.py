@@ -2,13 +2,13 @@ from pymodbus.client import ModbusTcpClient
 
 
 class ModbusClient:
-    def __init__(self, host, port):
+    def __init__(self, host, port=502):
         """
         Inicializa el cliente Modbus.
         :param host: Dirección IP del servidor Modbus.
-        :param port: Puerto del servidor Modbus.
+        :param port: Puerto del servidor Modbus (por defecto 502).
         """
-        self.client = ModbusTcpClient(host, port)
+        self.client = ModbusTcpClient(host=host, port=port)
 
     def connect(self):
         """Conecta al servidor Modbus."""
