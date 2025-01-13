@@ -4,8 +4,8 @@ from pymodbus.client import ModbusTcpClient  # Cambio en la importación
 app = Flask(__name__)
 
 # Configuración del servidor Modbus TCP
-MODBUS_HOST = '192.168.1.100'  # Dirección IP del dispositivo Modbus esclavo
-MODBUS_PORT = 502              # Puerto por defecto para Modbus TCP
+MODBUS_HOST = '192.168.138.193'  # Dirección IP del dispositivo Modbus esclavo
+MODBUS_PORT = 502                # Puerto por defecto para Modbus TCP
 
 # Configurar cliente Modbus
 modbus_client = ModbusTcpClient(MODBUS_HOST, port=MODBUS_PORT)
