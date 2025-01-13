@@ -1,25 +1,17 @@
-from pymodbus.server.sync import StartTcpServer
-from pymodbus.device import ModbusDeviceIdentification
-from pymodbus.datastore import ModbusSequentialDataBlock
-from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
+from pymodbus.server.asyncio import ModbusTcpServer
+from pymodbus.datastore import ModbusSequentialDataStore
+from pymodbus.datastore import ModbusSlaveContext, ModbusContext
+import asyncio
 
-# Configuración del bloque de datosll
+# Configuración del servidor Modbus
 store = ModbusSlaveContext(
-    di=ModbusSequentialDataBlock(0, [0]*100),
-    co=ModbusSequentialDataBlock(0, [0]*100),
-    hr=ModbusSequentialDataBlock(0, [0]*100),
-    ir=ModbusSequentialDataBlock(0, [0]*100))
-context = ModbusServerContext(slaves=store, single=True)
+    hr=ModbusSequentialDataStore(0)  # Configura registros de tipo holding
+)
+context = ModbusContext(slaves=store, single=True)
 
-# Configuración del servidor
-identity = ModbusDeviceIdentification()
-identity.VendorName = 'ModbusTest'
-identity.ProductCode = 'MT'
-identity.VendorUrl = 'http://example.com'
-identity.ProductName = 'Modbus Server'
-identity.ModelName = 'Modbus Server Test'
-identity.MajorMinorRevision = '1.0'
+# Crear y ejecutar el servidor
+server = ModbusTcpServer(context, address=("0.0.0.0", 502))
+loop = asyncio.get_event_loop()
 
-# Iniciar el servidor en la IP 192.168.138.193 y puerto 502
-print("Iniciando servidor Modbus en 192.168.138.193:502")
-StartTcpServer(context, identity=identity, address=("192.168.138.193", 502))
+print("Servidor Modbus escuchando en el puerto 502...")
+loop.run_until_complete(server.serve_forever())
