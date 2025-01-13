@@ -3,7 +3,7 @@ from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.datastore import ModbusSequentialDataBlock
 from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 
-# Configuración del bloque de datos
+# Configuración del bloque de datosll
 store = ModbusSlaveContext(
     di=ModbusSequentialDataBlock(0, [0]*100),
     co=ModbusSequentialDataBlock(0, [0]*100),
