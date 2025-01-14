@@ -34,6 +34,11 @@ async def run_server():
     # Ejecutar el servidor asincrónicamente
     await server.serve_forever()
 
-# Ejecutar el servidor
+# Asegurarnos de que el bucle de eventos de asyncio esté iniciado
 if __name__ == "__main__":
-    asyncio.run(run_server())
+    try:
+        asyncio.run(run_server())
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(run_server())
