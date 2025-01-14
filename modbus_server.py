@@ -1,18 +1,30 @@
-from pymodbus.server.asyncio import ModbusTcpServer
-from pymodbus.datastore import ModbusSlaveContext, ModbusContext
-from pymodbus.datastore import ModbusSequentialDataStore
 import asyncio
+from pymodbus.server.async_io import StartTcpServer
+from pymodbus.device import ModbusDeviceIdentification
+from pymodbus.datastore import ModbusSequentialDataBlock, ModbusSlaveContext, ModbusServerContext
 
-# Configuración de los registros (holding registers)
+# Configuración del datastore (almacenamiento de registros Modbus)
 store = ModbusSlaveContext(
-    hr=ModbusSequentialDataStore(0)  # Configura registros tipo holding
+    di=ModbusSequentialDataBlock(0, [0] * 100),  # Discrete Inputs
+    co=ModbusSequentialDataBlock(0, [0] * 100),  # Coils
+    hr=ModbusSequentialDataBlock(0, [0] * 100),  # Holding Registers
+    ir=ModbusSequentialDataBlock(0, [0] * 100),  # Input Registers
 )
-context = ModbusContext(slaves=store, single=True)
+context = ModbusServerContext(slaves=store, single=True)
 
-# Crear y ejecutar el servidor
-server = ModbusTcpServer(context, address=("0.0.0.0", 502))
+# Información del servidor
+identity = ModbusDeviceIdentification()
+identity.VendorName = "pymodbus"
+identity.ProductCode = "PM"
+identity.VendorUrl = "http://github.com/riptideio/pymodbus/"
+identity.ProductName = "pymodbus Server"
+identity.ModelName = "pymodbus Server"
+identity.MajorMinorRevision = "3.8.3"
 
-# Crear el bucle asyncio y ejecutar el servidor
-loop = asyncio.get_event_loop()
-print("Servidor Modbus TCP iniciado en el puerto 502...")
-loop.run_until_complete(server.serve_forever())
+# Función principal para iniciar el servidor
+async def run_server():
+    print("Iniciando el servidor Modbus...")
+    await StartTcpServer(context, identity=identity, address=("0.0.0.0", 502))
+
+if __name__ == "__main__":
+    asyncio.run(run_server())
