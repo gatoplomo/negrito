@@ -3,17 +3,17 @@ from pymodbus.server import StartTcpServer
 from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
 
-# Crear un contexto de servidor y un dispositivo
+# Configuración del servidor Modbus
 def setup_server():
-    # Contexto para los registros de esclavo
+    # Crear un contexto de registros de esclavo vacío
     slave_context = ModbusSlaveContext(
         di=None, co=None, hr=None, ir=None
     )
     
-    # Crear contexto del servidor con un único esclavo
+    # Crear el contexto del servidor
     context = ModbusServerContext(slaves={1: slave_context}, single=True)
     
-    # Información de identificación del dispositivo
+    # Identificación del dispositivo Modbus
     identity = ModbusDeviceIdentification(
         vendor_name="Pymodbus",
         product_code="PM",
@@ -25,16 +25,15 @@ def setup_server():
     
     return context, identity
 
-# Iniciar el servidor Modbus TCP asincrónico
+# Función asincrónica para ejecutar el servidor
 async def run_server():
     context, identity = setup_server()
-    server = StartTcpServer(context, identity=identity, address=("localhost", 502))
     print("Iniciando servidor Modbus TCP en localhost:502...")
     
-    # Ejecutar el servidor asincrónicamente
-    await server.serve_forever()
+    # Iniciar servidor TCP asincrónico
+    await StartTcpServer(context, identity=identity, address=("localhost", 502))
 
-# Asegurarnos de que el bucle de eventos de asyncio esté iniciado
+# Asegurarse de que el bucle de eventos de asyncio esté en ejecución
 if __name__ == "__main__":
     try:
         asyncio.run(run_server())
