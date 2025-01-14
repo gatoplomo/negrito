@@ -1,36 +1,25 @@
-import asyncio
-from pymodbus.server import ModbusSimulatorServer
+#!/bin/python
 
-async def run():
-    try:
-        # Configuración del simulador Modbus
-        simulator = ModbusSimulatorServer(
-            modbus_server="Simulador Modbus",
-            modbus_device="Dispositivo de Prueba",
-            http_host="0.0.0.0",  # Escucha en todas las interfaces
-            http_port=8080        # Puerto HTTP para el panel de simulación
-        )
-        
-        print("[INFO] Iniciando el simulador Modbus...")
-        
-        # Ejecuta el simulador
-        await simulator.run_forever(only_start=True)
+from pyModbusTCP.server import ModbusServer, DataBank
+from time import sleep
+from random import uniform
 
-        print("[INFO] Servidor Modbus corriendo en:")
-        print(f"  - Dirección HTTP: http://0.0.0.0:8080")
-        print(f"  - Dirección Modbus TCP: puerto 502")
-        print("[INFO] Presiona CTRL+C para detener el servidor.")
+# Create an instance of ModbusServer
+server = ModbusServer("127.0.0.1", 12345, no_block=True)
 
-        # Mantener el servidor corriendo indefinidamente
-        while True:
-            await asyncio.sleep(1)
+try:
+    print("Start server...")
+    server.start()
+    print("Server is online")
+    state = [0]
+    while True:
+        DataBank.set_words(0, [int(uniform(0, 100))])
+        if state != DataBank.get_words(1):
+            state = DataBank.get_words(1)
+            print("Value of Register 1 has changed to " +str(state))
+        sleep(0.5)
 
-    except KeyboardInterrupt:
-        print("\n[INFO] Deteniendo el servidor Modbus...")
-    finally:
-        await simulator.stop()
-        print("[INFO] Servidor Modbus detenido.")
-
-if __name__ == "__main__":
-    # Ejecuta la función principal usando asyncio
-    asyncio.run(run())
+except:
+    print("Shutdown server ...")
+    server.stop()
+    print("Server is offline")
