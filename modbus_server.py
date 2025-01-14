@@ -1,5 +1,5 @@
 import asyncio
-from pymodbus.server.async_io import ModbusTcpServer
+from pymodbus.server import StartTcpServer
 from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 from pymodbus.device import ModbusDeviceIdentification
 
@@ -28,7 +28,7 @@ def setup_server():
 # Iniciar el servidor Modbus TCP asincrónico
 async def run_server():
     context, identity = setup_server()
-    server = ModbusTcpServer(context, identity=identity, address=("localhost", 502))
+    server = StartTcpServer(context, identity=identity, address=("localhost", 502))
     print("Iniciando servidor Modbus TCP en localhost:502...")
     
     # Ejecutar el servidor asincrónicamente
