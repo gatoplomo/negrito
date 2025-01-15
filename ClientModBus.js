@@ -1,15 +1,15 @@
 const modbus = require('jsmodbus');
 const net = require('net');
 
-// Configura la conexión con el servidor Modbus
-const client = new modbus.client.TCP();
-
 // Dirección IP y puerto del servidor Modbus
-const host = '127.0.0.1';  // Dirección del servidor
-const port = 502;          // Puerto del servidor
+const host = '192.168.0.101';  // Dirección del servidor Modbus
+const port = 502;              // Puerto del servidor Modbus
+
+// Crear el cliente Modbus TCP
+const socket = new net.Socket();
+const client = new modbus.client.TCP(socket);
 
 // Conectar al servidor Modbus
-const socket = new net.Socket();
 socket.connect(port, host, () => {
   console.log(`Conectado al servidor Modbus en ${host}:${port}`);
 
