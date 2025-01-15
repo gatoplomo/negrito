@@ -23,6 +23,10 @@ function parseValue(value) {
   }
 }
 
+// Imprimir para confirmar que estamos en el script correcto
+console.log('Script Modbus iniciado...');
+
+
 // Conectar al servidor Modbus
 socket.connect(port, host, () => {
   console.log(`Conectado al servidor Modbus en ${host}:${port}`);
