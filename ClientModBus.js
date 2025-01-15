@@ -5,8 +5,10 @@ const net = require('net');
 const host = '192.168.0.101';  // Dirección del servidor Modbus
 const port = 502;              // Puerto del servidor Modbus
 
-// Crear el cliente Modbus TCP
+// Crear el socket manualmente
 const socket = new net.Socket();
+
+// Crear el cliente Modbus
 const client = new modbus.client.TCP(socket);
 
 // Conectar al servidor Modbus
