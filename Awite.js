@@ -23,33 +23,29 @@ function parseValue(value) {
   }
 }
 
-// Imprimir para confirmar que estamos en el script correcto
-console.log('Script Modbus iniciado...');
-
-
 // Conectar al servidor Modbus
 socket.connect(port, host, () => {
   console.log(`Conectado al servidor Modbus en ${host}:${port}`);
-
-  // Leer los primeros 16 registros (registro 800 - 807 para estado)
-  client.readInputRegisters(800, 8)  // Leer 8 registros a partir de la dirección 800
-    .then(function (response) {
-      console.log('Registros de estado leídos:');
-      response.response.body.values.forEach(value => {
-        console.log(parseValue(value));  // Llamamos a la función para identificar si es flotante o entero
-      });
-    })
-    .catch(function (err) {
-      console.error('Error al leer registros de estado:', err);
-    });
 
   // Leer los registros de medición a partir de la dirección 808
   client.readInputRegisters(808, 56) // Leer 56 registros a partir de la dirección 808
     .then(function (response) {
       console.log('Datos de medición leídos:');
-      response.response.body.values.forEach(value => {
-        console.log(parseValue(value));  // Llamamos a la función para procesar los valores
-      });
+
+      // Asumimos que los valores relevantes están en estos índices
+      let values = response.response.body.values;
+
+      // Crear el objeto JSON con tags y valores
+      let data = {
+        "CH4": parseValue(values[3]),  // CH4 en el índice 3
+        "O2": parseValue(values[4]),   // O2 en el índice 4
+        "CO2": parseValue(values[0]),  // CO2 en el índice 0
+        "H2": parseValue(values[13]),  // H2 en el índice 13
+        "H2S": parseValue(values[5])   // H2S en el índice 5
+      };
+
+      console.log(JSON.stringify(data, null, 2));  // Mostrar el JSON generado
+
     })
     .catch(function (err) {
       console.error('Error al leer datos de medición:', err);
