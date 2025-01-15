@@ -8,13 +8,17 @@ const port = 502;              // Puerto para Modbus TCP
 const socket = new net.Socket();
 const client = new modbus.client.TCP(socket);
 
-// Función para identificar si un dato es flotante o entero
+// Función para detectar y corregir valores flotantes escalados
 function parseValue(value) {
-  if (value % 10 === 0) {
-    // Si el valor es múltiplo de 10, probablemente es un entero
-    return value / 10; // Escala el valor para convertirlo en flotante (por ejemplo, 813 -> 81.3)
+  // Verificar si el valor parece ser un flotante escalado
+  if (value > 100 && value < 1000) {
+    // Suposición: valores como 29 se refieren a 2.9, por ejemplo
+    return value / 10;
+  } else if (value > 10000) {
+    // Valores muy grandes pueden ser enteros
+    return value;  // Tratamos este caso como un entero directo
   } else {
-    // De lo contrario, lo tratamos como un valor entero normal
+    // Si no se aplica ninguna regla, dejamos el valor como está
     return value;
   }
 }
