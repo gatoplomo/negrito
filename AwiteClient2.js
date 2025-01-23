@@ -2,7 +2,7 @@ const modbus = require('jsmodbus');
 const net = require('net');
 
 // Dirección IP y puerto del servidor Modbus (Awite)
-const host = '192.168.0.103';  // Dirección IP del dispositivo Awite
+const host = '10.31.213.114';  // Dirección IP del dispositivo Awite
 const port = 502;             // Puerto para Modbus TCP (según el manual)
 
 const socket = new net.Socket();
