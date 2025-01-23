@@ -12,28 +12,22 @@ const client = new modbus.client.TCP(socket);
 socket.connect(port, host, () => {
   console.log(`Conectado al servidor Modbus en ${host}:${port}`);
 
-  // Leer los primeros 8 registros (registro 800 - 807 para status)
-  client.readInputRegisters(800, 8)  // Leer 8 registros a partir de la dirección 800
+  // Probar con direcciones y registros más bajos (ejemplo: dirección 100, leer 4 registros)
+  client.readInputRegisters(100, 4)  // Leer 4 registros a partir de la dirección 100
     .then(function (response) {
       let data = response.response.body.values;
-
-      // Convertir los registros a flotantes dividiendo entre 10
-      let floatData = data.map(val => val / 10);
-
+      let floatData = data.map(val => val / 10); // Convertir a flotante
       console.log('Registros de estado leídos (convertidos a flotantes):', floatData);
     })
     .catch(function (err) {
       console.error('Error al leer registros de estado:', err);
     });
 
-  // Leer los registros de medición a partir de la dirección 808
-  client.readInputRegisters(808, 56) // Leer 56 registros a partir de la dirección 808
+  // Leer registros de medición a partir de la dirección 200 (ejemplo, con 4 registros)
+  client.readInputRegisters(200, 4) // Leer 4 registros a partir de la dirección 200
     .then(function (response) {
       let data = response.response.body.values;
-
-      // Convertir los registros de medición a flotantes dividiendo entre 10
-      let floatData = data.map(val => val / 10);
-
+      let floatData = data.map(val => val / 10); // Convertir a flotante
       console.log('Datos de medición leídos (convertidos a flotantes):', floatData);
     })
     .catch(function (err) {
