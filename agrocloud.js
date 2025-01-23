@@ -333,7 +333,7 @@ const assert = require('assert');
 
 
 
-const url = 'mongodb://192.168.207.193:27017';
+const url = 'mongodb://localhost:27017';
 
 // Database Name
 const dbName = 'myproject';
