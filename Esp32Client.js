@@ -12,8 +12,8 @@ const client = new modbus.client.TCP(socket);
 socket.connect(port, host, () => {
   console.log(`Conectado al servidor Modbus en ${host}:${port}`);
 
-  // Leer los primeros 10 Holding Registers (índices 0 al 9)
-  client.readHoldingRegisters(0, 10)  // Leer 10 registros desde la dirección 0
+  // Leer los primeros 68 Holding Registers (índices 0 al 67)
+  client.readHoldingRegisters(0, 68)  // Leer 68 registros desde la dirección 0
     .then(function (response) {
       let registers = response.response.body.values;
 
