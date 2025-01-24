@@ -19,15 +19,16 @@ socket.connect(port, host, () => {
 
       // Mostrar valores en formato hexadecimal
       console.log("\nValores de Holding Registers (Hexadecimal):");
-      console.log("{:<10} {:<10}".format("Índice", "Hexadecimal"));
+      console.log("Índice     Hexadecimal");
       console.log("-".repeat(20));
       registers.forEach((reg, idx) => {
-        console.log("{:<10} 0x{:04X}".format(idx, reg));
+        // Alineación manual para los valores
+        console.log(`${idx.toString().padEnd(10)} 0x${reg.toString(16).toUpperCase().padStart(4, '0')}`);
       });
 
       // Traducir y mostrar a caracteres ASCII (Big Endian)
       console.log("\nTraducción a ASCII (Big Endian):");
-      console.log("{:<10} {:<10} {:<10}".format("Índice", "Hexadecimal", "ASCII"));
+      console.log("Índice     Hexadecimal   ASCII");
       console.log("-".repeat(30));
       registers.forEach((reg, idx) => {
         // Obtener los bytes alto y bajo (Big Endian)
@@ -39,7 +40,8 @@ socket.connect(port, host, () => {
         let asciiLow = (lowByte >= 32 && lowByte <= 126) ? String.fromCharCode(lowByte) : '.';
         let asciiChars = `${asciiHigh}${asciiLow}`;
 
-        console.log("{:<10} 0x{:04X} {:<10}".format(idx, reg, asciiChars));
+        // Alineación manual para los valores
+        console.log(`${idx.toString().padEnd(10)} 0x${reg.toString(16).toUpperCase().padStart(4, '0')} ${asciiChars.padEnd(10)}`);
       });
     })
     .catch(function (err) {
