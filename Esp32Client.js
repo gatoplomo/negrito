@@ -1,41 +1,49 @@
 const modbus = require('jsmodbus');
 const net = require('net');
 
-// Dirección IP y puerto del servidor Modbus (ESP32)
-const host = '192.168.0.102';  // Dirección IP del dispositivo ESP32
-const port = 502;              // Puerto estándar para Modbus TCP
+// Dirección IP y puerto del servidor Modbus (Awite)
+const host = '10.31.213.114';  // Dirección IP del dispositivo Awite
+const port = 502;              // Puerto para Modbus TCP (según el manual)
 
-// Crea un socket TCP
 const socket = new net.Socket();
-
-// Crea un cliente Modbus TCP
-const client = new modbus.client.TCP(socket, 1);  // Asegúrate de que el ID de unidad (unitId) sea correcto
+const client = new modbus.client.TCP(socket);
 
 // Conectar al servidor Modbus
 socket.connect(port, host, () => {
   console.log(`Conectado al servidor Modbus en ${host}:${port}`);
 
-  // Leer los primeros 8 registros (modificar si es necesario)
-  client.readInputRegisters(0, 8)  // Intentamos leer desde la dirección 0, 8 registros
+  // Leer los primeros 10 Holding Registers (índices 0 al 9)
+  client.readHoldingRegisters(0, 10)  // Leer 10 registros desde la dirección 0
     .then(function (response) {
-      console.log('Registros de estado leídos:', response.response.body.values);
+      let registers = response.response.body.values;
+
+      // Mostrar valores en formato hexadecimal
+      console.log("\nValores de Holding Registers (Hexadecimal):");
+      console.log("{:<10} {:<10}".format("Índice", "Hexadecimal"));
+      console.log("-".repeat(20));
+      registers.forEach((reg, idx) => {
+        console.log("{:<10} 0x{:04X}".format(idx, reg));
+      });
+
+      // Traducir y mostrar a caracteres ASCII (Big Endian)
+      console.log("\nTraducción a ASCII (Big Endian):");
+      console.log("{:<10} {:<10} {:<10}".format("Índice", "Hexadecimal", "ASCII"));
+      console.log("-".repeat(30));
+      registers.forEach((reg, idx) => {
+        // Obtener los bytes alto y bajo (Big Endian)
+        let highByte = (reg >> 8) & 0xFF;
+        let lowByte = reg & 0xFF;
+
+        // Convertir a caracteres ASCII, reemplazar caracteres no imprimibles
+        let asciiHigh = (highByte >= 32 && highByte <= 126) ? String.fromCharCode(highByte) : '.';
+        let asciiLow = (lowByte >= 32 && lowByte <= 126) ? String.fromCharCode(lowByte) : '.';
+        let asciiChars = `${asciiHigh}${asciiLow}`;
+
+        console.log("{:<10} 0x{:04X} {:<10}".format(idx, reg, asciiChars));
+      });
     })
     .catch(function (err) {
-      console.error('Error al leer registros de estado:', err);
-    });
-
-  // Leer registros de medición (modificar dirección de inicio y cantidad si es necesario)
-  client.readInputRegisters(10, 10) // Intentamos leer desde la dirección 10, 10 registros
-    .then(function (response) {
-      let data = response.response.body.values;
-
-      // Convertir los registros a flotantes dividiendo entre 10
-      let floatData = data.map(val => val / 10);
-
-      console.log('Datos de medición leídos (convertidos a flotantes):', floatData);
-    })
-    .catch(function (err) {
-      console.error('Error al leer datos de medición:', err);
+      console.error('Error al leer registros:', err);
     });
 });
 
